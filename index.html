@@ -14,21 +14,52 @@
     .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     .task-done { text-decoration: line-through; color: #94a3b8; }
+
+    /* Variables dinámicas del Panel de Comando Oculto */
+    :root {
+      --base-950: #020617;
+      --base-900: #0f172a;
+      --base-800: #1e293b;
+      --base-700: #334155;
+      --base-50:  #f8fafc;
+      --accent-600: #d97706;
+      --accent-500: #f59e0b;
+      --accent-400: #fbbf24;
+      --accent-200: #fde68a;
+      --accent-100: #fef3c7;
+      --accent-50:  #fffbeb;
+      --accent-text: #020617;
+    }
+
+    .theme-bg-900 { background-color: var(--base-900) !important; }
+    .theme-bg-800 { background-color: var(--base-800) !important; }
+    .theme-border-800 { border-color: var(--base-800) !important; }
+    .theme-border-700 { border-color: var(--base-700) !important; }
+    .theme-body-bg { background-color: var(--base-50) !important; }
+
+    .theme-accent-bg { background-color: var(--accent-500) !important; color: var(--accent-text) !important; }
+    .theme-accent-bg:hover { background-color: var(--accent-600) !important; }
+    .theme-accent-text { color: var(--accent-400) !important; }
+    .theme-accent-soft { background-color: var(--accent-50) !important; border-color: var(--accent-200) !important; }
+    .theme-accent-badge { background-color: var(--accent-100) !important; color: var(--base-900) !important; border-color: var(--accent-200) !important; }
+    .theme-progress { background: linear-gradient(90deg, var(--accent-500), #10b981) !important; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="theme-body-bg text-slate-800 min-h-screen flex flex-col transition-colors duration-300">
 
   <!-- Barra Superior -->
-  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md border-b border-slate-800">
+  <header class="theme-bg-900 text-white sticky top-0 z-30 shadow-md border-b theme-border-800 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-amber-500 text-slate-950 font-extrabold flex items-center justify-center text-sm shadow">
+        <!-- Disparador secreto: Doble clic/toque abre el Panel de Comando -->
+        <div id="secretLogoTrigger" ondblclick="openModal('themeCommandModal')" title="Doble clic o Ctrl+Shift+K para ajustar colores"
+          class="w-9 h-9 rounded-lg theme-accent-bg font-extrabold flex items-center justify-center text-sm shadow cursor-pointer select-none active:scale-95 transition">
           EH6
         </div>
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-base sm:text-lg font-bold tracking-tight leading-tight">Ciclo 6 Semanas • Eric Hörst</h1>
-            <span class="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-amber-400 border border-slate-700">ELBLOQUE</span>
+            <span class="hidden sm:inline-block text-[11px] font-semibold px-2 py-0.5 rounded theme-bg-800 theme-accent-text border theme-border-700">ELBLOQUE</span>
           </div>
           <p class="text-xs text-slate-400">Menú Semanal Flexible (Día 1 – Día 7) • Sincronizado en la Nube</p>
         </div>
@@ -36,19 +67,19 @@
 
       <div class="flex items-center gap-2 flex-wrap">
         <!-- Indicador de Sincronización Google Sheets -->
-        <div id="syncBadge" class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">
+        <div id="syncBadge" class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg theme-bg-800 border theme-border-700 text-slate-300">
           <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
           <span id="syncText">Conectando...</span>
           <button onclick="pullFromCloud(true)" title="Sincronizar ahora desde Google Sheets" class="ml-1 text-slate-400 hover:text-white transition font-bold">↻</button>
         </div>
 
-        <button onclick="openModal('warmupModal')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition">
+        <button onclick="openModal('warmupModal')" class="text-xs font-semibold px-3 py-1.5 rounded-lg theme-bg-800 hover:opacity-90 theme-accent-text border theme-border-700 transition">
           Calentamiento
         </button>
-        <button onclick="openModal('glossaryModal')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+        <button onclick="openModal('glossaryModal')" class="text-xs font-semibold px-3 py-1.5 rounded-lg theme-bg-800 hover:opacity-90 text-slate-200 border theme-border-700 transition">
           Glosario
         </button>
-        <button onclick="openHistoryModal()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 transition">
+        <button onclick="openHistoryModal()" class="text-xs font-semibold px-3 py-1.5 rounded-lg theme-bg-800 hover:opacity-90 text-emerald-300 border theme-border-700 transition">
           Historial (<span id="historyCount">0</span>)
         </button>
       </div>
@@ -81,7 +112,7 @@
             <span id="globalProgressLabel" class="text-slate-900 text-sm">0% (0/42 días)</span>
           </div>
           <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-            <div id="globalProgressBar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500" style="width: 0%"></div>
+            <div id="globalProgressBar" class="h-full theme-progress transition-all duration-500" style="width: 0%"></div>
           </div>
           <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-1">
             <span id="weekSummaryStat">Semana actual: 0/7 bloques completados</span>
@@ -108,13 +139,13 @@
     </section>
 
     <!-- Reglas de Oro Fisiológicas para Reordenar Bloques -->
-    <section class="bg-amber-50/90 border border-amber-200 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <section class="theme-accent-soft border rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors duration-300">
       <div class="space-y-1">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-200 text-amber-900">Menú Flexible • 2 Reglas de Oro</span>
-          <h2 class="text-sm font-bold text-amber-950">Puedes intercambiar el orden de los días en la semana si respetas la recuperación:</h2>
+          <span class="text-xs font-extrabold uppercase tracking-wider px-2 py-0.5 rounded theme-accent-bg">Menú Flexible • 2 Reglas de Oro</span>
+          <h2 class="text-sm font-bold text-slate-900">Puedes intercambiar el orden de los días en la semana si respetas la recuperación:</h2>
         </div>
-        <ul class="text-xs text-amber-900 space-y-1 list-disc list-inside">
+        <ul class="text-xs text-slate-800 space-y-1 list-disc list-inside">
           <li><strong>Regla 1 (Dedos Frescos):</strong> Nunca hagas el <strong>Día 1 (Max Hangs)</strong> tras un día de escalada dura; asegura al menos 24h sin carga intensa de dedos (descanso o Día 4 Piernas/Core).</li>
           <li><strong>Regla 2 (Separación de Antebrazo):</strong> Deja mínimo <strong>48 horas</strong> entre el <strong>Día 1 (Max Hangs)</strong> y el <strong>Día 5 (Repetidores HIT 7:3)</strong>.</li>
         </ul>
@@ -139,23 +170,57 @@
         Sincronizado con Google Sheets • <span class="font-semibold text-slate-700">ELBLOQUE</span>
       </p>
       <div class="flex flex-wrap items-center justify-center gap-2.5">
-        <button onclick="openExceptionModal()" class="text-xs font-bold px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-sm transition">
+        <button onclick="openExceptionModal()" class="text-xs font-bold px-4 py-2.5 rounded-xl theme-accent-bg shadow-sm transition">
           Registrar Imprevisto / Cambio
         </button>
         <button onclick="copyHtmlForSites()" class="text-xs font-bold px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition">
           Copiar HTML
         </button>
-        <button onclick="openReportExportModal(false)" class="text-xs font-bold px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white shadow-sm transition">
+        <button onclick="openReportExportModal(false)" class="text-xs font-bold px-4 py-2.5 rounded-xl theme-bg-900 hover:opacity-90 text-white shadow-sm transition">
           Generar Reporte Acumulado Docs
         </button>
       </div>
     </div>
   </footer>
 
+  <!-- MODAL OCULTO: Panel de Comando de Apariencia (Ctrl+Shift+K o Doble Clic en EH6) -->
+  <div id="themeCommandModal" class="hidden fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-extrabold uppercase tracking-widest theme-accent-text block">Comando Oculto • Tiempo Real</span>
+          <h3 class="text-sm font-bold">Personalizar Paleta de Colores</h3>
+        </div>
+        <button onclick="closeModal('themeCommandModal')" class="text-slate-400 hover:text-white text-xl leading-none">×</button>
+      </div>
+
+      <div class="p-5 space-y-5 text-xs">
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-slate-500 mb-2">1. Color Principal (Botones, Barras e Insignias)</label>
+          <div class="grid grid-cols-3 gap-2" id="accentPickerGrid"></div>
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-slate-500 mb-2">2. Tono de Base Oscura (Cabecera y Tarjetas Activas)</label>
+          <div class="grid grid-cols-2 gap-2" id="basePickerGrid"></div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center justify-between">
+          <span>Atajo rápido: <strong>Ctrl + Shift + K</strong> o doble clic en <strong>EH6</strong></span>
+          <button onclick="resetDefaultTheme()" class="font-bold text-slate-800 underline hover:text-black">Restaurar</button>
+        </div>
+      </div>
+
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button onclick="closeModal('themeCommandModal')" class="text-xs font-bold px-4 py-2 rounded-lg theme-bg-900 text-white">Listo</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: Registrar Imprevisto / Cambio -->
   <div id="exceptionModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-slate-200 overflow-hidden">
-      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Registrar Imprevisto o Cambio de Enfoque</h3>
         <button onclick="closeModal('exceptionModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
@@ -205,26 +270,26 @@
         <div>
           <label class="block text-xs font-bold text-slate-600 mb-1">Detalle / Qué se hizo en su lugar</label>
           <textarea id="excReason" rows="3" placeholder="Ej: Muro muy lleno en ELBLOQUE, cambié Max Hangs por sesión de Psoas y Core + movilidad de hombros."
-            class="w-full text-sm border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+            class="w-full text-sm border border-slate-300 rounded-lg p-3 focus:outline-none"></textarea>
         </div>
 
         <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
-          <input type="checkbox" id="excMarkJustified" checked class="rounded text-amber-500 focus:ring-amber-500" />
+          <input type="checkbox" id="excMarkJustified" checked class="rounded text-amber-500" />
           <span>Contabilizar este bloque como <strong>completado/justificado</strong> en la barra de progreso</span>
         </label>
 
         <div class="flex justify-end gap-2 pt-2">
           <button onclick="closeModal('exceptionModal')" class="text-xs font-semibold px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">Cancelar</button>
-          <button onclick="saveException()" class="text-xs font-bold px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950">Guardar Registro</button>
+          <button onclick="saveException()" class="text-xs font-bold px-4 py-2 rounded-lg theme-accent-bg">Guardar Registro</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: Ver Detalle de Ejercicios (Explicación Paso a Paso de Cada Ejercicio) -->
+  <!-- MODAL: Ver Detalle de Ejercicios -->
   <div id="exerciseDetailModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <div>
           <span id="detailModalSub" class="text-[10px] font-bold uppercase tracking-wider text-teal-400 block">Guía Paso a Paso de Cada Ejercicio</span>
           <h3 id="detailModalTitle" class="text-sm sm:text-base font-bold">Detalle de Ejercicios</h3>
@@ -234,7 +299,7 @@
       <div id="detailModalContent" class="p-5 space-y-3.5 text-xs sm:text-sm text-slate-700 overflow-y-auto leading-relaxed flex-1"></div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
         <span class="text-[11px] text-slate-500">Desglose individual de ejecución y postura</span>
-        <button onclick="closeModal('exerciseDetailModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white">Entendido</button>
+        <button onclick="closeModal('exerciseDetailModal')" class="text-xs font-bold px-4 py-2 rounded-lg theme-bg-900 text-white">Entendido</button>
       </div>
     </div>
   </div>
@@ -242,7 +307,7 @@
   <!-- MODAL: Reporte Acumulado Google Docs -->
   <div id="reportModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 id="reportModalTitle" class="text-sm font-bold">Reporte Acumulado para Google Docs</h3>
         <button onclick="closeModal('reportModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
@@ -257,7 +322,7 @@
         </button>
         <div class="flex items-center gap-2">
           <button onclick="closeModal('reportModal')" class="text-xs font-semibold px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800">Cerrar</button>
-          <button onclick="copyReportText()" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white">Copiar Reporte</button>
+          <button onclick="copyReportText()" class="text-xs font-bold px-4 py-2 rounded-lg theme-bg-900 text-white">Copiar Reporte</button>
         </div>
       </div>
     </div>
@@ -266,12 +331,12 @@
   <!-- MODAL: Protocolo de Calentamiento -->
   <div id="warmupModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
-      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Protocolo de Calentamiento Obligatorio (15–20 min)</h3>
         <button onclick="closeModal('warmupModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
       <div class="p-5 space-y-3 text-xs text-slate-700 leading-relaxed max-h-[75vh] overflow-y-auto">
-        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-950">
+        <div class="p-3 rounded-xl theme-accent-soft border text-slate-900">
           <strong>Regla de Seguridad:</strong> Nunca inicies Max Hangs (20 mm) ni búlder explosivo en frío. Las poleas A2/A4 requieren irrigación progresiva.
         </div>
         <ol class="list-decimal list-inside space-y-2">
@@ -282,7 +347,7 @@
         </ol>
       </div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
-        <button onclick="closeModal('warmupModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Entendido</button>
+        <button onclick="closeModal('warmupModal')" class="text-xs font-bold px-4 py-2 rounded-lg theme-bg-900 text-white">Entendido</button>
       </div>
     </div>
   </div>
@@ -290,7 +355,7 @@
   <!-- MODAL: Glosario -->
   <div id="glossaryModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden">
-      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Glosario Completo de Ejercicios y Términos</h3>
         <button onclick="closeModal('glossaryModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
@@ -325,7 +390,7 @@
         </div>
       </div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
-        <button onclick="closeModal('glossaryModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Cerrar</button>
+        <button onclick="closeModal('glossaryModal')" class="text-xs font-bold px-4 py-2 rounded-lg theme-bg-900 text-white">Cerrar</button>
       </div>
     </div>
   </div>
@@ -333,26 +398,124 @@
   <!-- MODAL: Historial de Ciclos Archivados -->
   <div id="historyModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
-      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Historial de Ciclos Completados</h3>
         <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
       <div id="historyList" class="p-5 space-y-3 text-xs text-slate-700 max-h-[70vh] overflow-y-auto"></div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
-        <button onclick="closeModal('historyModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Cerrar</button>
+        <button onclick="closeModal('historyModal')" class="text-xs font-bold px-4 py-2 rounded-lg theme-bg-900 text-white">Cerrar</button>
       </div>
     </div>
   </div>
 
   <!-- Toast de Notificación -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-lg border border-slate-700"></div>
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 theme-bg-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-lg border theme-border-700"></div>
 
   <script>
-    // =========================================================================
-    // CONFIGURACIÓN DE CONEXIÓN CON GOOGLE SHEETS (APPS SCRIPT)
-    // =========================================================================
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwf7Naopzt_A6chJDFLo2Gq5VMykynfWmU3BztAFPdtvygadIhHi4wLMJlfs6p-UDd46A/exec";
     const STORAGE_KEY = "horst_climbing_cycle_v7";
+
+    // =========================================================================
+    // CONFIGURACIÓN DEL PANEL DE COMANDO OCULTO DE COLORES
+    // =========================================================================
+    const ACCENT_THEMES = {
+      amber:  { label: "Ámbar",   swatch: "#f59e0b", c600: "#d97706", c500: "#f59e0b", c400: "#fbbf24", c200: "#fde68a", c100: "#fef3c7", c50: "#fffbeb", text: "#020617" },
+      orange: { label: "Naranja", swatch: "#f97316", c600: "#ea580c", c500: "#f97316", c400: "#fb923c", c200: "#fed7aa", c100: "#ffedd5", c50: "#fff7ed", text: "#ffffff" },
+      sky:    { label: "Azul",    swatch: "#0ea5e9", c600: "#0284c7", c500: "#0ea5e9", c400: "#38bdf8", c200: "#bae6fd", c100: "#e0f2fe", c50: "#f0f9ff", text: "#ffffff" },
+      lime:   { label: "Neón",    swatch: "#84cc16", c600: "#65a30d", c500: "#84cc16", c400: "#a3e635", c200: "#d9f99d", c100: "#ecfccb", c50: "#f7fee7", text: "#020617" },
+      violet: { label: "Violeta", swatch: "#8b5cf6", c600: "#7c3aed", c500: "#8b5cf6", c400: "#a78bfa", c200: "#ddd6fe", c100: "#ede9fe", c50: "#f5f3ff", text: "#ffffff" },
+      rose:   { label: "Carmesí", swatch: "#f43f5e", c600: "#e11d48", c500: "#f43f5e", c400: "#fb7185", c200: "#fecdd3", c100: "#ffe4e6", c50: "#fff1f2", text: "#ffffff" }
+    };
+
+    const BASE_THEMES = {
+      slate:   { label: "Pizarra (Azulado)", c950: "#020617", c900: "#0f172a", c800: "#1e293b", c700: "#334155", c50: "#f8fafc" },
+      zinc:    { label: "Zinc (Neutro)",     c950: "#09090b", c900: "#18181b", c800: "#27272a", c700: "#3f3f46", c50: "#fafafa" },
+      stone:   { label: "Piedra (Cálido)",   c950: "#0c0a09", c900: "#1c1917", c800: "#292524", c700: "#44403c", c50: "#fafaf9" },
+      neutral: { label: "Grafito Puro",      c950: "#0a0a0a", c900: "#171717", c800: "#262626", c700: "#404040", c50: "#f5f5f5" }
+    };
+
+    function applyThemeVariables(themeConfig) {
+      const cfg = themeConfig || { accent: "amber", base: "slate" };
+      const acc = ACCENT_THEMES[cfg.accent] || ACCENT_THEMES.amber;
+      const bas = BASE_THEMES[cfg.base] || BASE_THEMES.slate;
+      const root = document.documentElement.style;
+
+      root.setProperty("--base-950", bas.c950);
+      root.setProperty("--base-900", bas.c900);
+      root.setProperty("--base-800", bas.c800);
+      root.setProperty("--base-700", bas.c700);
+      root.setProperty("--base-50",  bas.c50);
+
+      root.setProperty("--accent-600", acc.c600);
+      root.setProperty("--accent-500", acc.c500);
+      root.setProperty("--accent-400", acc.c400);
+      root.setProperty("--accent-200", acc.c200);
+      root.setProperty("--accent-100", acc.c100);
+      root.setProperty("--accent-50",  acc.c50);
+      root.setProperty("--accent-text", acc.text);
+
+      renderThemeCommandControls();
+    }
+
+    function selectAccentTheme(key) {
+      if (!appState.theme) appState.theme = { accent: "amber", base: "slate" };
+      appState.theme.accent = key;
+      applyThemeVariables(appState.theme);
+      saveState();
+    }
+
+    function selectBaseTheme(key) {
+      if (!appState.theme) appState.theme = { accent: "amber", base: "slate" };
+      appState.theme.base = key;
+      applyThemeVariables(appState.theme);
+      saveState();
+    }
+
+    function resetDefaultTheme() {
+      appState.theme = { accent: "amber", base: "slate" };
+      applyThemeVariables(appState.theme);
+      saveState();
+      showToast("Paleta original restaurada");
+    }
+
+    function renderThemeCommandControls() {
+      const current = appState.theme || { accent: "amber", base: "slate" };
+      const accGrid = document.getElementById("accentPickerGrid");
+      const basGrid = document.getElementById("basePickerGrid");
+      if (!accGrid || !basGrid) return;
+
+      accGrid.innerHTML = Object.entries(ACCENT_THEMES).map(([k, val]) => {
+        const active = current.accent === k;
+        return `
+          <button onclick="selectAccentTheme('${k}')"
+            class="flex items-center gap-2 p-2.5 rounded-xl border text-left font-bold transition ${active ? "border-slate-900 bg-slate-100 ring-1 ring-slate-900" : "border-slate-200 hover:bg-slate-50"}">
+            <span class="w-4 h-4 rounded-full shrink-0 border border-black/10" style="background:${val.swatch}"></span>
+            <span class="text-slate-800">${val.label}</span>
+          </button>
+        `;
+      }).join("");
+
+      basGrid.innerHTML = Object.entries(BASE_THEMES).map(([k, val]) => {
+        const active = current.base === k;
+        return `
+          <button onclick="selectBaseTheme('${k}')"
+            class="flex items-center gap-2 p-2.5 rounded-xl border text-left font-bold transition ${active ? "border-slate-900 bg-slate-100 ring-1 ring-slate-900" : "border-slate-200 hover:bg-slate-50"}">
+            <span class="w-4 h-4 rounded-md shrink-0" style="background:${val.c900}"></span>
+            <span class="text-slate-800">${val.label}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    // Atajo de teclado Ctrl + Shift + K (o Cmd + Shift + K)
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        const modal = document.getElementById("themeCommandModal");
+        modal.classList.toggle("hidden");
+      }
+    });
 
     // Renderizador de tarjeta individual de ejercicio dentro del modal de detalle
     function exCard(num, name, prescription, whatIsIt, stepByStep, proTip) {
@@ -360,7 +523,7 @@
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
             <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm">${num}. ${name}</h4>
-            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">${prescription}</span>
+            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-md theme-accent-badge border">${prescription}</span>
           </div>
           <p class="text-xs text-slate-700"><strong class="text-slate-900">¿Qué es?:</strong> ${whatIsIt}</p>
           <p class="text-xs text-slate-700"><strong class="text-slate-900">Cómo hacerlo paso a paso:</strong> ${stepByStep}</p>
@@ -371,210 +534,169 @@
       `;
     }
 
-    // DICCIONARIO MAESTRO DE CADA EJERCICIO (EXPLICADO DESDE CERO)
     const EX = {
       calentamiento: (t) => exCard(1, "Calentamiento Progresivo Articular y Tendinoso", t,
         "Preparación gradual de articulaciones, músculos y poleas de los dedos antes de aplicar fuerza máxima.",
         "1) Haz 15 círculos amplios de hombros hacia adelante y atrás + círculos de muñecas. 2) Cuélgate de una barra con brazos rectos y sube/baja los hombros juntando escápulas (2×10 Scapular Pull-ups). 3) Escala 3 bloques muy fáciles (V0-V1). 4) En la regleta de 20 mm, haz 3 suspensiones de 6 seg dejando los pies en el suelo para cargar solo el 50%, 70% y 85% de tu peso.",
         "Nunca te cuelgues con todo tu peso en frío; los tendones tardan 15 minutos en lubricarse."),
-
       maxHangs: (presc) => exCard(2, "Max Hangs en Regleta de 20 mm (Semiarqueo)", presc,
         "Suspensiones cortas a máxima intensidad en un borde plano de 20 mm para ganar fuerza pura de dedos.",
         "Coloca las 4 yemas (índice, medio, anular y meñique) sobre la regleta de 20 mm. Dobla la articulación media de los dedos a 90° (posición de semiarqueo / half crimp) dejando el pulgar relajado a un lado (NO lo montes encima del índice). Activa los hombros bajando las escápulas lejos de las orejas, mantén los codos casi estirados (microflexión de 5°) y sostén 10 segundos inmóvil.",
         "Si no aguantas los 10 seg limpios, pisa una banda elástica o apoya las puntas de los pies suavemente para restar peso. Descansa 3 minutos completos entre series."),
-
       powerPullups: (presc) => exCard(3, "Power Pull-ups (Dominadas Explosivas)", presc,
         "Dominadas ejecutadas con máxima velocidad de subida para desarrollar potencia de tracción en movimientos largos.",
         "Agarra la barra al ancho de tus hombros. Desde brazos totalmente estirados, activa los hombros y tira con toda la velocidad posible buscando llevar el pecho hacia la barra. Una vez arriba, baja de forma controlada contando 2 segundos hasta estirar brazos de nuevo.",
         "No busques llegar al fallo muscular; en el instante en que notes que subes lento, termina la serie."),
-
       bloqueos90: (presc) => exCard(4, "Bloqueos Isométricos a 90° en Barra", presc,
         "Sostener el cuerpo inmóvil en el aire con los codos doblados en ángulo recto (90°).",
         "Sube en la barra hasta que tus brazos formen una 'L' perfecta (ángulo de 90° en los codos) y quédate completamente quieto durante 8 segundos. Si lo haces a un brazo, sujeta una banda elástica o toalla con la otra mano para ayudarte.",
         "Mantén el pecho abierto y los codos pegados cerca de las costillas, sin encoger los hombros hacia el cuello."),
-
       remoAnillas: (presc) => exCard(4, "Remo en Anillas / TRX con Pausa Isométrica", presc,
         "Ejercicio de tracción horizontal para fortalecer la espalda media y estabilizar los omóplatos en techos.",
         "Sujeta las anillas o cintas TRX, inclina tu cuerpo hacia atrás a unos 45° manteniendo el cuerpo recto como una tabla. Tira llevando las manos hacia tus costillas bajas, junta las escápulas atrás y sostén esa posición 2 segundos antes de bajar lento.",
         "Evita que la cadera cuelgue; aprieta glúteos y abdomen durante toda la repetición."),
-
       dominadasLastradas: (presc) => exCard(3, "Dominadas Lastradas o Estrictas Pecho a Barra", presc,
         "Dominadas pesadas (con disco/mancuerna en arnés o mochila) o estrictas tocando la barra con el pecho.",
         "Inicia colgado con brazos rectos y piernas juntas ligeramente hacia adelante. Tira fuerte hasta que la parte alta del pecho toque la barra y baja en 2–3 segundos sin balancearte ni patear con las piernas.",
         "Si usas lastre, añade entre 2 kg y 6 kg de forma que las 4 repeticiones exijan esfuerzo alto pero con técnica limpia."),
-
       facePulls: (presc) => exCard(4, "Face-Pulls con Banda Elástica", presc,
         "Tirón hacia el rostro que fortalece la parte posterior de los hombros y corrige la postura encorvada del escalador.",
         "Ata una banda elástica a la altura de tu cara. Agárrala con ambas manos (pulgares apuntando hacia ti) y tira hacia tu frente separando las manos y rotando los pulgares hacia atrás al final del movimiento, juntando los omóplatos.",
         "Haz una pausa de 1 segundo atrás sintiendo el trabajo entre las escápulas."),
-
       suspensionUnBrazo: (presc) => exCard(4, "Suspensión a Un Brazo Asistida con Banda", presc,
         "Colgarse de un solo brazo descargando parte del peso corporal con ayuda de una goma elástica.",
         "Agarra una barra o presa buena con una mano. Con la otra mano sujeta una banda elástica colgada arriba (o pisa la banda con un pie) para quitar entre 10 y 20 kg de tu peso. Mantén el hombro activo (sin dejarte colgar pasivamente de la articulación) y sostén 6 segundos.",
         "Asegúrate de que el hombro no se suba hacia tu oreja; empuja el hombro hacia abajo todo el tiempo."),
-
       piesSilenciosos: (presc) => exCard(2, "Drill: Pies Silenciosos (Quiet Feet)", presc,
         "Ejercicio de precisión técnica que elimina los golpes y reacomodos torpes de los pies en el muro.",
         "Elige 4 bloques fáciles (V0-V2). Antes de mover un pie, mira fijamente la presa de pie hasta que la punta de tu gata toque exactamente el punto elegido sin hacer ningún ruido. Una vez apoyado el pie, está prohibido moverlo o girarlo.",
         "Si el pie golpea el muro o resbala, baja y repite ese paso. Entrena control total de piernas."),
-
       hoverHands: (presc) => exCard(3, "Drill: Hover Hands (Manos Flotantes 2 seg)", presc,
         "Pausa obligatoria en el aire antes de agarrar cada presa para mejorar el equilibrio y el uso de piernas.",
         "Escala bloques fáciles, pero cada vez que vayas a agarrar una presa nueva, detén tu mano abierta a 3 centímetros de la presa durante 2 segundos completos antes de cerrarla.",
         "Para lograr quedarte quieto 2 segundos sin agarrarte, tu cerebro se verá obligado a cargar todo el peso en los pies y pegar la cadera al muro."),
-
       escaladaLibre: (presc) => exCard(4, "Escalada Libre Consciente (Cadera Pegada)", presc,
         "Escalada continua a intensidad moderada enfocada en mover la cadera en lugar de tirar solo con brazos.",
         "Escala durante 30–40 min al 60–70% de tu esfuerzo máximo. En cada paso, gira la cadera hacia el muro (llevando el costado de la pierna que empuja hacia la pared) para ganar alcance con los brazos estirados.",
         "No llegues al fallo ni a sentir los antebrazos hinchados como piedras."),
-
       taloneos: (presc) => exCard(2, "Práctica de Taloneos (Heel Hooks) y Empeines", presc,
         "Técnica avanzada de pies donde usas el talón o el empeine para engancharte y descargar peso de los brazos.",
         "Busca 3 bloques en ELBLOQUE con presas grandes a la altura de tu cintura o pecho. Sube el pie y apoya el talón sobre la presa (girando ligeramente la punta del pie hacia afuera). Contrae la parte trasera del muslo (isquiotibial) jalando el talón hacia tu glúteo antes de soltar la mano.",
         "Un buen taloneo debe sentirse como si estuvieras 'jalando' el muro con la pierna."),
-
       onsight: (presc) => exCard(3, "Escalada a Vista (Onsight) con Lectura Previa", presc,
         "Intentar resolver un bloque al primer intento tras analizar todos los movimientos desde el suelo.",
         "Párate frente a 4 bloques que nunca hayas probado. Dedica 60 segundos a señalar desde abajo qué mano y qué pie va en cada presa, dónde cambiarás de pie y cómo harás el paso final. Luego súbete e intenta encadenarlo sin dudar.",
         "Respira profundo antes de despegar del suelo y confía en la lectura que hiciste."),
-
       deadpoints: (presc) => exCard(2, "Práctica de Deadpoints (Lances Controlados)", presc,
         "Movimientos dinámicos donde atrapas una presa lejana justo en el instante de gravedad cero.",
         "En un muro ligeramente desplomado, flexiona piernas y cadera hacia abajo, impúlsate fuerte con los pies hacia arriba y suelta la mano hacia la presa lejana. Atrapa la presa justo en el punto más alto del impulso, un instante antes de empezar a caer.",
         "Mantén los pies presionando firme contra sus presas al atrapar la mano para no salir despedido hacia afuera."),
-
       placaRegletas: (presc) => exCard(3, "Bloques Técnicos de Placa y Regletas", presc,
         "Escalada en muros verticales o ligeramente tumbados que exige equilibrio y confianza en apoyos diminutos.",
         "Selecciona 4 bloques de placa. Baja ligeramente los talones al pisar presas pequeñas para aumentar la superficie de goma en contacto con la presa y mantén la cadera centrada sobre los pies.",
         "Evita inclinarte demasiado hacia la pared con el pecho; si pegas el pecho al muro en placa, los pies se resbalan."),
-
       respiracion: (presc) => exCard(2, "Escalada con Control Respiratorio", presc,
         "Sincronizar la exhalación con cada movimiento difícil para evitar bloquear la respiración.",
         "Escala 5 bloques de dificultad media. Cada vez que hagas un movimiento de mano o un paso exigente, exhala el aire de forma audible ('tss' o soplido suave).",
         "Contener la respiración dispara la tensión muscular innecesaria y acelera la fatiga de antebrazos."),
-
       repeticionPerfecta: (presc) => exCard(3, "Drill de Repetición Perfecta", presc,
         "Repetir el mismo bloque 3 veces seguidas perfeccionando cada detalle hasta que parezca fácil.",
         "Escala un bloque de dificultad media, baja, descansa 2 minutos y repítelo dos veces más eliminando cualquier movimiento brusco, duda o reacomodo de pie.",
         "La tercera repetición debe verse fluida, silenciosa y sin esfuerzo aparente."),
-
       extensionesBanda: (presc) => exCard(1, "Extensiones de Dedos con Banda Elástica", presc,
         "Ejercicio preventivo que fortalece los músculos que abren la mano (antagonistas de los flexores).",
         "Coloca una banda elástica (o goma gruesa) alrededor de las uñas de los 5 dedos juntos. Abre la mano separando y estirando todos los dedos al máximo contra la resistencia de la banda, sostén 1 segundo abierto y cierra lento.",
         "Indispensable para evitar dolores en la parte externa del codo (epicondilitis) y desequilibrios en los tendones."),
-
       pushupPlus: (presc) => exCard(2, "Push-up Plus (Flexiones Escapulares)", presc,
         "Movimiento corto de hombros en posición de plancha para fortalecer el músculo serrato anterior.",
         "Ponte en posición de plancha alta (manos apoyadas bajo los hombros, cuerpo recto, brazos totalmente estirados). SIN doblar los codos, deja que tu pecho baje juntando los omóplatos atrás, y luego empuja el suelo con fuerza separando los omóplatos al máximo (redondeando la espalda alta).",
         "Los codos nunca se doblan; todo el movimiento ocurre únicamente en los omóplatos."),
-
       cadera9090: (presc) => exCard(3, "Movilidad Cadera 90/90 y Apertura Torácica", presc,
         "Estiramiento dinámico de rotación interna y externa de cadera para poder abrir piernas y subir pies altos.",
-        "Siéntate en el suelo. Coloca la pierna derecha delante de ti doblada en ángulo recto (90°) con el muslo y pantorrilla apoyados en el piso, y la pierna izquierda hacia el costado/atrás también doblada a 90°. Mantén la espalda recta, inclínate suave sobre la pierna delantera 5 seg y luego gira las rodillas hacia el lado contrario.",
+        "Siéntate en el suelo. Coloca la pierna derecha delante de ti doblada en ángulo recto (90°) con el muslo y pantorrilla apoyados en el piso, y la pierna izquierda hacia el costado/atrás también doblada a 90°. Mantén la espalda recta, inclínate suave sobre la pierna delantera 5 seg y luego gira las rodillas hacia el otro lado.",
         "Completa con rotaciones de torso en cuatro apoyos (una mano detrás de la nuca girando el codo hacia el techo)."),
-
       rotacionesHombro: (presc) => exCard(1, "Rotaciones Externas de Hombro + Extensiones", presc,
         "Fortalecimiento del manguito rotador para blindar los hombros frente a agarres laterales o invertidos.",
         "De pie, pega el codo derecho a tus costillas con el antebrazo doblado a 90° hacia adelante. Sujeta una banda elástica atada a un lado y gira el antebrazo hacia afuera separándolo del abdomen sin despegar el codo de las costillas.",
         "Haz 15 repeticiones lentas por brazo seguidas de 15 extensiones de dedos con banda."),
-
       pikePushups: (presc) => exCard(2, "Flexiones en Pica (Pike Push-ups)", presc,
         "Flexiones con la cadera elevada en forma de 'V' invertida para trabajar hombros y tríceps.",
         "Apoya manos y pies en el suelo levantando la cadera hacia el techo formando una 'V' invertida. Dobla los codos llevando la parte superior de la cabeza hacia el suelo (un poco por delante de tus manos) y empuja fuerte hasta estirar brazos.",
         "Equilibra la fuerza de empuje vertical frente a tantas dominadas y tracción."),
-
       pronacionMuneca: (presc) => exCard(1, "Pronación / Supinación de Muñeca", presc,
         "Giros controlados de antebrazo con peso ligero para proteger muñecas y codos.",
         "Siéntate y apoya el antebrazo sobre tu muslo dejando la muñeca libre por fuera de la rodilla. Sujeta una mancuerna ligera (o un martillo/botella llena por un extremo) y gira lentamente la palma hacia arriba y luego hacia abajo.",
         "Movimiento lento y controlado (2 seg por giro) sin usar pesos pesados."),
-
       yogaToracico: (presc) => exCard(2, "Movilidad Torácica (Postura del Cachorro)", presc,
         "Estiramiento profundo de dorsales y columna media para mejorar el alcance vertical.",
         "En cuatro apoyos (rodillas bajo caderas), camina con las manos hacia adelante estirando los brazos y deja caer el pecho y la frente hacia el suelo sin mover las caderas de su sitio. Respira profundo durante 40 segundos × 3 veces.",
         "Relaja los hombros en cada exhalación."),
-
       bulgara: (presc) => exCard(1, "Sentadilla Búlgara Unilateral", presc,
         "Sentadilla a una pierna que desarrolla fuerza de empuje para pararte sobre apoyos altos en el muro.",
         "Ponte de espaldas a un banco bajo o cajón (a un paso largo de distancia) y apoya el empeine del pie trasero encima. Manteniendo el torso ligeramente inclinado hacia adelante, baja controladamente hasta que la rodilla trasera casi toque el suelo y sube empujando fuerte con el pie delantero.",
         "Asegúrate de que la rodilla delantera vaya alineada con la punta del pie sin meterse hacia adentro."),
-
       psoasColgado: (presc) => exCard(2, "Elevaciones de Piernas Colgado (Psoas y Core)", presc,
         "Trabajo directo de flexores de cadera (psoas) y abdomen inferior para subir los pies en desplomes.",
         "Cuélgate de una barra con las manos al ancho de hombros y activa ligeramente los hombros. Sin balancear el cuerpo, sube ambas piernas estiradas (o las rodillas hacia el pecho) hasta formar una 'L' de 90° con el torso y baja contando 3 segundos.",
         "Antes de subir las piernas, mete el ombligo hacia adentro (retroversión pélvica) para proteger la zona lumbar."),
-
       hollowPallof: (presc) => exCard(3, "Plancha Hollow Body + Pallof Press", presc,
         "Combinación de tensión abdominal frontal (Hollow) y estabilidad antirrotación (Pallof).",
         "1) Hollow Body: Acostado boca arriba, aplasta la espalda baja contra el piso (sin hueco lumbar), eleva hombros y piernas estiradas a 15 cm del suelo formando una canoa y aguanta 30 seg. 2) Pallof Press: De pie de lado a una banda elástica atada al pecho, estira los brazos al frente resistiendo que la banda te gire el tronco.",
         "Si en el Hollow Body sientes que la cintura se despega del suelo, dobla un poco las rodillas."),
-
       estiramientoPsoas: (presc) => exCard(4, "Estiramiento Activo de Isquiotibiales y Psoas", presc,
         "Liberación de la musculatura de cadera y piernas tras el entrenamiento de fuerza.",
         "Haz una zancada larga apoyando la rodilla trasera en una colchoneta. Aprieta el glúteo de la pierna trasera y empuja suavemente la cadera hacia adelante durante 30 seg por lado (estira el psoas). Luego estira la pierna delantera apoyando el talón e inclínate recto (estira isquiotibiales).",
         "Mantén la respiración lenta y profunda sin rebotar."),
-
       stepUps: (presc) => exCard(1, "Step-ups Altos (Subida a Cajón Alto)", presc,
         "Subida unilateral a una superficie alta simulando un paso de pie alto en escalada.",
         "Coloca un pie completo sobre un cajón o banco estable que te quede a la altura de la rodilla o un poco más arriba. Sube todo tu cuerpo haciendo fuerza exclusivamente con esa pierna elevada (sin impulsarte con el talón del pie de abajo) y baja lento en 3 segundos.",
         "Controlar la bajada es tan importante como la subida para fortalecer la rodilla."),
-
       lSit: (presc) => exCard(2, "L-Sit Progresivo / Elevaciones Controladas", presc,
         "Sostener las piernas horizontales en el aire para máxima compresión abdominal.",
         "Colgado de la barra (o apoyado en paralelas), sube ambas piernas estiradas hasta que queden paralelas al suelo (ángulo de 90°). Si es muy intenso, hazlo con una pierna estirada y la otra doblada alternando.",
         "Evita encorvar los hombros hacia adelante."),
-
       planchaLateral: (presc) => exCard(3, "Plancha Lateral con Elevación de Pierna", presc,
         "Fortalecimiento de oblicuos y glúteo medio para estabilizar pasos laterales.",
         "Apóyate de lado sobre un antebrazo con el codo justo debajo del hombro y el cuerpo recto de cabeza a pies. Eleva la cadera del suelo y sube la pierna superior unos 30 cm manteniendo la postura firme 25 segundos por lado.",
         "No dejes que la cadera caiga hacia atrás ni hacia el suelo."),
-
       pistols: (presc) => exCard(1, "Pistols Asistidos / Búlgara con Pausa Abajo", presc,
         "Sentadilla profunda a una pierna eliminando el rebote para ganar fuerza pura desde abajo.",
         "Sujeta suavemente una cinta TRX o poste para equilibrarte, estira una pierna al frente y baja completo sobre la otra pierna hasta que el glúteo toque el talón. Haz una pausa estática de 2 segundos abajo y sube empujando fuerte.",
         "Si sientes molestia en la rodilla, realiza Sentadilla Búlgara haciendo la misma pausa de 2 segundos abajo."),
-
       toesToBar: (presc) => exCard(2, "Toes-to-Bar / Elevaciones Estrictas de Psoas", presc,
         "Llevar los pies hasta tocar la barra colgado sin balanceo.",
         "Colgado de la barra, activa el abdomen y sube las piernas estiradas hasta que tus empeines toquen la barra entre tus manos. Baja muy despacio en 3 segundos evitando columpiarte.",
         "Si aún no llegas a la barra con piernas rectas, sube hasta donde puedas con control total."),
-
       abWheel: (presc) => exCard(3, "Ab-Wheel (Rueda Abdominal) o Walkouts", presc,
         "Extensión abdominal completa que entrena la tensión corporal en techos largos.",
         "De rodillas en una colchoneta con las manos en la rueda abdominal (o en el suelo caminando con las manos hacia adelante), deslízate estirando el cuerpo hacia el frente hasta donde puedas mantener los glúteos apretados y la espalda recta, y regresa contrayendo el abdomen.",
         "Detén el avance antes de que la espalda baja se hunda o arquee."),
-
       repetidores: (presc) => exCard(2, "Repetidores HIT 7:3 en Regleta de 20 mm", presc,
         "Series interválicas de alta intensidad (7 seg colgado / 3 seg descanso) para resistencia de fuerza en antebrazos.",
         "Usa un cronómetro con intervalos: cuélgate 7 segundos en semiarqueo (20 mm), baja los pies al suelo durante 3 segundos (sin soltar las manos ni sacudir magnesio) y vuelve a colgarte 7 segundos. Repite este ciclo 6 veces seguidas (1 minuto total = 1 serie). Descansa 3 minutos completos entre series.",
         "Si en las últimas repeticiones tus dedos empiezan a abrirse o colapsan a arqueo cerrado, descarga un poco de peso con los pies."),
-
       circuitos4x4: (presc) => exCard(3, "Circuitos 4×4 Suave (Capacidad Aeróbica)", presc,
         "Escalar 4 bloques seguidos sin descanso entre ellos para mejorar la recuperación del antebrazo.",
         "Elige 4 bloques fáciles (V1-V2) que conozcas bien. Escala el primero, baja rápido, pasa inmediatamente al segundo, tercero y cuarto sin parar. Al terminar los 4, descansa 3 minutos y repite una segunda ronda.",
         "Mantén un ritmo fluido y constante, respirando calmado."),
-
       arc4min: (presc) => exCard(3, "Travesía Continua de 4 Minutos (ARC)", presc,
         "Escalada continua de baja intensidad durante 4 minutos para estimular la capilarización de los antebrazos.",
         "Muévete lateralmente por el muro usando presas cómodas durante 4 minutos sin tocar el suelo. Cada 3 o 4 movimientos, suelta una mano y sacúdela suavemente durante 2 segundos para relajarla.",
         "La congestión debe ser suave y manejable (nivel 4 de 10), nunca máxima."),
-
       desplome3x2: (presc) => exCard(3, "Bloques en Desplome Encadenados (3×2)", presc,
         "Encadenamiento de bloques físicos en inclinación para tolerar fatiga anaeróbica.",
         "Selecciona 3 bloques en muro desplomado. Escálalos uno detrás del otro sin descanso entre ellos, descansa 4 minutos completos y haz una segunda ronda.",
         "Prioriza mantener los pies pegados usando tensión de core y taloneos."),
-
       social: (presc) => exCard(2, "Sesión Social de Búlder en ELBLOQUE", presc,
         "Escalada compartida enfocada en creatividad, lectura de betas y variedad de estilos.",
         "Comparte sesión en ELBLOQUE alternando placas, desplomes y movimientos de coordinación. Limita a 4 o 5 intentos los bloques duros y descansa 3 minutos entre pegues exigentes.",
         "Observa cómo usan los pies los escaladores más fluidos del muro."),
-
       descansoTotal: (presc) => exCard(1, "Descanso Total y Supercompensación", presc,
         "Jornada completa sin carga mecánica en dedos ni escalada para que los tejidos se reparen y fortalezcan.",
         "No escales ni hagas ejercicios de agarre hoy. Prioriza hidratación, alimentación rica en proteínas/carbohidratos y 7.5 a 8.5 horas de sueño.",
         "Los tendones y poleas crecen y se fortalecen precisamente durante este día de reposo.")
     };
 
-    // Estructura Completa de las 6 Semanas con Rutinas Detalladas y Guías Exhaustivas
     const WEEKLY_TEMPLATES = [
       {
         week: 1,
@@ -582,9 +704,7 @@
         focus: "Familiarización con regleta 20 mm (RPE 8), técnica de pies y activación de psoas/core en ELBLOQUE.",
         days: [
           {
-            dayLabel: "Día 1",
-            tag: "Fuerza Máxima & Dedos",
-            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            dayLabel: "Día 1", tag: "Fuerza Máxima & Dedos", badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
             title: "Max Hangs 20mm + Tracción Explosiva",
             tasks: [
               "Calentamiento progresivo completo (15-20 min)",
@@ -595,9 +715,7 @@
             detailGuide: EX.calentamiento("15–20 min") + EX.maxHangs("4 series × 10 seg • Descanso 3 min • RPE 8") + EX.powerPullups("4 series × 4 reps • Descanso 2.5 min") + EX.bloqueos90("3 series × 8 seg • Descanso 2 min")
           },
           {
-            dayLabel: "Día 2",
-            tag: "Escalada Libre & Técnica",
-            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            dayLabel: "Día 2", tag: "Escalada Libre & Técnica", badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
             title: "Técnica de Precisión y Pies Silenciosos",
             tasks: [
               "Calentamiento en travesía suave (15 min)",
@@ -608,9 +726,7 @@
             detailGuide: EX.calentamiento("15 min en travesía") + EX.piesSilenciosos("4 bloques fáciles (V0–V2)") + EX.hoverHands("4 bloques fáciles") + EX.escaladaLibre("30–40 min • 60–70% intensidad")
           },
           {
-            dayLabel: "Día 3",
-            tag: "Descanso Activo",
-            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            dayLabel: "Día 3", tag: "Descanso Activo", badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Regeneración, Antagonistas y Movilidad",
             tasks: [
               "Extensiones de dedos con banda elástica: 3 series × 20 reps",
@@ -620,9 +736,7 @@
             detailGuide: EX.extensionesBanda("3 series × 20 reps • Descanso 60 seg") + EX.pushupPlus("3 series × 12 reps • Descanso 60 seg") + EX.cadera9090("15 min continuos")
           },
           {
-            dayLabel: "Día 4",
-            tag: "Piernas, Psoas & Core",
-            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            dayLabel: "Día 4", tag: "Piernas, Psoas & Core", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Fuerza Funcional Tren Inferior y Flexores",
             tasks: [
               "Sentadilla Búlgara (enfoque empuje de talón/punta): 3 series × 8 por pierna",
@@ -633,9 +747,7 @@
             detailGuide: EX.bulgara("3 series × 8 reps/pierna") + EX.psoasColgado("3 series × 10 reps") + EX.hollowPallof("3 rondas × 30 seg") + EX.estiramientoPsoas("10 min")
           },
           {
-            dayLabel: "Día 5",
-            tag: "Repetidores HIT 7:3",
-            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            dayLabel: "Día 5", tag: "Repetidores HIT 7:3", badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
             title: "Resistencia de Fuerza Local en Antebrazo",
             tasks: [
               "Calentamiento articular + 3 bloques progresivos",
@@ -645,9 +757,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.repetidores("3 series × (6 reps de 7s/3s) • Descanso 3 min") + EX.circuitos4x4("2 rondas × 4 bloques • Descanso 3 min")
           },
           {
-            dayLabel: "Día 6",
-            tag: "Escalada Social",
-            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            dayLabel: "Día 6", tag: "Escalada Social", badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
             title: "Búlder Lúdico y Lectura de Movimientos",
             tasks: [
               "Calentamiento compartido en ELBLOQUE (15 min)",
@@ -657,9 +767,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.social("60 min variados")
           },
           {
-            dayLabel: "Día 7",
-            tag: "Descanso Total",
-            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            dayLabel: "Día 7", tag: "Descanso Total", badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
             title: "Recuperación Completa del Sistema Nervioso",
             tasks: [
               "Cero escalada ni carga en dedos",
@@ -675,9 +783,7 @@
         focus: "Incremento de volumen en Max Hangs (5 series) y consolidación de apoyos.",
         days: [
           {
-            dayLabel: "Día 1",
-            tag: "Fuerza Máxima & Dedos",
-            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            dayLabel: "Día 1", tag: "Fuerza Máxima & Dedos", badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
             title: "Max Hangs 20mm (5 Series) + Power Pull-ups",
             tasks: [
               "Calentamiento progresivo completo (15-20 min)",
@@ -688,9 +794,7 @@
             detailGuide: EX.calentamiento("15–20 min") + EX.maxHangs("5 series × 10 seg • Descanso 3 min • RPE 8.5") + EX.powerPullups("4 series × 5 reps • Descanso 2.5 min") + EX.remoAnillas("3 series × 10 reps")
           },
           {
-            dayLabel: "Día 2",
-            tag: "Escalada Libre & Técnica",
-            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            dayLabel: "Día 2", tag: "Escalada Libre & Técnica", badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
             title: "Transferencia de Fuerza y Taloneos",
             tasks: [
               "Calentamiento en travesía (15 min)",
@@ -700,9 +804,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.taloneos("25 min • Técnica específica") + EX.onsight("4 bloques a vista")
           },
           {
-            dayLabel: "Día 3",
-            tag: "Descanso Activo",
-            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            dayLabel: "Día 3", tag: "Descanso Activo", badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Movilidad Escapular y Antagonistas",
             tasks: [
               "Extensiones de dedos con banda + rotaciones externas de hombro: 3 series × 15",
@@ -712,9 +814,7 @@
             detailGuide: EX.rotacionesHombro("3 series × 15 reps") + EX.pikePushups("3 series × 10 reps") + EX.cadera9090("15 min")
           },
           {
-            dayLabel: "Día 4",
-            tag: "Piernas, Psoas & Core",
-            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            dayLabel: "Día 4", tag: "Piernas, Psoas & Core", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Estabilidad Unilateral y Compresión",
             tasks: [
               "Step-ups altos (subida a cajón simulando pie alto en muro): 3 series × 8 por pierna",
@@ -724,9 +824,7 @@
             detailGuide: EX.stepUps("3 series × 8 reps/pierna") + EX.lSit("3 series × 12 reps") + EX.planchaLateral("3 series × 25 seg/lado")
           },
           {
-            dayLabel: "Día 5",
-            tag: "Repetidores HIT 7:3",
-            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            dayLabel: "Día 5", tag: "Repetidores HIT 7:3", badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
             title: "Repetidores 7:3 (4 Series)",
             tasks: [
               "Calentamiento progresivo",
@@ -736,9 +834,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.repetidores("4 series × (6 reps de 7s/3s) • Descanso 3 min") + EX.arc4min("2 rondas × 4 min")
           },
           {
-            dayLabel: "Día 6",
-            tag: "Escalada Social",
-            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            dayLabel: "Día 6", tag: "Escalada Social", badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
             title: "Sesión Social de Búlder en ELBLOQUE",
             tasks: [
               "Calentamiento grupal (15 min)",
@@ -748,9 +844,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.social("60–75 min")
           },
           {
-            dayLabel: "Día 7",
-            tag: "Descanso Total",
-            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            dayLabel: "Día 7", tag: "Descanso Total", badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
             title: "Descanso Total y Supercompensación",
             tasks: [
               "Descanso pasivo completo",
@@ -766,9 +860,7 @@
         focus: "Aumento de carga/lastre en Max Hangs (RPE 9) y potencia en movimientos largos.",
         days: [
           {
-            dayLabel: "Día 1",
-            tag: "Fuerza Máxima & Dedos",
-            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            dayLabel: "Día 1", tag: "Fuerza Máxima & Dedos", badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
             title: "Max Hangs con Lastre Ligero / Menor Asistencia",
             tasks: [
               "Calentamiento progresivo riguroso (20 min)",
@@ -779,9 +871,7 @@
             detailGuide: EX.calentamiento("20 min") + EX.maxHangs("5 series × 10 seg (+2–4 kg) • RPE 9") + EX.dominadasLastradas("4 series × 4 reps") + EX.facePulls("3 series × 12 reps")
           },
           {
-            dayLabel: "Día 2",
-            tag: "Escalada Libre & Técnica",
-            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            dayLabel: "Día 2", tag: "Escalada Libre & Técnica", badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
             title: "Dinámicos Controlados y Precisión en Regletas",
             tasks: [
               "Calentamiento (15 min)",
@@ -791,9 +881,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.deadpoints("25 min") + EX.placaRegletas("4 bloques técnicos")
           },
           {
-            dayLabel: "Día 3",
-            tag: "Descanso Activo",
-            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            dayLabel: "Día 3", tag: "Descanso Activo", badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Descarga Articular y Antagonistas",
             tasks: [
               "Extensores de dedos + pronación/supinación de muñeca con peso ligero: 3 series × 15",
@@ -802,9 +890,7 @@
             detailGuide: EX.pronacionMuneca("3 series × 15 reps") + EX.yogaToracico("20 min")
           },
           {
-            dayLabel: "Día 4",
-            tag: "Piernas, Psoas & Core",
-            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            dayLabel: "Día 4", tag: "Piernas, Psoas & Core", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Potencia de Empuje de Pierna y Psoas",
             tasks: [
               "Pistols asistidos o Sentadilla Búlgara con pausa abajo: 4 series × 6 por pierna",
@@ -814,9 +900,7 @@
             detailGuide: EX.pistols("4 series × 6 reps/pierna") + EX.toesToBar("4 series × 8 reps") + EX.abWheel("3 series × 10 reps")
           },
           {
-            dayLabel: "Día 5",
-            tag: "Repetidores HIT 7:3",
-            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            dayLabel: "Día 5", tag: "Repetidores HIT 7:3", badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
             title: "Repetidores 7:3 Alta Densidad",
             tasks: [
               "Calentamiento completo",
@@ -826,9 +910,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.repetidores("4 series × (6 reps de 7s/3s) • Descanso 2.5 min") + EX.desplome3x2("2 rondas × 3 bloques")
           },
           {
-            dayLabel: "Día 6",
-            tag: "Escalada Social",
-            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            dayLabel: "Día 6", tag: "Escalada Social", badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
             title: "Proyección de Bloques Límite con Amigos",
             tasks: [
               "Calentamiento (15 min)",
@@ -838,9 +920,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.social("60–75 min (Proyectos límite)")
           },
           {
-            dayLabel: "Día 7",
-            tag: "Descanso Total",
-            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            dayLabel: "Día 7", tag: "Descanso Total", badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
             title: "Descanso Total",
             tasks: [
               "Cero actividad de agarre",
@@ -856,9 +936,7 @@
         focus: "Pico de volumen de fuerza antes de la descarga de Semana 5.",
         days: [
           {
-            dayLabel: "Día 1",
-            tag: "Fuerza Máxima & Dedos",
-            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            dayLabel: "Día 1", tag: "Fuerza Máxima & Dedos", badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
             title: "Max Hangs 20mm (6 Series) + Tracción Máxima",
             tasks: [
               "Calentamiento completo (20 min)",
@@ -869,9 +947,7 @@
             detailGuide: EX.calentamiento("20 min") + EX.maxHangs("6 series × 10 seg • Descanso 3 min • RPE 9") + EX.powerPullups("5 series × 4 reps") + EX.suspensionUnBrazo("2 series × 6 seg/brazo")
           },
           {
-            dayLabel: "Día 2",
-            tag: "Escalada Libre & Técnica",
-            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            dayLabel: "Día 2", tag: "Escalada Libre & Técnica", badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
             title: "Eficiencia Energética y Respiración",
             tasks: [
               "Calentamiento (15 min)",
@@ -881,9 +957,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.respiracion("5 bloques medios") + EX.repeticionPerfecta("3 bloques × 3 repeticiones")
           },
           {
-            dayLabel: "Día 3",
-            tag: "Descanso Activo",
-            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            dayLabel: "Día 3", tag: "Descanso Activo", badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Regeneración Activa y Antagonistas",
             tasks: [
               "Extensiones de dedos con banda: 3 series × 25 reps",
@@ -893,9 +967,7 @@
             detailGuide: EX.extensionesBanda("3 series × 25 reps") + EX.pushupPlus("3 series × 10 reps") + EX.estiramientoPsoas("15 min")
           },
           {
-            dayLabel: "Día 4",
-            tag: "Piernas, Psoas & Core",
-            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            dayLabel: "Día 4", tag: "Piernas, Psoas & Core", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Tensión Corporal Total en Desplome",
             tasks: [
               "Sentadilla Búlgara + salto explosivo suave: 3 series × 6 por pierna",
@@ -905,9 +977,7 @@
             detailGuide: EX.bulgara("3 series × 6 reps/pierna (explosivo)") + EX.psoasColgado("3 series × 8 reps (3 seg pausa)") + EX.hollowPallof("3 series × 30 seg")
           },
           {
-            dayLabel: "Día 5",
-            tag: "Repetidores HIT 7:3",
-            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            dayLabel: "Día 5", tag: "Repetidores HIT 7:3", badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
             title: "Repetidores 7:3 (5 Series)",
             tasks: [
               "Calentamiento progresivo",
@@ -917,9 +987,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.repetidores("5 series × (6 reps de 7s/3s) • Descanso 3 min")
           },
           {
-            dayLabel: "Día 6",
-            tag: "Escalada Social",
-            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            dayLabel: "Día 6", tag: "Escalada Social", badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
             title: "Sesión Social Variada en ELBLOQUE",
             tasks: [
               "Calentamiento grupal",
@@ -928,9 +996,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.social("60 min")
           },
           {
-            dayLabel: "Día 7",
-            tag: "Descanso Total",
-            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            dayLabel: "Día 7", tag: "Descanso Total", badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
             title: "Descanso Total Pre-Descarga",
             tasks: [
               "Descanso total para preparar la semana de descarga"
@@ -945,9 +1011,7 @@
         focus: "Reducción del 40% del volumen manteniendo intensidad para disipar fatiga tendinosa.",
         days: [
           {
-            dayLabel: "Día 1",
-            tag: "Fuerza Máxima (Descarga)",
-            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            dayLabel: "Día 1", tag: "Fuerza Máxima (Descarga)", badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
             title: "Max Hangs 20mm Volumen Reducido (3 Series)",
             tasks: [
               "Calentamiento completo (15 min)",
@@ -957,9 +1021,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.maxHangs("3 series × 10 seg (Descarga • 3 min descanso)") + EX.powerPullups("3 series × 3 reps rápidas")
           },
           {
-            dayLabel: "Día 2",
-            tag: "Escalada Libre & Técnica",
-            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            dayLabel: "Día 2", tag: "Escalada Libre & Técnica", badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
             title: "Fluidez y Movimiento Sin Fatiga",
             tasks: [
               "Calentamiento suave",
@@ -969,9 +1031,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.escaladaLibre("6 bloques cómodos • Sin fatiga")
           },
           {
-            dayLabel: "Día 3",
-            tag: "Descanso Activo",
-            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            dayLabel: "Día 3", tag: "Descanso Activo", badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Movilidad Profunda y Recuperación",
             tasks: [
               "Movilidad completa de hombros, cadera y columna (20 min)",
@@ -980,9 +1040,7 @@
             detailGuide: EX.cadera9090("20 min") + EX.extensionesBanda("2 series × 20 reps")
           },
           {
-            dayLabel: "Día 4",
-            tag: "Piernas, Psoas & Core (Ligero)",
-            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            dayLabel: "Día 4", tag: "Piernas, Psoas & Core (Ligero)", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Activación Ligera de Piernas y Core",
             tasks: [
               "Sentadilla Búlgara peso corporal: 2 series × 8 por pierna",
@@ -992,9 +1050,7 @@
             detailGuide: EX.bulgara("2 series × 8 reps (sin peso)") + EX.psoasColgado("2 series × 10 reps") + EX.planchaLateral("2 rondas × 30 seg")
           },
           {
-            dayLabel: "Día 5",
-            tag: "Repetidores Ligero",
-            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            dayLabel: "Día 5", tag: "Repetidores Ligero", badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
             title: "Activación Rápida de Antebrazo (2 Series)",
             tasks: [
               "Calentamiento",
@@ -1004,9 +1060,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.repetidores("2 series × (6 reps de 7s/3s) • Descanso 3 min")
           },
           {
-            dayLabel: "Día 6",
-            tag: "Escalada Social",
-            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            dayLabel: "Día 6", tag: "Escalada Social", badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
             title: "Escalada Recreativa Sin Presión",
             tasks: [
               "Sesión social ligera en ELBLOQUE (45-60 min) evitando arqueos extremos"
@@ -1014,9 +1068,7 @@
             detailGuide: EX.social("45–60 min ligeros")
           },
           {
-            dayLabel: "Día 7",
-            tag: "Descanso Total",
-            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            dayLabel: "Día 7", tag: "Descanso Total", badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
             title: "Descanso Total Antes de Semana Pico",
             tasks: [
               "Descanso total para llegar al 100% a la Semana 6"
@@ -1031,9 +1083,7 @@
         focus: "Transferencia máxima al muro, encadenamiento de proyectos y cierre de ciclo en ELBLOQUE.",
         days: [
           {
-            dayLabel: "Día 1",
-            tag: "Test / Pico de Fuerza",
-            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            dayLabel: "Día 1", tag: "Test / Pico de Fuerza", badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
             title: "Evaluación Max Hangs 20mm + Potencia",
             tasks: [
               "Calentamiento progresivo óptimo (20 min)",
@@ -1043,9 +1093,7 @@
             detailGuide: EX.calentamiento("20 min") + EX.maxHangs("Test Final: 3 series × 10 seg • Descanso 3.5 min") + EX.powerPullups("3 series × 4 reps explosivas")
           },
           {
-            dayLabel: "Día 2",
-            tag: "Escalada Libre & Técnica",
-            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            dayLabel: "Día 2", tag: "Escalada Libre & Técnica", badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
             title: "Encadenamiento de Bloques Objetivo",
             tasks: [
               "Calentamiento (15 min)",
@@ -1055,9 +1103,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.onsight("2 bloques objetivo • Descanso 4 min")
           },
           {
-            dayLabel: "Día 3",
-            tag: "Descanso Activo",
-            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            dayLabel: "Día 3", tag: "Descanso Activo", badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Movilidad y Descarga Neural",
             tasks: [
               "Extensiones de dedos + movilidad articular suave (15 min)",
@@ -1066,9 +1112,7 @@
             detailGuide: EX.extensionesBanda("2 series × 20 reps") + EX.cadera9090("15 min")
           },
           {
-            dayLabel: "Día 4",
-            tag: "Piernas, Psoas & Core",
-            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            dayLabel: "Día 4", tag: "Piernas, Psoas & Core", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Activación de Core y Estabilidad",
             tasks: [
               "Step-ups dinámicos: 2 series × 8 por pierna",
@@ -1078,9 +1122,7 @@
             detailGuide: EX.stepUps("2 series × 8 reps/pierna") + EX.psoasColgado("3 series × 8 reps") + EX.hollowPallof("3 series × 30 seg")
           },
           {
-            dayLabel: "Día 5",
-            tag: "Resistencia Aplicada",
-            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            dayLabel: "Día 5", tag: "Resistencia Aplicada", badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
             title: "Simulación de Pegues Largos",
             tasks: [
               "Calentamiento",
@@ -1089,9 +1131,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.repetidores("2 series × (6 reps de 7s/3s)") + EX.arc4min("2 travesías de 25 movimientos")
           },
           {
-            dayLabel: "Día 6",
-            tag: "Escalada Social & Cierre",
-            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            dayLabel: "Día 6", tag: "Escalada Social & Cierre", badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
             title: "Festival de Bloques en ELBLOQUE",
             tasks: [
               "Calentamiento con amigos",
@@ -1101,9 +1141,7 @@
             detailGuide: EX.calentamiento("15 min") + EX.social("75 min • Festival de cierre")
           },
           {
-            dayLabel: "Día 7",
-            tag: "Descanso y Cierre de Ciclo",
-            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            dayLabel: "Día 7", tag: "Descanso y Cierre de Ciclo", badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
             title: "Descanso Final y Generación de Informe",
             tasks: [
               "Descanso total",
@@ -1115,23 +1153,21 @@
       }
     ];
 
-    // Estado Global de la Aplicación
     let appState = {
       activeWeek: 1,
       cycleStartDate: new Date().toISOString().split("T")[0],
-      completedTasks: {},     // { "w1_d0_t0": "2026-11-18 15:40" }
-      dayCustomDates: {},     // { "w1_d0": "2026-11-18" }
-      exceptions: [],         // [{ id, week, dayIdx, date, type, reason, justified, timestamp }]
-      archivedCycles: []      // [{ id, dateRange, completionRate, reportText }]
+      completedTasks: {},
+      dayCustomDates: {},
+      exceptions: [],
+      archivedCycles: [],
+      theme: { accent: "amber", base: "slate" }
     };
 
     let syncTimeout = null;
 
-    // =========================================================================
-    // INICIALIZACIÓN Y SINCRONIZACIÓN CON GOOGLE SHEETS
-    // =========================================================================
     document.addEventListener("DOMContentLoaded", async () => {
       loadFromLocal();
+      applyThemeVariables(appState.theme);
       renderAll();
       await pullFromCloud(false);
     });
@@ -1141,13 +1177,9 @@
       const label = document.getElementById("syncText");
       label.textContent = text;
       dot.className = "w-2 h-2 rounded-full";
-      if (status === "syncing") {
-        dot.classList.add("bg-amber-400", "animate-pulse");
-      } else if (status === "ok") {
-        dot.classList.add("bg-emerald-400");
-      } else {
-        dot.classList.add("bg-rose-400");
-      }
+      if (status === "syncing") dot.classList.add("bg-amber-400", "animate-pulse");
+      else if (status === "ok") dot.classList.add("bg-emerald-400");
+      else dot.classList.add("bg-rose-400");
     }
 
     function loadFromLocal() {
@@ -1157,9 +1189,7 @@
           const parsed = JSON.parse(raw);
           appState = { ...appState, ...parsed };
         }
-      } catch (e) {
-        console.warn("Error leyendo almacenamiento local:", e);
-      }
+      } catch (e) {}
     }
 
     function saveState() {
@@ -1190,7 +1220,6 @@
           setSyncStatus("error", "Error de red (local OK)");
         }
       } catch (err) {
-        console.error("Error enviando a Google Sheets:", err);
         setSyncStatus("error", "Sin conexión (local OK)");
       }
     }
@@ -1205,21 +1234,18 @@
         if (cloudData && typeof cloudData === "object" && Object.keys(cloudData).length > 0) {
           appState = { ...appState, ...cloudData };
           localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+          applyThemeVariables(appState.theme);
           renderAll();
           if (manual) showToast("Datos actualizados desde Google Sheets");
         }
         const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
         setSyncStatus("ok", `Sincronizado (${now})`);
       } catch (err) {
-        console.warn("No se pudo leer de la nube, usando caché local:", err);
         setSyncStatus("error", "Modo local");
         if (manual) showToast("No se pudo conectar con Google Sheets");
       }
     }
 
-    // =========================================================================
-    // UTILIDADES DE FECHAS Y CÁLCULO DE PROGRESO
-    // =========================================================================
     function formatShortDate(isoStr) {
       if (!isoStr) return "";
       const [y, m, d] = isoStr.split("-").map(Number);
@@ -1270,9 +1296,6 @@
       return { completedDays, percent };
     }
 
-    // =========================================================================
-    // ACCIONES DEL USUARIO
-    // =========================================================================
     function updateCycleStartDate(newDate) {
       if (!newDate) return;
       appState.cycleStartDate = newDate;
@@ -1341,9 +1364,6 @@
       openModal("exerciseDetailModal");
     }
 
-    // =========================================================================
-    // RENDERIZADO DE INTERFAZ
-    // =========================================================================
     function renderAll() {
       const startInput = document.getElementById("cycleStartDate");
       startInput.value = appState.cycleStartDate;
@@ -1361,11 +1381,8 @@
         if (getDayStatus(6, d).isComplete) week6Done++;
       }
       const banner = document.getElementById("cycleCompleteBanner");
-      if (week6Done >= 6 || completedDays >= 38) {
-        banner.classList.remove("hidden");
-      } else {
-        banner.classList.add("hidden");
-      }
+      if (week6Done >= 6 || completedDays >= 38) banner.classList.remove("hidden");
+      else banner.classList.add("hidden");
 
       renderWeekTabs();
       renderWeekHeader();
@@ -1381,14 +1398,14 @@
         }
         const isActive = appState.activeWeek === w.week;
         const activeClasses = isActive
-          ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+          ? "theme-bg-900 text-white theme-border-800 shadow-sm"
           : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100";
 
         return `
           <button onclick="setActiveWeek(${w.week})"
             class="shrink-0 px-4 py-2.5 rounded-xl border text-xs font-bold transition flex items-center gap-2 ${activeClasses}">
             <span>Semana ${w.week}</span>
-            <span class="px-1.5 py-0.5 rounded-md text-[11px] ${isActive ? "bg-amber-500 text-slate-950" : "bg-slate-100 text-slate-600"}">
+            <span class="px-1.5 py-0.5 rounded-md text-[11px] ${isActive ? "theme-accent-bg" : "bg-slate-100 text-slate-600"}">
               ${wDone}/7
             </span>
           </button>
@@ -1406,7 +1423,7 @@
 
       document.getElementById("weekPhaseHeader").innerHTML = `
         <div>
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-600">${wObj.phase}</span>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500">${wObj.phase}</span>
           <h2 class="text-sm sm:text-base font-bold text-slate-900 mt-0.5">${wObj.focus}</h2>
         </div>
         <div class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
@@ -1452,9 +1469,9 @@
         }).join("");
 
         const exceptionHtml = status.justifiedExc ? `
-          <div class="mt-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-[11px] text-amber-900">
+          <div class="mt-3 p-2.5 rounded-lg theme-accent-soft border text-[11px] text-slate-900">
             <p class="font-bold">⚡ ${status.justifiedExc.type} (${formatShortDate(status.justifiedExc.date)})</p>
-            <p class="mt-0.5 text-amber-800">${status.justifiedExc.reason}</p>
+            <p class="mt-0.5 text-slate-700">${status.justifiedExc.reason}</p>
           </div>
         ` : "";
 
@@ -1462,7 +1479,7 @@
           <article class="rounded-2xl border ${cardBorder} shadow-sm p-4 flex flex-col justify-between transition">
             <div>
               <div class="flex items-center justify-between gap-2 mb-2">
-                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-slate-900 text-white">
+                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg theme-bg-900 text-white">
                   ${day.dayLabel}
                 </span>
                 <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${day.badgeColor}">
@@ -1472,21 +1489,19 @@
 
               <h3 class="text-sm font-bold text-slate-900 leading-snug mb-2">${day.title}</h3>
 
-              <!-- Selector de Fecha Real Ejecutada -->
               <div class="flex items-center justify-between gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 mb-3">
                 <span class="text-[11px] font-medium text-slate-600">${displayDateLabel}</span>
                 <input type="date" value="${assignedDate}" title="Seleccionar fecha real en que hiciste este bloque"
                   onchange="updateDayCustomDate(${wNum}, ${dIdx}, this.value)"
-                  class="text-[11px] bg-white border border-slate-300 rounded px-1.5 py-0.5 text-slate-700 focus:outline-none focus:ring-1 focus:ring-amber-500" />
+                  class="text-[11px] bg-white border border-slate-300 rounded px-1.5 py-0.5 text-slate-700 focus:outline-none" />
               </div>
 
               <ul class="space-y-0.5">
                 ${tasksHtml}
               </ul>
 
-              <!-- Botón Ver Detalle de Ejercicios -->
               <button onclick="openExerciseDetail(${wNum}, ${dIdx})"
-                class="w-full mt-3.5 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-teal-400 font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 border border-slate-800">
+                class="w-full mt-3.5 py-2.5 px-3 rounded-xl theme-bg-900 hover:opacity-95 theme-accent-text font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 border theme-border-800">
                 <span>Ver Detalle de Ejercicios</span>
               </button>
 
@@ -1511,9 +1526,6 @@
       }).join("");
     }
 
-    // =========================================================================
-    // MODALES: IMPREVISTOS, REPORTES, HISTORIAL Y EXPORTACIÓN
-    // =========================================================================
     function openModal(id) {
       document.getElementById(id).classList.remove("hidden");
     }
@@ -1665,7 +1677,7 @@
               <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">${item.completionRate}</span>
             </div>
             <p class="text-[11px] text-slate-500">Archivado el ${item.archivedAt}</p>
-            <button onclick="copyArchivedReport(${idx})" class="text-xs font-bold text-amber-700 hover:underline">
+            <button onclick="copyArchivedReport(${idx})" class="text-xs font-bold text-slate-800 hover:underline">
               Copiar informe completo de este ciclo
             </button>
           </div>
