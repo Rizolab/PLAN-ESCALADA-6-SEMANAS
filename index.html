@@ -203,4 +203,1196 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Detalle / Qué se hizo
+          <label class="block text-xs font-bold text-slate-600 mb-1">Detalle / Qué se hizo en su lugar</label>
+          <textarea id="excReason" rows="3" placeholder="Ej: Muro muy lleno en ELBLOQUE, cambié Max Hangs por sesión de Psoas y Core + movilidad de hombros."
+            class="w-full text-sm border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+        </div>
+
+        <label class="flex items-center gap-2 text-xs text-slate-700 cursor-pointer">
+          <input type="checkbox" id="excMarkJustified" checked class="rounded text-amber-500 focus:ring-amber-500" />
+          <span>Contabilizar este bloque como <strong>completado/justificado</strong> en la barra de progreso</span>
+        </label>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button onclick="closeModal('exceptionModal')" class="text-xs font-semibold px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">Cancelar</button>
+          <button onclick="saveException()" class="text-xs font-bold px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950">Guardar Registro</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Reporte Acumulado Google Docs -->
+  <div id="reportModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 id="reportModalTitle" class="text-sm font-bold">Reporte Acumulado para Google Docs</h3>
+        <button onclick="closeModal('reportModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+      </div>
+      <div class="p-5 overflow-y-auto space-y-3 flex-1">
+        <p class="text-xs text-slate-600">Copia este informe estructurado con fechas reales, marcas de tiempo y novedades para pegarlo directamente en tu documento de Google Docs:</p>
+        <textarea id="reportOutput" rows="16" readonly
+          class="w-full text-xs font-mono bg-slate-50 border border-slate-300 rounded-xl p-3.5 text-slate-800 focus:outline-none"></textarea>
+      </div>
+      <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2">
+        <button onclick="archiveAndResetCycle()" class="text-xs font-semibold px-3.5 py-2 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 transition">
+          Archivar Ciclo en Historial
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="closeModal('reportModal')" class="text-xs font-semibold px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800">Cerrar</button>
+          <button onclick="copyReportText()" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white">Copiar Reporte</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Protocolo de Calentamiento -->
+  <div id="warmupModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 class="text-sm font-bold">Protocolo de Calentamiento Obligatorio (15–20 min)</h3>
+        <button onclick="closeModal('warmupModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+      </div>
+      <div class="p-5 space-y-3 text-xs text-slate-700 leading-relaxed max-h-[75vh] overflow-y-auto">
+        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-950">
+          <strong>Regla de Seguridad:</strong> Nunca inicies Max Hangs (20 mm) ni búlder explosivo en frío. Las poleas A2/A4 requieren irrigación progresiva.
+        </div>
+        <ol class="list-decimal list-inside space-y-2">
+          <li><strong>Movilidad Articular General (4 min):</strong> Círculos de hombros, rotaciones escapulares, apertura torácica y círculos suaves de muñecas y dedos.</li>
+          <li><strong>Activación Escapular y Core (4 min):</strong> 2×10 <em>Scapular Pull-ups</em> en barra + 2×20 seg de plancha <em>Hollow Body</em>.</li>
+          <li><strong>Escalada Progresiva en Travesía / Bloques Fáciles (6 min):</strong> 3 a 4 bloques muy fáciles (V0–V1) enfocándote en pies silenciosos y agarres abiertos (semiarqueo / extensión).</li>
+          <li><strong>Aproximación en Regleta 20 mm (4 min):</strong> 3 suspensiones progresivas de 6–8 seg descargando peso con los pies en el suelo (50% → 70% → 85% de carga) con 1 min de pausa entre cada una.</li>
+        </ol>
+      </div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
+        <button onclick="closeModal('warmupModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Glosario -->
+  <div id="glossaryModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 class="text-sm font-bold">Glosario Técnico • Método Eric Hörst</h3>
+        <button onclick="closeModal('glossaryModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+      </div>
+      <div class="p-5 space-y-3 text-xs text-slate-700 max-h-[75vh] overflow-y-auto">
+        <div>
+          <p class="font-bold text-slate-900">Max Hangs (Suspensiones Máximas 10s)</p>
+          <p>Colgarse de una regleta de 20 mm durante 10 segundos a máxima intensidad (peso corporal + lastre o asistencia con banda) con 3 minutos de descanso completo entre series. Desarrolla fuerza neural sin hipertrofia excesiva.</p>
+        </div>
+        <div>
+          <p class="font-bold text-slate-900">Semiarqueo (Half Crimp)</p>
+          <p>Posición de agarre con los dedos flexionados a 90° en la articulación interfalángica proximal y el pulgar libre (sin bloquear sobre el índice). Es la posición más segura y transferible a la roca/muro.</p>
+        </div>
+        <div>
+          <p class="font-bold text-slate-900">Repetidores HIT 7:3 (High-Intensity Repeaters)</p>
+          <p>Protocolo de resistencia de fuerza local: 7 segundos colgado / 3 segundos de descanso × 6 repeticiones = 1 serie (1 minuto bajo tensión). Descansar 3 minutos entre series.</p>
+        </div>
+        <div>
+          <p class="font-bold text-slate-900">Power Pull-ups (Dominadas Explosivas)</p>
+          <p>Dominadas ejecutadas con máxima velocidad en la fase concéntrica (subida explosiva llevando el pecho hacia la barra) y bajada controlada de 2 segundos.</p>
+        </div>
+        <div>
+          <p class="font-bold text-slate-900">RPE (Índice de Esfuerzo Percibido 1–10)</p>
+          <p>Escala subjetiva de intensidad. RPE 8.5–9 significa terminar la serie sintiendo que podrías haber aguantado apenas 1 o 2 segundos más antes del fallo.</p>
+        </div>
+      </div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
+        <button onclick="closeModal('glossaryModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Historial de Ciclos Archivados -->
+  <div id="historyModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 class="text-sm font-bold">Historial de Ciclos Completados</h3>
+        <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+      </div>
+      <div id="historyList" class="p-5 space-y-3 text-xs text-slate-700 max-h-[70vh] overflow-y-auto"></div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
+        <button onclick="closeModal('historyModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de Notificación -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-lg border border-slate-700"></div>
+
+  <script>
+    // =========================================================================
+    // CONFIGURACIÓN DE CONEXIÓN CON GOOGLE SHEETS (APPS SCRIPT)
+    // =========================================================================
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxu6im1CkZw89RrfPMO34Bb6WsdL-wCkMy6oKVO_-cZtJOGFQ2KfZU_ndiML3QVJSRd/exec";
+    const STORAGE_KEY = "horst_climbing_cycle_v3";
+
+    // Estructura Base del Plan de 6 Semanas (Menú Flexible Día 1 a Día 7)
+    const WEEKLY_TEMPLATES = [
+      {
+        week: 1,
+        phase: "Fase 1: Adaptación Neural y Base Técnica",
+        focus: "Familiarización con regleta 20 mm (RPE 8), técnica de pies y activación de psoas/core.",
+        days: [
+          {
+            dayLabel: "Día 1",
+            tag: "Fuerza Máxima & Dedos",
+            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            title: "Max Hangs 20mm + Tracción Explosiva",
+            tasks: [
+              "Calentamiento progresivo completo (15-20 min)",
+              "Max Hangs 20 mm (Semiarqueo): 4 series × 10 seg (RPE 8 • 3 min descanso)",
+              "Power Pull-ups (Dominadas explosivas): 4 series × 4 reps (2.5 min descanso)",
+              "Bloqueos isométricos a 90° en barra: 3 series × 8 seg por brazo/asistido"
+            ]
+          },
+          {
+            dayLabel: "Día 2",
+            tag: "Escalada Libre & Técnica",
+            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            title: "Técnica de Precisión y Pies Silenciosos",
+            tasks: [
+              "Calentamiento en travesía suave (15 min)",
+              "Drill Pies Silenciosos: 4 bloques fáciles sin hacer ruido al apoyar",
+              "Drill Hover Hands (pausa 2 seg antes de agarrar presa): 4 bloques",
+              "Escalada libre controlada (60-70% intensidad) enfocada en cadera pegada al muro"
+            ]
+          },
+          {
+            dayLabel: "Día 3",
+            tag: "Descanso Activo",
+            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            title: "Regeneración, Antagonistas y Movilidad",
+            tasks: [
+              "Extensiones de dedos con banda elástica: 3 series × 20 reps",
+              "Flexiones escapulares (Push-up Plus) en suelo: 3 series × 12 reps",
+              "Movilidad profunda de cadera (90/90) y apertura torácica (15 min)"
+            ]
+          },
+          {
+            dayLabel: "Día 4",
+            tag: "Piernas, Psoas & Core",
+            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            title: "Fuerza Funcional Tren Inferior y Flexores",
+            tasks: [
+              "Sentadilla Búlgara (enfoque empuje de talón/punta): 3 × 8 por pierna",
+              "Elevaciones de pierna colgado (Hanging Leg Raises / Psoas): 3 × 10 reps",
+              "Plancha Hollow Body + Pallof Press antirrotación: 3 rondas × 30 seg",
+              "Estiramiento activo de isquiotibiales y psoas (10 min)"
+            ]
+          },
+          {
+            dayLabel: "Día 5",
+            tag: "Repetidores HIT 7:3",
+            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            title: "Resistencia de Fuerza Local en Antebrazo",
+            tasks: [
+              "Calentamiento articular + 3 bloques progresivos",
+              "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 3 series (3 min descanso)",
+              "Circuitos 4×4 suave en bloques de V1-V2 (4 bloques seguidos, 3 min pausa × 2 rondas)"
+            ]
+          },
+          {
+            dayLabel: "Día 6",
+            tag: "Escalada Social",
+            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            title: "Búlder Lúdico y Lectura de Movimientos",
+            tasks: [
+              "Calentamiento compartido en ELBLOQUE (15 min)",
+              "Sesión de proyectos de placa / equilibrio y desplomes moderados (60 min)",
+              "Enfriamiento y estiramiento suave de antebrazos al terminar"
+            ]
+          },
+          {
+            dayLabel: "Día 7",
+            tag: "Descanso Total",
+            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            title: "Recuperación Completa del Sistema Nervioso",
+            tasks: [
+              "Cero escalada ni carga en dedos",
+              "Hidratación óptima y sueño reparador (7.5–8.5 horas)"
+            ]
+          }
+        ]
+      },
+      {
+        week: 2,
+        phase: "Fase 1: Adaptación Neural y Base Técnica",
+        focus: "Incremento de volumen en Max Hangs (5 series) y consolidación de pies.",
+        days: [
+          {
+            dayLabel: "Día 1",
+            tag: "Fuerza Máxima & Dedos",
+            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            title: "Max Hangs 20mm (5 Series) + Power Pull-ups",
+            tasks: [
+              "Calentamiento progresivo completo (15-20 min)",
+              "Max Hangs 20 mm (Semiarqueo): 5 series × 10 seg (RPE 8.5 • 3 min descanso)",
+              "Power Pull-ups: 4 series × 5 reps explosivas",
+              "Remo en anillas / TRX con pausa de 2 seg arriba: 3 × 10 reps"
+            ]
+          },
+          {
+            dayLabel: "Día 2",
+            tag: "Escalada Libre & Técnica",
+            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            title: "Transferencia de Fuerza y Taloneos",
+            tasks: [
+              "Calentamiento en travesía (15 min)",
+              "Práctica específica de taloneos (Heel Hooks) y empeines en desplome suave",
+              "4 bloques a vista (Onsight) priorizando lectura previa desde el suelo"
+            ]
+          },
+          {
+            dayLabel: "Día 3",
+            tag: "Descanso Activo",
+            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            title: "Movilidad Escapular y Antagonistas",
+            tasks: [
+              "Extensiones de dedos con banda + rotaciones externas de hombro: 3 × 15",
+              "Flexiones en pica o fondo suave: 3 × 10 reps",
+              "Movilidad de cadera y tobillos (15 min)"
+            ]
+          },
+          {
+            dayLabel: "Día 4",
+            tag: "Piernas, Psoas & Core",
+            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            title: "Estabilidad Unilateral y Compresión",
+            tasks: [
+              "Step-ups altos (subida a cajón simulando pie alto en muro): 3 × 8 por pierna",
+              "L-Sit progresivo o elevaciones de rodillas al pecho colgado: 3 × 12 reps",
+              "Plancha lateral con elevación de pierna: 3 × 25 seg por lado"
+            ]
+          },
+          {
+            dayLabel: "Día 5",
+            tag: "Repetidores HIT 7:3",
+            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            title: "Repetidores 7:3 (4 Series)",
+            tasks: [
+              "Calentamiento progresivo",
+              "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 4 series (3 min descanso)",
+              "Travesía continua de 4 minutos sin bajar del muro (2 rondas)"
+            ]
+          },
+          {
+            dayLabel: "Día 6",
+            tag: "Escalada Social",
+            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            title: "Sesión Social de Búlder en ELBLOQUE",
+            tasks: [
+              "Calentamiento grupal (15 min)",
+              "Resolver 5 a 6 bloques variados compartiendo betas con amigos",
+              "Estiramiento suave de flexores de antebrazo"
+            ]
+          },
+          {
+            dayLabel: "Día 7",
+            tag: "Descanso Total",
+            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            title: "Descanso Total y Supercompensación",
+            tasks: [
+              "Descanso pasivo completo",
+              "Automasaje suave en antebrazos y espalda alta"
+            ]
+          }
+        ]
+      },
+      {
+        week: 3,
+        phase: "Fase 2: Sobrecarga Progresiva de Fuerza",
+        focus: "Aumento de carga/lastre en Max Hangs (RPE 9) y potencia en movimientos largos.",
+        days: [
+          {
+            dayLabel: "Día 1",
+            tag: "Fuerza Máxima & Dedos",
+            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            title: "Max Hangs con Lastre Ligero / Menor Asistencia",
+            tasks: [
+              "Calentamiento progresivo riguroso (20 min)",
+              "Max Hangs 20 mm: 5 series × 10 seg (+2 a 4 kg o goma más ligera, RPE 9)",
+              "Dominadas lastradas o estrictas con pecho a barra: 4 × 4 reps",
+              "Face-pulls o aperturas posteriores para salud escapular: 3 × 12"
+            ]
+          },
+          {
+            dayLabel: "Día 2",
+            tag: "Escalada Libre & Técnica",
+            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            title: "Dinámicos Controlados y Precisión en Regletas",
+            tasks: [
+              "Calentamiento (15 min)",
+              "Práctica de lances controlados (Deadpoints) atrapando la presa en punto muerto",
+              "4 bloques técnicos exigentes de equilibrio / placa vertical"
+            ]
+          },
+          {
+            dayLabel: "Día 3",
+            tag: "Descanso Activo",
+            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            title: "Descarga Articular y Antagonistas",
+            tasks: [
+              "Extensores de dedos + pronación/supinación de muñeca con peso ligero: 3 × 15",
+              "Yoga / movilidad torácica y apertura de hombros (20 min)"
+            ]
+          },
+          {
+            dayLabel: "Día 4",
+            tag: "Piernas, Psoas & Core",
+            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            title: "Potencia de Empuje de Pierna y Psoas",
+            tasks: [
+              "Pistols asistidos o Sentadilla Búlgara con pausa abajo: 4 × 6 por pierna",
+              "Toes-to-bar (pies a la barra) o elevaciones estrictas de psoas: 4 × 8 reps",
+              "Ab-wheel (rueda abdominal) o walkouts en plancha: 3 × 10 reps"
+            ]
+          },
+          {
+            dayLabel: "Día 5",
+            tag: "Repetidores HIT 7:3",
+            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            title: "Repetidores 7:3 Alta Densidad",
+            tasks: [
+              "Calentamiento completo",
+              "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 4 series (2.5 min descanso)",
+              "3 bloques en desplome seguidos sin descanso × 2 rondas"
+            ]
+          },
+          {
+            dayLabel: "Día 6",
+            tag: "Escalada Social",
+            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            title: "Proyección de Bloques Límite con Amigos",
+            tasks: [
+              "Calentamiento (15 min)",
+              "Probar 2–3 proyectos de grado límite (máximo 4 intentos de calidad por bloque)",
+              "Descanso largo (3–4 min) entre intentos intensos"
+            ]
+          },
+          {
+            dayLabel: "Día 7",
+            tag: "Descanso Total",
+            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            title: "Descanso Total",
+            tasks: [
+              "Cero actividad de agarre",
+              "Recuperación nutricional y sueño"
+            ]
+          }
+        ]
+      },
+      {
+        week: 4,
+        phase: "Fase 2: Sobrecarga Progresiva de Fuerza",
+        focus: "Pico de volumen de fuerza antes de la descarga de Semana 5.",
+        days: [
+          {
+            dayLabel: "Día 1",
+            tag: "Fuerza Máxima & Dedos",
+            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            title: "Max Hangs 20mm (6 Series) + Tracción Máxima",
+            tasks: [
+              "Calentamiento completo (20 min)",
+              "Max Hangs 20 mm: 6 series × 10 seg (RPE 9 • 3 min descanso)",
+              "Power Pull-ups: 5 series × 4 reps explosivas",
+              "Suspensión a un brazo asistida con banda: 2 × 6 seg por brazo"
+            ]
+          },
+          {
+            dayLabel: "Día 2",
+            tag: "Escalada Libre & Técnica",
+            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            title: "Eficiencia Energética y Respiración",
+            tasks: [
+              "Calentamiento (15 min)",
+              "Escalada consciente exhalando en cada movimiento clave (5 bloques medios)",
+              "Drill de repetición perfecta: repetir 3 veces el mismo bloque mejorando fluidez"
+            ]
+          },
+          {
+            dayLabel: "Día 3",
+            tag: "Descanso Activo",
+            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            title: "Regeneración Activa y Antagonistas",
+            tasks: [
+              "Extensiones de dedos con banda: 3 × 25 reps",
+              "Flexiones con rotación torácica: 3 × 10 reps",
+              "Estiramientos suaves de cadena posterior (15 min)"
+            ]
+          },
+          {
+            dayLabel: "Día 4",
+            tag: "Piernas, Psoas & Core",
+            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            title: "Tensión Corporal Total en Desplome",
+            tasks: [
+              "Sentadilla Búlgara + salto explosivo suave: 3 × 6 por pierna",
+              "Elevaciones de piernas colgado + sostener 3 seg en L: 3 × 8 reps",
+              "Plancha Hollow Body con lastre ligero o brazos extendidos: 3 × 30 seg"
+            ]
+          },
+          {
+            dayLabel: "Día 5",
+            tag: "Repetidores HIT 7:3",
+            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            title: "Repetidores 7:3 (5 Series)",
+            tasks: [
+              "Calentamiento progresivo",
+              "Repetidores 7:3 en regleta 20 mm: 5 series × 6 reps (3 min descanso)",
+              "Enfriamiento y movilidad de muñecas"
+            ]
+          },
+          {
+            dayLabel: "Día 6",
+            tag: "Escalada Social",
+            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            title: "Sesión Social Variada en ELBLOQUE",
+            tasks: [
+              "Calentamiento grupal",
+              "Escalada libre combinando placas, techos y coordinación (60 min)"
+            ]
+          },
+          {
+            dayLabel: "Día 7",
+            tag: "Descanso Total",
+            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            title: "Descanso Total Pre-Descarga",
+            tasks: [
+              "Descanso total para preparar la semana de descarga"
+            ]
+          }
+        ]
+      },
+      {
+        week: 5,
+        phase: "Fase 3: Descarga Estratégica (Deload) y Consolidación",
+        focus: "Reducción del 40% del volumen manteniendo intensidad para disipar fatiga tendinosa.",
+        days: [
+          {
+            dayLabel: "Día 1",
+            tag: "Fuerza Máxima (Descarga)",
+            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            title: "Max Hangs 20mm Volumen Reducido (3 Series)",
+            tasks: [
+              "Calentamiento completo (15 min)",
+              "Max Hangs 20 mm: solo 3 series × 10 seg (misma carga, cero fallo)",
+              "Power Pull-ups: 3 series × 3 reps muy rápidas y limpias"
+            ]
+          },
+          {
+            dayLabel: "Día 2",
+            tag: "Escalada Libre & Técnica",
+            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            title: "Fluidez y Movimiento Sin Fatiga",
+            tasks: [
+              "Calentamiento suave",
+              "Escalar 6 bloques cómodos enfocándose 100% en elegancia y precisión de pies",
+              "Terminar la sesión sintiéndote con energía de sobra"
+            ]
+          },
+          {
+            dayLabel: "Día 3",
+            tag: "Descanso Activo",
+            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            title: "Movilidad Profunda y Recuperación",
+            tasks: [
+              "Movilidad completa de hombros, cadera y columna (20 min)",
+              "Extensiones suaves de dedos con goma"
+            ]
+          },
+          {
+            dayLabel: "Día 4",
+            tag: "Piernas, Psoas & Core (Ligero)",
+            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            title: "Activación Ligera de Piernas y Core",
+            tasks: [
+              "Sentadilla Búlgara peso corporal: 2 × 8 por pierna",
+              "Elevaciones de rodillas colgado controladas: 2 × 10 reps",
+              "Plancha frontal + lateral: 2 rondas × 30 seg"
+            ]
+          },
+          {
+            dayLabel: "Día 5",
+            tag: "Repetidores Ligero",
+            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            title: "Activación Rápida de Antebrazo (2 Series)",
+            tasks: [
+              "Calentamiento",
+              "Repetidores 7:3 en 20 mm: solo 2 series × 6 reps (3 min pausa)",
+              "Estiramiento suave"
+            ]
+          },
+          {
+            dayLabel: "Día 6",
+            tag: "Escalada Social",
+            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            title: "Escalada Recreativa Sin Presión",
+            tasks: [
+              "Sesión social ligera en ELBLOQUE (45-60 min) evitando arqueos extremos"
+            ]
+          },
+          {
+            dayLabel: "Día 7",
+            tag: "Descanso Total",
+            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            title: "Descanso Total Antes de Semana Pico",
+            tasks: [
+              "Descanso total para llegar al 100% a la Semana 6"
+            ]
+          }
+        ]
+      },
+      {
+        week: 6,
+        phase: "Fase 4: Realización, Pico de Rendimiento y Evaluación",
+        focus: "Transferencia máxima al muro, encadenamiento de proyectos y cierre de ciclo.",
+        days: [
+          {
+            dayLabel: "Día 1",
+            tag: "Test / Pico de Fuerza",
+            badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
+            title: "Evaluación Max Hangs 20mm + Potencia",
+            tasks: [
+              "Calentamiento progresivo óptimo (20 min)",
+              "Test Max Hangs 20 mm: 3 series × 10 seg buscando tu mejor marca limpia del ciclo",
+              "Power Pull-ups: 3 series × 4 reps explosivas"
+            ]
+          },
+          {
+            dayLabel: "Día 2",
+            tag: "Escalada Libre & Técnica",
+            badgeColor: "bg-sky-100 text-sky-800 border-sky-200",
+            title: "Encadenamiento de Bloques Objetivo",
+            tasks: [
+              "Calentamiento (15 min)",
+              "Intentos de encadenamiento (Redpoint) en 2 bloques clave del ciclo",
+              "Descanso completo de 4 min entre pegues de máxima calidad"
+            ]
+          },
+          {
+            dayLabel: "Día 3",
+            tag: "Descanso Activo",
+            badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
+            title: "Movilidad y Descarga Neural",
+            tasks: [
+              "Extensiones de dedos + movilidad articular suave (15 min)",
+              "Caminata ligera o estiramiento general"
+            ]
+          },
+          {
+            dayLabel: "Día 4",
+            tag: "Piernas, Psoas & Core",
+            badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
+            title: "Activación de Core y Estabilidad",
+            tasks: [
+              "Step-ups dinámicos: 2 × 8 por pierna",
+              "Elevaciones de piernas colgado (Psoas): 3 × 8 reps",
+              "Hollow Body Hold: 3 × 30 seg"
+            ]
+          },
+          {
+            dayLabel: "Día 5",
+            tag: "Resistencia Aplicada",
+            badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+            title: "Simulación de Pegues Largos",
+            tasks: [
+              "Calentamiento",
+              "2 series de Repetidores 7:3 + 2 travesías exigentes de 25 movimientos"
+            ]
+          },
+          {
+            dayLabel: "Día 6",
+            tag: "Escalada Social & Cierre",
+            badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+            title: "Festival de Bloques en ELBLOQUE",
+            tasks: [
+              "Calentamiento con amigos",
+              "Disfrutar el pico de forma encadenando tus bloques favoritos del mes",
+              "Registrar sensaciones finales del ciclo"
+            ]
+          },
+          {
+            dayLabel: "Día 7",
+            tag: "Descanso y Cierre de Ciclo",
+            badgeColor: "bg-slate-200 text-slate-700 border-slate-300",
+            title: "Descanso Final y Generación de Informe",
+            tasks: [
+              "Descanso total",
+              "Generar Informe Final de las 6 Semanas y archivar el ciclo"
+            ]
+          }
+        ]
+      }
+    ];
+
+    // Estado Global de la Aplicación
+    let appState = {
+      activeWeek: 1,
+      cycleStartDate: new Date().toISOString().split("T")[0],
+      completedTasks: {},     // { "w1_d0_t0": "2026-11-18 15:40" }
+      dayCustomDates: {},     // { "w1_d0": "2026-11-18" }
+      exceptions: [],         // [{ id, week, dayIdx, date, type, reason, justified, timestamp }]
+      archivedCycles: []      // [{ id, dateRange, completionRate, reportText }]
+    };
+
+    let syncTimeout = null;
+
+    // =========================================================================
+    // INICIALIZACIÓN Y SINCRONIZACIÓN CON GOOGLE SHEETS
+    // =========================================================================
+    document.addEventListener("DOMContentLoaded", async () => {
+      loadFromLocal();
+      renderAll();
+      await pullFromCloud(false);
+    });
+
+    function setSyncStatus(status, text) {
+      const dot = document.getElementById("syncDot");
+      const label = document.getElementById("syncText");
+      label.textContent = text;
+      dot.className = "w-2 h-2 rounded-full";
+      if (status === "syncing") {
+        dot.classList.add("bg-amber-400", "animate-pulse");
+      } else if (status === "ok") {
+        dot.classList.add("bg-emerald-400");
+      } else {
+        dot.classList.add("bg-rose-400");
+      }
+    }
+
+    function loadFromLocal() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          appState = { ...appState, ...parsed };
+        }
+      } catch (e) {
+        console.warn("Error leyendo almacenamiento local:", e);
+      }
+    }
+
+    function saveState() {
+      // 1. Respaldo inmediato en localStorage
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {}
+
+      renderAll();
+
+      // 2. Envío con debounce (600 ms) a Google Sheets
+      clearTimeout(syncTimeout);
+      setSyncStatus("syncing", "Guardando en Sheets...");
+      syncTimeout = setTimeout(() => {
+        pushToCloud();
+      }, 600);
+    }
+
+    async function pushToCloud() {
+      try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(appState)
+        });
+        if (response.ok) {
+          const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+          setSyncStatus("ok", `Sincronizado (${now})`);
+        } else {
+          setSyncStatus("error", "Error de red (local OK)");
+        }
+      } catch (err) {
+        console.error("Error enviando a Google Sheets:", err);
+        setSyncStatus("error", "Sin conexión (local OK)");
+      }
+    }
+
+    async function pullFromCloud(manual = false) {
+      setSyncStatus("syncing", "Leyendo Sheets...");
+      try {
+        const res = await fetch(`${APPS_SCRIPT_URL}?t=${Date.now()}`);
+        if (!res.ok) throw new Error("HTTP error");
+        const cloudData = await res.json();
+
+        if (cloudData && typeof cloudData === "object" && Object.keys(cloudData).length > 0) {
+          appState = { ...appState, ...cloudData };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+          renderAll();
+          if (manual) showToast("Datos actualizados desde Google Sheets");
+        }
+        const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        setSyncStatus("ok", `Sincronizado (${now})`);
+      } catch (err) {
+        console.warn("No se pudo leer de la nube, usando caché local:", err);
+        setSyncStatus("error", "Modo local");
+        if (manual) showToast("No se pudo conectar con Google Sheets");
+      }
+    }
+
+    // =========================================================================
+    // UTILIDADES DE FECHAS Y CÁLCULO DE PROGRESO
+    // =========================================================================
+    function formatShortDate(isoStr) {
+      if (!isoStr) return "";
+      const [y, m, d] = isoStr.split("-").map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+      const days = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+      return `${days[dateObj.getDay()]} ${d} ${months[m - 1]}`;
+    }
+
+    function addDaysToIso(isoStr, daysToAdd) {
+      const [y, m, d] = isoStr.split("-").map(Number);
+      const dt = new Date(y, m - 1, d);
+      dt.setDate(dt.getDate() + daysToAdd);
+      const yyyy = dt.getFullYear();
+      const mm = String(dt.getMonth() + 1).padStart(2, "0");
+      const dd = String(dt.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function getDayStatus(weekNum, dayIdx) {
+      const weekObj = WEEKLY_TEMPLATES[weekNum - 1];
+      const dayObj = weekObj.days[dayIdx];
+      const totalTasks = dayObj.tasks.length;
+      let doneCount = 0;
+
+      dayObj.tasks.forEach((_, tIdx) => {
+        if (appState.completedTasks[`w${weekNum}_d${dayIdx}_t${tIdx}`]) {
+          doneCount++;
+        }
+      });
+
+      const justifiedExc = appState.exceptions.find(
+        ex => Number(ex.week) === weekNum && Number(ex.dayIdx) === dayIdx && ex.justified
+      );
+
+      const isComplete = (doneCount === totalTasks && totalTasks > 0) || Boolean(justifiedExc);
+      return { doneCount, totalTasks, isComplete, justifiedExc };
+    }
+
+    function calculateGlobalStats() {
+      let completedDays = 0;
+      for (let w = 1; w <= 6; w++) {
+        for (let d = 0; d < 7; d++) {
+          if (getDayStatus(w, d).isComplete) completedDays++;
+        }
+      }
+      const percent = Math.round((completedDays / 42) * 100);
+      return { completedDays, percent };
+    }
+
+    // =========================================================================
+    // ACCIONES DEL USUARIO
+    // =========================================================================
+    function updateCycleStartDate(newDate) {
+      if (!newDate) return;
+      appState.cycleStartDate = newDate;
+      saveState();
+    }
+
+    function setActiveWeek(weekNum) {
+      appState.activeWeek = weekNum;
+      saveState();
+    }
+
+    function updateDayCustomDate(weekNum, dayIdx, dateVal) {
+      appState.dayCustomDates[`w${weekNum}_d${dayIdx}`] = dateVal;
+      saveState();
+    }
+
+    function toggleTask(weekNum, dayIdx, taskIdx) {
+      const key = `w${weekNum}_d${dayIdx}_t${taskIdx}`;
+      if (appState.completedTasks[key]) {
+        delete appState.completedTasks[key];
+      } else {
+        const now = new Date();
+        const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+        appState.completedTasks[key] = stamp;
+
+        // Si el día no tenía fecha asignada aún, fijar la fecha de hoy automáticamente
+        const dayKey = `w${weekNum}_d${dayIdx}`;
+        if (!appState.dayCustomDates[dayKey]) {
+          appState.dayCustomDates[dayKey] = now.toISOString().split("T")[0];
+        }
+      }
+      saveState();
+    }
+
+    function toggleAllDayTasks(weekNum, dayIdx) {
+      const weekObj = WEEKLY_TEMPLATES[weekNum - 1];
+      const dayObj = weekObj.days[dayIdx];
+      const status = getDayStatus(weekNum, dayIdx);
+      const now = new Date();
+      const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+      const dayKey = `w${weekNum}_d${dayIdx}`;
+
+      if (status.doneCount === dayObj.tasks.length) {
+        dayObj.tasks.forEach((_, tIdx) => {
+          delete appState.completedTasks[`w${weekNum}_d${dayIdx}_t${tIdx}`];
+        });
+      } else {
+        dayObj.tasks.forEach((_, tIdx) => {
+          const key = `w${weekNum}_d${dayIdx}_t${tIdx}`;
+          if (!appState.completedTasks[key]) {
+            appState.completedTasks[key] = stamp;
+          }
+        });
+        if (!appState.dayCustomDates[dayKey]) {
+          appState.dayCustomDates[dayKey] = now.toISOString().split("T")[0];
+        }
+      }
+      saveState();
+    }
+
+    // =========================================================================
+    // RENDERIZADO DE INTERFAZ
+    // =========================================================================
+    function renderAll() {
+      // Fechas de ciclo
+      const startInput = document.getElementById("cycleStartDate");
+      startInput.value = appState.cycleStartDate;
+      const endIso = addDaysToIso(appState.cycleStartDate, 41);
+      document.getElementById("cycleEndDateBadge").textContent = `Fin estimado: ${formatShortDate(endIso)}`;
+
+      // Progreso global
+      const { completedDays, percent } = calculateGlobalStats();
+      document.getElementById("globalProgressLabel").textContent = `${percent}% (${completedDays}/42 días)`;
+      document.getElementById("globalProgressBar").style.width = `${percent}%`;
+      document.getElementById("exceptionsCountStat").textContent = `Imprevistos / cambios justificados: ${appState.exceptions.length}`;
+      document.getElementById("historyCount").textContent = appState.archivedCycles.length;
+
+      // Banner de cierre al completar Semana 6
+      let week6Done = 0;
+      for (let d = 0; d < 7; d++) {
+        if (getDayStatus(6, d).isComplete) week6Done++;
+      }
+      const banner = document.getElementById("cycleCompleteBanner");
+      if (week6Done >= 6 || completedDays >= 38) {
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+
+      renderWeekTabs();
+      renderWeekHeader();
+      renderDaysGrid();
+    }
+
+    function renderWeekTabs() {
+      const container = document.getElementById("weekTabs");
+      container.innerHTML = WEEKLY_TEMPLATES.map(w => {
+        let wDone = 0;
+        for (let d = 0; d < 7; d++) {
+          if (getDayStatus(w.week, d).isComplete) wDone++;
+        }
+        const isActive = appState.activeWeek === w.week;
+        const activeClasses = isActive
+          ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+          : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100";
+
+        return `
+          <button onclick="setActiveWeek(${w.week})"
+            class="shrink-0 px-4 py-2.5 rounded-xl border text-xs font-bold transition flex items-center gap-2 ${activeClasses}">
+            <span>Semana ${w.week}</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[11px] ${isActive ? "bg-amber-500 text-slate-950" : "bg-slate-100 text-slate-600"}">
+              ${wDone}/7
+            </span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderWeekHeader() {
+      const wObj = WEEKLY_TEMPLATES[appState.activeWeek - 1];
+      let wDone = 0;
+      for (let d = 0; d < 7; d++) {
+        if (getDayStatus(wObj.week, d).isComplete) wDone++;
+      }
+      document.getElementById("weekSummaryStat").textContent = `Semana ${wObj.week}: ${wDone}/7 bloques completados`;
+
+      document.getElementById("weekPhaseHeader").innerHTML = `
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-600">${wObj.phase}</span>
+          <h2 class="text-sm sm:text-base font-bold text-slate-900 mt-0.5">${wObj.focus}</h2>
+        </div>
+        <div class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+          Bloques completados esta semana: <strong class="text-slate-900">${wDone} / 7</strong>
+        </div>
+      `;
+    }
+
+    function renderDaysGrid() {
+      const wNum = appState.activeWeek;
+      const wObj = WEEKLY_TEMPLATES[wNum - 1];
+      const grid = document.getElementById("daysGrid");
+
+      grid.innerHTML = wObj.days.map((day, dIdx) => {
+        const status = getDayStatus(wNum, dIdx);
+        const dayKey = `w${wNum}_d${dIdx}`;
+        const defaultSuggestedDate = addDaysToIso(appState.cycleStartDate, (wNum - 1) * 7 + dIdx);
+        const assignedDate = appState.dayCustomDates[dayKey] || "";
+        const displayDateLabel = assignedDate
+          ? `Ejecutado: ${formatShortDate(assignedDate)}`
+          : `Sugerido: ${formatShortDate(defaultSuggestedDate)}`;
+
+        const cardBorder = status.isComplete
+          ? "border-emerald-300 ring-1 ring-emerald-200/70 bg-emerald-50/20"
+          : "border-slate-200 bg-white";
+
+        const tasksHtml = day.tasks.map((taskText, tIdx) => {
+          const tKey = `w${wNum}_d${dIdx}_t${tIdx}`;
+          const stamp = appState.completedTasks[tKey];
+          const checked = Boolean(stamp);
+
+          return `
+            <li class="flex items-start gap-2.5 text-xs py-1.5 border-b border-slate-100 last:border-b-0">
+              <input type="checkbox" id="${tKey}" ${checked ? "checked" : ""}
+                onchange="toggleTask(${wNum}, ${dIdx}, ${tIdx})"
+                class="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0" />
+              <label for="${tKey}" class="flex-1 cursor-pointer select-none leading-snug ${checked ? "task-done" : "text-slate-700"}">
+                <span>${taskText}</span>
+                ${stamp ? `<span class="block text-[10px] text-emerald-600 font-medium mt-0.5">✓ ${stamp}</span>` : ""}
+              </label>
+            </li>
+          `;
+        }).join("");
+
+        const exceptionHtml = status.justifiedExc ? `
+          <div class="mt-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-[11px] text-amber-900">
+            <p class="font-bold">⚡ ${status.justifiedExc.type} (${formatShortDate(status.justifiedExc.date)})</p>
+            <p class="mt-0.5 text-amber-800">${status.justifiedExc.reason}</p>
+          </div>
+        ` : "";
+
+        return `
+          <article class="rounded-2xl border ${cardBorder} shadow-sm p-4 flex flex-col justify-between transition">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-slate-900 text-white">
+                  ${day.dayLabel}
+                </span>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${day.badgeColor}">
+                  ${day.tag}
+                </span>
+              </div>
+
+              <h3 class="text-sm font-bold text-slate-900 leading-snug mb-2">${day.title}</h3>
+
+              <!-- Selector de Fecha Real Ejecutada -->
+              <div class="flex items-center justify-between gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 mb-3">
+                <span class="text-[11px] font-medium text-slate-600">${displayDateLabel}</span>
+                <input type="date" value="${assignedDate}" title="Seleccionar fecha real en que hiciste este bloque"
+                  onchange="updateDayCustomDate(${wNum}, ${dIdx}, this.value)"
+                  class="text-[11px] bg-white border border-slate-300 rounded px-1.5 py-0.5 text-slate-700 focus:outline-none focus:ring-1 focus:ring-amber-500" />
+              </div>
+
+              <ul class="space-y-0.5">
+                ${tasksHtml}
+              </ul>
+
+              ${exceptionHtml}
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-[11px] font-semibold ${status.isComplete ? "text-emerald-700" : "text-slate-400"}">
+                ${status.isComplete ? "✓ Bloque completado" : `${status.doneCount}/${status.totalTasks} ítems`}
+              </span>
+              <button onclick="toggleAllDayTasks(${wNum}, ${dIdx})"
+                class="text-[11px] font-bold px-2.5 py-1 rounded-lg transition ${
+                  status.doneCount === status.totalTasks
+                    ? "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+                }">
+                ${status.doneCount === status.totalTasks ? "Desmarcar día" : "Completar día"}
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    // =========================================================================
+    // MODALES: IMPREVISTOS, REPORTES, HISTORIAL Y EXPORTACIÓN
+    // =========================================================================
+    function openModal(id) {
+      document.getElementById(id).classList.remove("hidden");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
+    function openExceptionModal() {
+      document.getElementById("excWeek").value = appState.activeWeek;
+      document.getElementById("excDate").value = new Date().toISOString().split("T")[0];
+      document.getElementById("excReason").value = "";
+      openModal("exceptionModal");
+    }
+
+    function saveException() {
+      const week = Number(document.getElementById("excWeek").value);
+      const dayIdx = Number(document.getElementById("excDay").value);
+      const date = document.getElementById("excDate").value || new Date().toISOString().split("T")[0];
+      const type = document.getElementById("excType").value;
+      const reason = document.getElementById("excReason").value.trim() || "Ajuste operativo de calendario.";
+      const justified = document.getElementById("excMarkJustified").checked;
+
+      // Reemplazar si ya había un registro para ese mismo bloque o agregar uno nuevo
+      appState.exceptions = appState.exceptions.filter(
+        ex => !(Number(ex.week) === week && Number(ex.dayIdx) === dayIdx)
+      );
+
+      appState.exceptions.push({
+        id: Date.now(),
+        week,
+        dayIdx,
+        date,
+        type,
+        reason,
+        justified,
+        timestamp: new Date().toLocaleString("es-CO")
+      });
+
+      appState.dayCustomDates[`w${week}_d${dayIdx}`] = date;
+      closeModal("exceptionModal");
+      saveState();
+      showToast("Imprevisto/cambio registrado y sincronizado");
+    }
+
+    function buildReportText(isFinal) {
+      const { completedDays, percent } = calculateGlobalStats();
+      const endIso = addDaysToIso(appState.cycleStartDate, 41);
+      const header = isFinal
+        ? "INFORME FINAL DE CIERRE • CICLO DE ESCALADA 6 SEMANAS (ERIC HÖRST)"
+        : "REPORTE ACUMULADO DE ENTRENAMIENTO • CICLO 6 SEMANAS (ERIC HÖRST)";
+
+      let lines = [
+        "====================================================================",
+        header,
+        "Sede: ELBLOQUE | Sincronizado con Google Sheets",
+        `Rango del Ciclo: ${formatShortDate(appState.cycleStartDate)} al ${formatShortDate(endIso)}`,
+        `Cumplimiento Global: ${percent}% (${completedDays} de 42 bloques completados)`,
+        `Fecha de generación: ${new Date().toLocaleString("es-CO")}`,
+        "====================================================================",
+        ""
+      ];
+
+      WEEKLY_TEMPLATES.forEach(w => {
+        lines.push(`--- SEMANA ${w.week}: ${w.phase.toUpperCase()} ---`);
+        w.days.forEach((day, dIdx) => {
+          const status = getDayStatus(w.week, dIdx);
+          const customDate = appState.dayCustomDates[`w${w.week}_d${dIdx}`];
+          const dateStr = customDate ? formatShortDate(customDate) : "Sin fecha asignada";
+          const stateTag = status.isComplete ? "[COMPLETADO]" : `[PENDIENTE ${status.doneCount}/${status.totalTasks}]`;
+
+          lines.push(`• ${day.dayLabel} (${day.tag}) - ${day.title} | Fecha: ${dateStr} ${stateTag}`);
+          day.tasks.forEach((t, tIdx) => {
+            const stamp = appState.completedTasks[`w${w.week}_d${dIdx}_t${tIdx}`];
+            if (stamp) {
+              lines.push(`    ✓ ${t} (${stamp})`);
+            }
+          });
+          if (status.justifiedExc) {
+            lines.push(`    ⚡ NOVEDAD (${status.justifiedExc.type}): ${status.justifiedExc.reason}`);
+          }
+        });
+        lines.push("");
+      });
+
+      if (appState.exceptions.length > 0) {
+        lines.push("--- BITÁCORA CONSOLIDADA DE IMPREVISTOS Y CAMBIOS ---");
+        appState.exceptions.forEach(ex => {
+          lines.push(`• Semana ${ex.week} - Día ${ex.dayIdx + 1} (${ex.date}): [${ex.type}] ${ex.reason}`);
+        });
+      }
+
+      return lines.join("\n");
+    }
+
+    function openReportExportModal(isFinal) {
+      document.getElementById("reportModalTitle").textContent = isFinal
+        ? "Informe Final de Cierre • Ciclo 6 Semanas"
+        : "Reporte Acumulado para Google Docs";
+      document.getElementById("reportOutput").value = buildReportText(isFinal);
+      openModal("reportModal");
+    }
+
+    function copyReportText() {
+      const textarea = document.getElementById("reportOutput");
+      textarea.select();
+      navigator.clipboard.writeText(textarea.value);
+      showToast("Reporte copiado al portapapeles para Google Docs");
+    }
+
+    function copyHtmlForSites() {
+      const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      navigator.clipboard.writeText(fullHtml);
+      showToast("Código HTML completo copiado al portapapeles");
+    }
+
+    function archiveAndResetCycle() {
+      const { completedDays, percent } = calculateGlobalStats();
+      const endIso = addDaysToIso(appState.cycleStartDate, 41);
+      const reportText = buildReportText(true);
+
+      appState.archivedCycles.unshift({
+        id: Date.now(),
+        dateRange: `${formatShortDate(appState.cycleStartDate)} - ${formatShortDate(endIso)}`,
+        completionRate: `${percent}% (${completedDays}/42 días)`,
+        archivedAt: new Date().toLocaleDateString("es-CO"),
+        reportText
+      });
+
+      // Reiniciar ciclo actual en limpio
+      appState.activeWeek = 1;
+      appState.cycleStartDate = new Date().toISOString().split("T")[0];
+      appState.completedTasks = {};
+      appState.dayCustomDates = {};
+      appState.exceptions = [];
+
+      closeModal("reportModal");
+      saveState();
+      showToast("Ciclo archivado en el historial y reiniciado a 0%");
+    }
+
+    function openHistoryModal() {
+      const list = document.getElementById("historyList");
+      if (appState.archivedCycles.length === 0) {
+        list.innerHTML = `<p class="text-slate-500 text-center py-6">Aún no tienes ciclos archivados. Al finalizar la Semana 6 podrás guardar tu informe definitivo aquí.</p>`;
+      } else {
+        list.innerHTML = appState.archivedCycles.map((item, idx) => `
+          <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-900">Ciclo #${appState.archivedCycles.length - idx} • ${item.dateRange}</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">${item.completionRate}</span>
+            </div>
+            <p class="text-[11px] text-slate-500">Archivado el ${item.archivedAt}</p>
+            <button onclick="copyArchivedReport(${idx})" class="text-xs font-bold text-amber-700 hover:underline">
+              Copiar informe completo de este ciclo
+            </button>
+          </div>
+        `).join("");
+      }
+      openModal("historyModal");
+    }
+
+    function copyArchivedReport(idx) {
+      const item = appState.archivedCycles[idx];
+      if (item) {
+        navigator.clipboard.writeText(item.reportText);
+        showToast("Informe histórico copiado al portapapeles");
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.remove("hidden");
+      setTimeout(() => t.classList.add("hidden"), 3000);
+    }
+  </script>
+</body>
+</html>
