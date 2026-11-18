@@ -132,7 +132,7 @@
 
   </main>
 
-  <!-- Pie de Página Simplificado (3 Botones Solicitados) -->
+  <!-- Pie de Página Simplificado -->
   <footer class="bg-white border-t border-slate-200 mt-10 py-5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <p class="text-xs text-slate-500">
@@ -217,6 +217,20 @@
           <button onclick="closeModal('exceptionModal')" class="text-xs font-semibold px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">Cancelar</button>
           <button onclick="saveException()" class="text-xs font-bold px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950">Guardar Registro</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Ver Detalle de Ejercicios (Detalle Técnico Extendido) -->
+  <div id="exerciseDetailModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <h3 id="detailModalTitle" class="text-sm font-bold">Guía Técnica Detallada</h3>
+        <button onclick="closeModal('exerciseDetailModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+      </div>
+      <div id="detailModalContent" class="p-5 space-y-3 text-xs text-slate-700 overflow-y-auto leading-relaxed flex-1"></div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
+        <button onclick="closeModal('exerciseDetailModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Cerrar</button>
       </div>
     </div>
   </div>
@@ -326,9 +340,9 @@
     // CONFIGURACIÓN DE CONEXIÓN CON GOOGLE SHEETS (APPS SCRIPT)
     // =========================================================================
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwf7Naopzt_A6chJDFLo2Gq5VMykynfWmU3BztAFPdtvygadIhHi4wLMJlfs6p-UDd46A/exec";
-    const STORAGE_KEY = "horst_climbing_cycle_v4";
+    const STORAGE_KEY = "horst_climbing_cycle_v5";
 
-    // Estructura Completa de las 6 Semanas con Rutinas Detalladas y Menú Flexible
+    // Estructura Completa de las 6 Semanas con Rutinas Detalladas y Guías Técnicas Expandidas
     const WEEKLY_TEMPLATES = [
       {
         week: 1,
@@ -345,7 +359,12 @@
               "Max Hangs 20 mm (Semiarqueo): 4 series × 10 seg (RPE 8 • 3 min descanso completo)",
               "Power Pull-ups (Dominadas explosivas): 4 series × 4 reps (2.5 min descanso)",
               "Bloqueos isométricos a 90° en barra: 3 series × 8 seg por brazo / asistidos"
-            ]
+            ],
+            detailGuide: `
+              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 1 (Fuerza Máxima)</h4>
+              <p><strong>Max Hangs (20 mm):</strong> Adopta obligatoriamente posición de <em>semarqueo</em> (dedos doblados a 90° y pulgar libre). Si necesitas asistencia, usa una banda elástica bajo los pies; si buscas intensidad, añade lastre ligero. El descanso entre series debe ser de 3 minutos completos para permitir la resíntesis de fosfocreatina.</p>
+              <p class="mt-2"><strong>Power Pull-ups:</strong> Concéntrate en la velocidad de aceleración en la subida (fase concéntrica explosiva) y una bajada controlada de 2 segundos para proteger los codos.</p>
+            `
           },
           {
             dayLabel: "Día 2",
@@ -357,7 +376,12 @@
               "Drill Pies Silenciosos: 4 bloques fáciles sin hacer ruido al apoyar el calzado",
               "Drill Hover Hands (pausa de 2 seg antes de agarrar la presa): 4 bloques",
               "Escalada libre controlada (60-70% intensidad) enfocada en cadera pegada al muro"
-            ]
+            ],
+            detailGuide: `
+              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 2 (Técnica & Pies)</h4>
+              <p><strong>Pies Silenciosos:</strong> El sonido al apoyar el pie delata un impacto brusco. Busca colocar la punta de la goma de forma milimétrica y estática al primer intento.</p>
+              <p class="mt-2"><strong>Hover Hands:</strong> Antes de mover la mano hacia la siguiente presa, mantén la mano suspendida en el aire sobre la presa durante 2 segundos asegurando la lectura visual y la tensión corporal.</p>
+            `
           },
           {
             dayLabel: "Día 3",
@@ -368,7 +392,11 @@
               "Extensiones de dedos con banda elástica: 3 series × 20 reps",
               "Flexiones escapulares (Push-up Plus) en suelo: 3 series × 12 reps",
               "Movilidad profunda de cadera (90/90) y apertura torácica (15 min)"
-            ]
+            ],
+            detailGuide: `
+              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 3 (Descanso Activo)</h4>
+              <p>Este día está diseñado para contrarrestar el acoplamiento flexor de la escalada. Las extensiones con banda previenen tendinitis y equilibran la musculatura del antebrazo.</p>
+            `
           },
           {
             dayLabel: "Día 4",
@@ -380,7 +408,11 @@
               "Elevaciones de pierna colgado (Hanging Leg Raises / Psoas): 3 series × 10 reps",
               "Plancha Hollow Body + Pallof Press antirrotación: 3 rondas × 30 seg",
               "Estiramiento activo de isquiotibiales y psoas (10 min)"
-            ]
+            ],
+            detailGuide: `
+              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 4 (Piernas & Psoas)</h4>
+              <p><strong>Psoas y Core:</strong> Las elevaciones colgado deben hacerse sin inercia (evita balancearte). Contrae el abdomen antes de subir las rodillas para proteger la zona lumbar.</p>
+            `
           },
           {
             dayLabel: "Día 5",
@@ -391,7 +423,11 @@
               "Calentamiento articular + 3 bloques progresivos",
               "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 3 series (3 min descanso)",
               "Circuitos 4×4 suave en bloques de V1-V2 (4 bloques seguidos, 3 min pausa × 2 rondas)"
-            ]
+            ],
+            detailGuide: `
+              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 5 (Repetidores HIT 7:3)</h4>
+              <p>El protocolo 7:3 (7 seg colgado / 3 seg de descanso) × 6 repeticiones forma 1 serie de alta intensidad aeróbico-anaeróbica. Respeta los 3 minutos de pausa entre series.</p>
+            `
           },
           {
             dayLabel: "Día 6",
@@ -402,7 +438,11 @@
               "Calentamiento compartido en ELBLOQUE (15 min)",
               "Sesión de proyectos de placa / equilibrio y desplomes moderados (60 min)",
               "Enfriamiento y estiramiento suave de antebrazos al terminar"
-            ]
+            ],
+            detailGuide: `
+              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 6 (Escalada Social)</h4>
+              <p>Disfruta del muro compartiendo betas con compañeros en ELBLOQUE, priorizando la fluidez y el disfrute sin sobreentrenar.</p>
+            `
           },
           {
             dayLabel: "Día 7",
@@ -412,7 +452,11 @@
             tasks: [
               "Cero escalada ni carga en dedos",
               "Hidratación óptima y sueño reparador (7.5–8.5 horas)"
-            ]
+            ],
+            detailGuide: `
+              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 7 (Descanso Total)</h4>
+              <p>Jornada clave de supercompensación para iniciar la siguiente semana con el sistema neuromuscular completamente fresco.</p>
+            `
           }
         ]
       },
@@ -431,7 +475,8 @@
               "Max Hangs 20 mm (Semiarqueo): 5 series × 10 seg (RPE 8.5 • 3 min descanso)",
               "Power Pull-ups: 4 series × 5 reps explosivas",
               "Remo en anillas / TRX con pausa de 2 seg arriba: 3 series × 10 reps"
-            ]
+            ],
+            detailGuide: `<p>Aumentamos a 5 series de Max Hangs consolidando la adaptación tendinosa de la primera semana.</p>`
           },
           {
             dayLabel: "Día 2",
@@ -442,7 +487,8 @@
               "Calentamiento en travesía (15 min)",
               "Práctica específica de taloneos (Heel Hooks) y empeines en desplome suave",
               "4 bloques a vista (Onsight) priorizando lectura previa desde el suelo"
-            ]
+            ],
+            detailGuide: `<p>Enfócate en fijar el talón correctamente antes de soltar la mano de oposición.</p>`
           },
           {
             dayLabel: "Día 3",
@@ -453,7 +499,8 @@
               "Extensiones de dedos con banda + rotaciones externas de hombro: 3 series × 15",
               "Flexiones en pica o fondo suave: 3 series × 10 reps",
               "Movilidad de cadera y tobillos (15 min)"
-            ]
+            ],
+            detailGuide: `<p>Trabajo enfocado en salud articular de hombros y muñecas.</p>`
           },
           {
             dayLabel: "Día 4",
@@ -464,7 +511,8 @@
               "Step-ups altos (subida a cajón simulando pie alto en muro): 3 series × 8 por pierna",
               "L-Sit progresivo o elevaciones de rodillas al pecho colgado: 3 series × 12 reps",
               "Plancha lateral con elevación de pierna: 3 series × 25 seg por lado"
-            ]
+            ],
+            detailGuide: `<p>Simula los arranques de pie alto típicos en bloques modernos de inclinación negativa.</p>`
           },
           {
             dayLabel: "Día 5",
@@ -475,7 +523,8 @@
               "Calentamiento progresivo",
               "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 4 series (3 min descanso)",
               "Travesía continua de 4 minutos sin bajar del muro (2 rondas)"
-            ]
+            ],
+            detailGuide: `<p>Cuarta serie añadida para estimular la tolerancia al lactato local.</p>`
           },
           {
             dayLabel: "Día 6",
@@ -486,7 +535,8 @@
               "Calentamiento grupal (15 min)",
               "Resolver 5 a 6 bloques variados compartiendo betas con amigos",
               "Estiramiento suave de flexores de antebrazo"
-            ]
+            ],
+            detailGuide: `<p>Sesión recreativa para afianzar confianza y lectura de problemas.</p>`
           },
           {
             dayLabel: "Día 7",
@@ -496,7 +546,8 @@
             tasks: [
               "Descanso pasivo completo",
               "Automasaje suave en antebrazos y espalda alta"
-            ]
+            ],
+            detailGuide: `<p>Recuperación total previa al salto de intensidad de la Fase 2.</p>`
           }
         ]
       },
@@ -515,7 +566,8 @@
               "Max Hangs 20 mm: 5 series × 10 seg (+2 a 4 kg o goma más ligera, RPE 9)",
               "Dominadas lastradas o estrictas con pecho a barra: 4 series × 4 reps",
               "Face-pulls o aperturas posteriores para salud escapular: 3 series × 12"
-            ]
+            ],
+            detailGuide: `<p>Inicio de sobrecarga con lastre moderado o asistencia reducida (RPE 9).</p>`
           },
           {
             dayLabel: "Día 2",
@@ -526,7 +578,8 @@
               "Calentamiento (15 min)",
               "Práctica de lances controlados (Deadpoints) atrapando la presa en punto muerto",
               "4 bloques técnicos exigentes de equilibrio / placa vertical"
-            ]
+            ],
+            detailGuide: `<p>Coordina la inercia del cuerpo con el agarre estático en el punto más alto del lance.</p>`
           },
           {
             dayLabel: "Día 3",
@@ -536,7 +589,8 @@
             tasks: [
               "Extensores de dedos + pronación/supinación de muñeca con peso ligero: 3 series × 15",
               "Yoga / movilidad torácica y apertura de hombros (20 min)"
-            ]
+            ],
+            detailGuide: `<p>Mantenimiento de la salud articular ante cargas de fuerza incrementadas.</p>`
           },
           {
             dayLabel: "Día 4",
@@ -547,7 +601,8 @@
               "Pistols asistidos o Sentadilla Búlgara con pausa abajo: 4 series × 6 por pierna",
               "Toes-to-bar (pies a la barra) o elevaciones estrictas de psoas: 4 series × 8 reps",
               "Ab-wheel (rueda abdominal) o walkouts en plancha: 3 series × 10 reps"
-            ]
+            ],
+            detailGuide: `<p>Ejercicios de alta exigencia para compresión y tensión abdominal.</p>`
           },
           {
             dayLabel: "Día 5",
@@ -558,7 +613,8 @@
               "Calentamiento completo",
               "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 4 series (2.5 min descanso)",
               "3 bloques en desplome seguidos sin descanso × 2 rondas"
-            ]
+            ],
+            detailGuide: `<p>Descansos ligeramente más cortos entre series para elevar la densidad metabólica.</p>`
           },
           {
             dayLabel: "Día 6",
@@ -569,7 +625,8 @@
               "Calentamiento (15 min)",
               "Probar 2–3 proyectos de grado límite (máximo 4 intentos de calidad por bloque)",
               "Descanso largo (3–4 min) entre intentos intensos"
-            ]
+            ],
+            detailGuide: `<p>Foco en resolución de problemas complejos al límite de tu grado.</p>`
           },
           {
             dayLabel: "Día 7",
@@ -579,7 +636,8 @@
             tasks: [
               "Cero actividad de agarre",
               "Recuperación nutricional y sueño"
-            ]
+            ],
+            detailGuide: `<p>Descanso completo para asimilar la Semana 3.</p>`
           }
         ]
       },
@@ -598,7 +656,8 @@
               "Max Hangs 20 mm: 6 series × 10 seg (RPE 9 • 3 min descanso)",
               "Power Pull-ups: 5 series × 4 reps explosivas",
               "Suspensión a un brazo asistida con banda: 2 series × 6 seg por brazo"
-            ]
+            ],
+            detailGuide: `<p>Máximo volumen de fuerza del ciclo: 6 series de Max Hangs con alta exigencia.</p>`
           },
           {
             dayLabel: "Día 2",
@@ -609,7 +668,8 @@
               "Calentamiento (15 min)",
               "Escalada consciente exhalando en cada movimiento clave (5 bloques medios)",
               "Drill de repetición perfecta: repetir 3 veces el mismo bloque mejorando fluidez"
-            ]
+            ],
+            detailGuide: `<p>Optimización del gasto energético mediante control respiratorio.</p>`
           },
           {
             dayLabel: "Día 3",
@@ -620,7 +680,8 @@
               "Extensiones de dedos con banda: 3 series × 25 reps",
               "Flexiones con rotación torácica: 3 series × 10 reps",
               "Estiramientos suaves de cadena posterior (15 min)"
-            ]
+            ],
+            detailGuide: `<p>Sesión regenerativa clave para evitar sobrecargas articulares.</p>`
           },
           {
             dayLabel: "Día 4",
@@ -631,7 +692,8 @@
               "Sentadilla Búlgara + salto explosivo suave: 3 series × 6 por pierna",
               "Elevaciones de piernas colgado + sostener 3 seg en L: 3 series × 8 reps",
               "Plancha Hollow Body con lastre ligero o brazos extendidos: 3 series × 30 seg"
-            ]
+            ],
+            detailGuide: `<p>Máxima tensión en suspensión para evitar el efecto "arco" en techos.</p>`
           },
           {
             dayLabel: "Día 5",
@@ -640,9 +702,10 @@
             title: "Repetidores 7:3 (5 Series)",
             tasks: [
               "Calentamiento progresivo",
-              "Repetidores 7:3 en regleta 20 mm: 5 series × 6 reps (3 min descanso)",
+              "Repetidores 7:3 in regleta 20 mm: 5 series × 6 reps (3 min descanso)",
               "Enfriamiento y movilidad de muñecas"
-            ]
+            ],
+            detailGuide: `<p>Pico de series en repetidores antes de la semana de descarga.</p>`
           },
           {
             dayLabel: "Día 6",
@@ -652,7 +715,8 @@
             tasks: [
               "Calentamiento grupal",
               "Escalada libre combinando placas, techos y coordinación (60 min)"
-            ]
+            ],
+            detailGuide: `<p>Disfrute y variedad de estilos de escalada en ELBLOQUE.</p>`
           },
           {
             dayLabel: "Día 7",
@@ -661,7 +725,8 @@
             title: "Descanso Total Pre-Descarga",
             tasks: [
               "Descanso total para preparar la semana de descarga"
-            ]
+            ],
+            detailGuide: `<p>Preparación mental y física para la semana de supercompensación (Deload).</p>`
           }
         ]
       },
@@ -679,7 +744,8 @@
               "Calentamiento completo (15 min)",
               "Max Hangs 20 mm: solo 3 series × 10 seg (misma carga, cero fallo)",
               "Power Pull-ups: 3 series × 3 reps muy rápidas y limpias"
-            ]
+            ],
+            detailGuide: `<p>Reducción de series a la mitad para permitir la reparación completa de los tejidos.</p>`
           },
           {
             dayLabel: "Día 2",
@@ -690,7 +756,8 @@
               "Calentamiento suave",
               "Escalar 6 bloques cómodos enfocándose 100% en elegancia y precisión de pies",
               "Terminar la sesión sintiéndote con energía de sobra"
-            ]
+            ],
+            detailGuide: `<p>Escalada regenerativa y fluida sin acumular ácido láctico.</p>`
           },
           {
             dayLabel: "Día 3",
@@ -700,7 +767,8 @@
             tasks: [
               "Movilidad completa de hombros, cadera y columna (20 min)",
               "Extensiones suaves de dedos con goma"
-            ]
+            ],
+            detailGuide: `<p>Liberación de tensiones fasciales y movilidad articular.</p>`
           },
           {
             dayLabel: "Día 4",
@@ -711,7 +779,8 @@
               "Sentadilla Búlgara peso corporal: 2 series × 8 por pierna",
               "Elevaciones de rodillas colgado controladas: 2 series × 10 reps",
               "Plancha frontal + lateral: 2 rondas × 30 seg"
-            ]
+            ],
+            detailGuide: `<p>Rutina suave de mantenimiento sin fatiga residual.</p>`
           },
           {
             dayLabel: "Día 5",
@@ -722,7 +791,8 @@
               "Calentamiento",
               "Repetidores 7:3 en 20 mm: solo 2 series × 6 reps (3 min pausa)",
               "Estiramiento suave"
-            ]
+            ],
+            detailGuide: `<p>Estímulo mínimo para mantener el tono muscular en regleta.</p>`
           },
           {
             dayLabel: "Día 6",
@@ -731,7 +801,8 @@
             title: "Escalada Recreativa Sin Presión",
             tasks: [
               "Sesión social ligera en ELBLOQUE (45-60 min) evitando arqueos extremos"
-            ]
+            ],
+            detailGuide: `<p>Escalada relajada para conservar sensaciones frescas en el muro.</p>`
           },
           {
             dayLabel: "Día 7",
@@ -740,7 +811,8 @@
             title: "Descanso Total Antes de Semana Pico",
             tasks: [
               "Descanso total para llegar al 100% a la Semana 6"
-            ]
+            ],
+            detailGuide: `<p>Cierre de la descarga y preparación para el pico de rendimiento.</p>`
           }
         ]
       },
@@ -758,7 +830,8 @@
               "Calentamiento progresivo óptimo (20 min)",
               "Test Max Hangs 20 mm: 3 series × 10 seg buscando tu mejor marca limpia del ciclo",
               "Power Pull-ups: 3 series × 4 reps explosivas"
-            ]
+            ],
+            detailGuide: `<p>Evaluación de los gains de fuerza conseguidos a lo largo de las 6 semanas.</p>`
           },
           {
             dayLabel: "Día 2",
@@ -769,7 +842,8 @@
               "Calentamiento (15 min)",
               "Intentos de encadenamiento (Redpoint) en 2 bloques clave del ciclo",
               "Descanso completo de 4 min entre pegues de máxima calidad"
-            ]
+            ],
+            detailGuide: `<p>Punto óptimo de realización en tus proyectos principales.</p>`
           },
           {
             dayLabel: "Día 3",
@@ -779,7 +853,8 @@
             tasks: [
               "Extensiones de dedos + movilidad articular suave (15 min)",
               "Caminata ligera o estiramiento general"
-            ]
+            ],
+            detailGuide: `<p>Descanso activo enfocado en conservar la chispa neuromuscular.</p>`
           },
           {
             dayLabel: "Día 4",
@@ -790,7 +865,8 @@
               "Step-ups dinámicos: 2 series × 8 por pierna",
               "Elevaciones de piernas colgado (Psoas): 3 series × 8 reps",
               "Hollow Body Hold: 3 series × 30 seg"
-            ]
+            ],
+            detailGuide: `<p>Activación general sin fatiga.</p>`
           },
           {
             dayLabel: "Día 5",
@@ -800,7 +876,8 @@
             tasks: [
               "Calentamiento",
               "2 series de Repetidores 7:3 + 2 travesías exigentes de 25 movimientos"
-            ]
+            ],
+            detailGuide: `<p>Activación final de resistencia local antes del cierre.</p>`
           },
           {
             dayLabel: "Día 6",
@@ -811,7 +888,8 @@
               "Calentamiento con amigos",
               "Disfrutar el pico de forma encadenando tus bloques favoritos del mes",
               "Registrar sensaciones finales del ciclo"
-            ]
+            ],
+            detailGuide: `<p>Celebración del ciclo completado y disfrute del pico de forma en ELBLOQUE.</p>`
           },
           {
             dayLabel: "Día 7",
@@ -821,7 +899,8 @@
             tasks: [
               "Descanso total",
               "Generar Informe Final de las 6 Semanas y archivar el ciclo"
-            ]
+            ],
+            detailGuide: `<p>Genera tu informe acumulado para Google Docs, archívalo y prepárate para el siguiente ciclo.</p>`
           }
         ]
       }
@@ -1012,7 +1091,6 @@
         const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
         appState.completedTasks[key] = stamp;
 
-        // Si el día no tenía fecha asignada aún, fijar la fecha de hoy automáticamente
         const dayKey = `w${weekNum}_d${dayIdx}`;
         if (!appState.dayCustomDates[dayKey]) {
           appState.dayCustomDates[dayKey] = now.toISOString().split("T")[0];
@@ -1047,24 +1125,29 @@
       saveState();
     }
 
+    function openExerciseDetail(weekNum, dayIdx) {
+      const wObj = WEEKLY_TEMPLATES[weekNum - 1];
+      const dObj = wObj.days[dayIdx];
+      document.getElementById("detailModalTitle").textContent = `Semana ${weekNum} • ${dObj.dayLabel}: ${dObj.title}`;
+      document.getElementById("detailModalContent").innerHTML = dObj.detailGuide || "<p>No hay notas detalladas adicionales para este bloque.</p>";
+      openModal("exerciseDetailModal");
+    }
+
     // =========================================================================
     // RENDERIZADO DE INTERFAZ
     // =========================================================================
     function renderAll() {
-      // Fechas de ciclo
       const startInput = document.getElementById("cycleStartDate");
       startInput.value = appState.cycleStartDate;
       const endIso = addDaysToIso(appState.cycleStartDate, 41);
       document.getElementById("cycleEndDateBadge").textContent = `Fin estimado: ${formatShortDate(endIso)}`;
 
-      // Progreso global
       const { completedDays, percent } = calculateGlobalStats();
       document.getElementById("globalProgressLabel").textContent = `${percent}% (${completedDays}/42 días)`;
       document.getElementById("globalProgressBar").style.width = `${percent}%`;
       document.getElementById("exceptionsCountStat").textContent = `Imprevistos / cambios justificados: ${appState.exceptions.length}`;
       document.getElementById("historyCount").textContent = appState.archivedCycles.length;
 
-      // Banner de cierre al completar Semana 6
       let week6Done = 0;
       for (let d = 0; d < 7; d++) {
         if (getDayStatus(6, d).isComplete) week6Done++;
@@ -1192,6 +1275,12 @@
               <ul class="space-y-0.5">
                 ${tasksHtml}
               </ul>
+
+              <!-- Botón Ver Detalle de Ejercicios -->
+              <button onclick="openExerciseDetail(${wNum}, ${dIdx})"
+                class="w-full mt-3.5 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-teal-400 font-bold text-xs shadow-sm transition flex items-center justify-center gap-2">
+                <span>Ver Detalle de Ejercicios</span>
+              </button>
 
               ${exceptionHtml}
             </div>
@@ -1345,7 +1434,6 @@
         reportText
       });
 
-      // Reiniciar ciclo actual en limpio
       appState.activeWeek = 1;
       appState.cycleStartDate = new Date().toISOString().split("T")[0];
       appState.completedTasks = {};
