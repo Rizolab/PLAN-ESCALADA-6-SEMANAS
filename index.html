@@ -325,15 +325,15 @@
     // =========================================================================
     // CONFIGURACIÓN DE CONEXIÓN CON GOOGLE SHEETS (APPS SCRIPT)
     // =========================================================================
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxu6im1CkZw89RrfPMO34Bb6WsdL-wCkMy6oKVO_-cZtJOGFQ2KfZU_ndiML3QVJSRd/exec";
-    const STORAGE_KEY = "horst_climbing_cycle_v3";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwBIBoDteyzxKxVrHlVam9b2QORQY7RQrhFiBvWNW4eE292x3OdCJbjR0KmuGqcZnN3bg/exec";
+    const STORAGE_KEY = "horst_climbing_cycle_v4";
 
-    // Estructura Base del Plan de 6 Semanas (Menú Flexible Día 1 a Día 7)
+    // Estructura Completa de las 6 Semanas con Rutinas Detalladas y Menú Flexible
     const WEEKLY_TEMPLATES = [
       {
         week: 1,
         phase: "Fase 1: Adaptación Neural y Base Técnica",
-        focus: "Familiarización con regleta 20 mm (RPE 8), técnica de pies y activación de psoas/core.",
+        focus: "Familiarización con regleta 20 mm (RPE 8), técnica de pies y activación de psoas/core en ELBLOQUE.",
         days: [
           {
             dayLabel: "Día 1",
@@ -342,9 +342,9 @@
             title: "Max Hangs 20mm + Tracción Explosiva",
             tasks: [
               "Calentamiento progresivo completo (15-20 min)",
-              "Max Hangs 20 mm (Semiarqueo): 4 series × 10 seg (RPE 8 • 3 min descanso)",
+              "Max Hangs 20 mm (Semiarqueo): 4 series × 10 seg (RPE 8 • 3 min descanso completo)",
               "Power Pull-ups (Dominadas explosivas): 4 series × 4 reps (2.5 min descanso)",
-              "Bloqueos isométricos a 90° en barra: 3 series × 8 seg por brazo/asistido"
+              "Bloqueos isométricos a 90° en barra: 3 series × 8 seg por brazo / asistidos"
             ]
           },
           {
@@ -354,8 +354,8 @@
             title: "Técnica de Precisión y Pies Silenciosos",
             tasks: [
               "Calentamiento en travesía suave (15 min)",
-              "Drill Pies Silenciosos: 4 bloques fáciles sin hacer ruido al apoyar",
-              "Drill Hover Hands (pausa 2 seg antes de agarrar presa): 4 bloques",
+              "Drill Pies Silenciosos: 4 bloques fáciles sin hacer ruido al apoyar el calzado",
+              "Drill Hover Hands (pausa de 2 seg antes de agarrar la presa): 4 bloques",
               "Escalada libre controlada (60-70% intensidad) enfocada en cadera pegada al muro"
             ]
           },
@@ -376,8 +376,8 @@
             badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Fuerza Funcional Tren Inferior y Flexores",
             tasks: [
-              "Sentadilla Búlgara (enfoque empuje de talón/punta): 3 × 8 por pierna",
-              "Elevaciones de pierna colgado (Hanging Leg Raises / Psoas): 3 × 10 reps",
+              "Sentadilla Búlgara (enfoque empuje de talón/punta): 3 series × 8 por pierna",
+              "Elevaciones de pierna colgado (Hanging Leg Raises / Psoas): 3 series × 10 reps",
               "Plancha Hollow Body + Pallof Press antirrotación: 3 rondas × 30 seg",
               "Estiramiento activo de isquiotibiales y psoas (10 min)"
             ]
@@ -419,7 +419,7 @@
       {
         week: 2,
         phase: "Fase 1: Adaptación Neural y Base Técnica",
-        focus: "Incremento de volumen en Max Hangs (5 series) y consolidación de pies.",
+        focus: "Incremento de volumen en Max Hangs (5 series) y consolidación de apoyos.",
         days: [
           {
             dayLabel: "Día 1",
@@ -430,7 +430,7 @@
               "Calentamiento progresivo completo (15-20 min)",
               "Max Hangs 20 mm (Semiarqueo): 5 series × 10 seg (RPE 8.5 • 3 min descanso)",
               "Power Pull-ups: 4 series × 5 reps explosivas",
-              "Remo en anillas / TRX con pausa de 2 seg arriba: 3 × 10 reps"
+              "Remo en anillas / TRX con pausa de 2 seg arriba: 3 series × 10 reps"
             ]
           },
           {
@@ -450,8 +450,8 @@
             badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Movilidad Escapular y Antagonistas",
             tasks: [
-              "Extensiones de dedos con banda + rotaciones externas de hombro: 3 × 15",
-              "Flexiones en pica o fondo suave: 3 × 10 reps",
+              "Extensiones de dedos con banda + rotaciones externas de hombro: 3 series × 15",
+              "Flexiones en pica o fondo suave: 3 series × 10 reps",
               "Movilidad de cadera y tobillos (15 min)"
             ]
           },
@@ -461,9 +461,9 @@
             badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Estabilidad Unilateral y Compresión",
             tasks: [
-              "Step-ups altos (subida a cajón simulando pie alto en muro): 3 × 8 por pierna",
-              "L-Sit progresivo o elevaciones de rodillas al pecho colgado: 3 × 12 reps",
-              "Plancha lateral con elevación de pierna: 3 × 25 seg por lado"
+              "Step-ups altos (subida a cajón simulando pie alto en muro): 3 series × 8 por pierna",
+              "L-Sit progresivo o elevaciones de rodillas al pecho colgado: 3 series × 12 reps",
+              "Plancha lateral con elevación de pierna: 3 series × 25 seg por lado"
             ]
           },
           {
@@ -513,8 +513,8 @@
             tasks: [
               "Calentamiento progresivo riguroso (20 min)",
               "Max Hangs 20 mm: 5 series × 10 seg (+2 a 4 kg o goma más ligera, RPE 9)",
-              "Dominadas lastradas o estrictas con pecho a barra: 4 × 4 reps",
-              "Face-pulls o aperturas posteriores para salud escapular: 3 × 12"
+              "Dominadas lastradas o estrictas con pecho a barra: 4 series × 4 reps",
+              "Face-pulls o aperturas posteriores para salud escapular: 3 series × 12"
             ]
           },
           {
@@ -534,7 +534,7 @@
             badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Descarga Articular y Antagonistas",
             tasks: [
-              "Extensores de dedos + pronación/supinación de muñeca con peso ligero: 3 × 15",
+              "Extensores de dedos + pronación/supinación de muñeca con peso ligero: 3 series × 15",
               "Yoga / movilidad torácica y apertura de hombros (20 min)"
             ]
           },
@@ -544,9 +544,9 @@
             badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Potencia de Empuje de Pierna y Psoas",
             tasks: [
-              "Pistols asistidos o Sentadilla Búlgara con pausa abajo: 4 × 6 por pierna",
-              "Toes-to-bar (pies a la barra) o elevaciones estrictas de psoas: 4 × 8 reps",
-              "Ab-wheel (rueda abdominal) o walkouts en plancha: 3 × 10 reps"
+              "Pistols asistidos o Sentadilla Búlgara con pausa abajo: 4 series × 6 por pierna",
+              "Toes-to-bar (pies a la barra) o elevaciones estrictas de psoas: 4 series × 8 reps",
+              "Ab-wheel (rueda abdominal) o walkouts en plancha: 3 series × 10 reps"
             ]
           },
           {
@@ -597,7 +597,7 @@
               "Calentamiento completo (20 min)",
               "Max Hangs 20 mm: 6 series × 10 seg (RPE 9 • 3 min descanso)",
               "Power Pull-ups: 5 series × 4 reps explosivas",
-              "Suspensión a un brazo asistida con banda: 2 × 6 seg por brazo"
+              "Suspensión a un brazo asistida con banda: 2 series × 6 seg por brazo"
             ]
           },
           {
@@ -617,8 +617,8 @@
             badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
             title: "Regeneración Activa y Antagonistas",
             tasks: [
-              "Extensiones de dedos con banda: 3 × 25 reps",
-              "Flexiones con rotación torácica: 3 × 10 reps",
+              "Extensiones de dedos con banda: 3 series × 25 reps",
+              "Flexiones con rotación torácica: 3 series × 10 reps",
               "Estiramientos suaves de cadena posterior (15 min)"
             ]
           },
@@ -628,9 +628,9 @@
             badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Tensión Corporal Total en Desplome",
             tasks: [
-              "Sentadilla Búlgara + salto explosivo suave: 3 × 6 por pierna",
-              "Elevaciones de piernas colgado + sostener 3 seg en L: 3 × 8 reps",
-              "Plancha Hollow Body con lastre ligero o brazos extendidos: 3 × 30 seg"
+              "Sentadilla Búlgara + salto explosivo suave: 3 series × 6 por pierna",
+              "Elevaciones de piernas colgado + sostener 3 seg en L: 3 series × 8 reps",
+              "Plancha Hollow Body con lastre ligero o brazos extendidos: 3 series × 30 seg"
             ]
           },
           {
@@ -708,8 +708,8 @@
             badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Activación Ligera de Piernas y Core",
             tasks: [
-              "Sentadilla Búlgara peso corporal: 2 × 8 por pierna",
-              "Elevaciones de rodillas colgado controladas: 2 × 10 reps",
+              "Sentadilla Búlgara peso corporal: 2 series × 8 por pierna",
+              "Elevaciones de rodillas colgado controladas: 2 series × 10 reps",
               "Plancha frontal + lateral: 2 rondas × 30 seg"
             ]
           },
@@ -747,7 +747,7 @@
       {
         week: 6,
         phase: "Fase 4: Realización, Pico de Rendimiento y Evaluación",
-        focus: "Transferencia máxima al muro, encadenamiento de proyectos y cierre de ciclo.",
+        focus: "Transferencia máxima al muro, encadenamiento de proyectos y cierre de ciclo en ELBLOQUE.",
         days: [
           {
             dayLabel: "Día 1",
@@ -787,9 +787,9 @@
             badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200",
             title: "Activación de Core y Estabilidad",
             tasks: [
-              "Step-ups dinámicos: 2 × 8 por pierna",
-              "Elevaciones de piernas colgado (Psoas): 3 × 8 reps",
-              "Hollow Body Hold: 3 × 30 seg"
+              "Step-ups dinámicos: 2 series × 8 por pierna",
+              "Elevaciones de piernas colgado (Psoas): 3 series × 8 reps",
+              "Hollow Body Hold: 3 series × 30 seg"
             ]
           },
           {
@@ -1240,7 +1240,6 @@
       const reason = document.getElementById("excReason").value.trim() || "Ajuste operativo de calendario.";
       const justified = document.getElementById("excMarkJustified").checked;
 
-      // Reemplazar si ya había un registro para ese mismo bloque o agregar uno nuevo
       appState.exceptions = appState.exceptions.filter(
         ex => !(Number(ex.week) === week && Number(ex.dayIdx) === dayIdx)
       );
