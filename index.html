@@ -223,14 +223,18 @@
 
   <!-- MODAL: Ver Detalle de Ejercicios (Detalle Técnico Extendido) -->
   <div id="exerciseDetailModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[88vh]">
       <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
-        <h3 id="detailModalTitle" class="text-sm font-bold">Guía Técnica Detallada</h3>
-        <button onclick="closeModal('exerciseDetailModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+        <div>
+          <span id="detailModalSub" class="text-[10px] font-bold uppercase tracking-wider text-teal-400 block">Protocolo Detallado de Ejecución</span>
+          <h3 id="detailModalTitle" class="text-sm sm:text-base font-bold">Guía Técnica Detallada</h3>
+        </div>
+        <button onclick="closeModal('exerciseDetailModal')" class="text-slate-400 hover:text-white text-xl leading-none px-1">×</button>
       </div>
-      <div id="detailModalContent" class="p-5 space-y-3 text-xs text-slate-700 overflow-y-auto leading-relaxed flex-1"></div>
-      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
-        <button onclick="closeModal('exerciseDetailModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 text-white">Cerrar</button>
+      <div id="detailModalContent" class="p-5 space-y-4 text-xs sm:text-sm text-slate-700 overflow-y-auto leading-relaxed flex-1"></div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <span class="text-[11px] text-slate-500">Método Eric Hörst • Ejecución Técnica</span>
+        <button onclick="closeModal('exerciseDetailModal')" class="text-xs font-bold px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white">Cerrar Detalle</button>
       </div>
     </div>
   </div>
@@ -340,9 +344,23 @@
     // CONFIGURACIÓN DE CONEXIÓN CON GOOGLE SHEETS (APPS SCRIPT)
     // =========================================================================
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwf7Naopzt_A6chJDFLo2Gq5VMykynfWmU3BztAFPdtvygadIhHi4wLMJlfs6p-UDd46A/exec";
-    const STORAGE_KEY = "horst_climbing_cycle_v5";
+    const STORAGE_KEY = "horst_climbing_cycle_v6";
 
-    // Estructura Completa de las 6 Semanas con Rutinas Detalladas y Guías Técnicas Expandidas
+    // Helper para construir bloques detallados limpios en cada ejercicio
+    function exBox(title, metrics, howTo, cue) {
+      return `
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h4 class="font-bold text-slate-900 text-xs sm:text-sm">${title}</h4>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200">${metrics}</span>
+          </div>
+          <p class="text-xs text-slate-700 leading-relaxed"><strong>Ejecución:</strong> ${howTo}</p>
+          <p class="text-[11px] text-teal-800 bg-teal-50 border border-teal-200 rounded-lg px-2.5 py-1.5"><strong>Clave Técnica:</strong> ${cue}</p>
+        </div>
+      `;
+    }
+
+    // Estructura Completa de las 6 Semanas con Rutinas Detalladas y Guías Exhaustivas
     const WEEKLY_TEMPLATES = [
       {
         week: 1,
@@ -360,11 +378,19 @@
               "Power Pull-ups (Dominadas explosivas): 4 series × 4 reps (2.5 min descanso)",
               "Bloqueos isométricos a 90° en barra: 3 series × 8 seg por brazo / asistidos"
             ],
-            detailGuide: `
-              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 1 (Fuerza Máxima)</h4>
-              <p><strong>Max Hangs (20 mm):</strong> Adopta obligatoriamente posición de <em>semarqueo</em> (dedos doblados a 90° y pulgar libre). Si necesitas asistencia, usa una banda elástica bajo los pies; si buscas intensidad, añade lastre ligero. El descanso entre series debe ser de 3 minutos completos para permitir la resíntesis de fosfocreatina.</p>
-              <p class="mt-2"><strong>Power Pull-ups:</strong> Concéntrate en la velocidad de aceleración en la subida (fase concéntrica explosiva) y una bajada controlada de 2 segundos para proteger los codos.</p>
-            `
+            detailGuide:
+              exBox("1. Calentamiento Progresivo Articular y Tendinoso", "15–20 min • Obligatorio",
+                "Movilidad de hombros, rotaciones escapulares, 2×10 Scapular Pull-ups, 3 bloques fáciles (V0-V1) y 3 suspensiones de aproximación en 20 mm descargando peso con los pies (50%, 70%, 85%).",
+                "Nunca te cuelgues al 100% en frío; las poleas A2/A4 necesitan irrigación gradual.") +
+              exBox("2. Max Hangs en Regleta de 20 mm (Semiarqueo)", "4 series × 10 seg • Descanso 3 min • RPE 8",
+                "Coloca las 4 yemas en la regleta de 20 mm con las articulaciones medias flexionadas a 90° y el pulgar libre a un lado (sin bloquear sobre el índice). Mantén hombros activos (escápulas deprimidas, cuello largo) y codos ligeramente desbloqueados (5°).",
+                "Si no aguantas 10 seg limpios, descarga peso apoyando la punta de un pie sobre una banda elástica o silla. Respeta los 3 minutos completos de descanso para recargar ATP-PC.") +
+              exBox("3. Power Pull-ups (Dominadas Explosivas)", "4 series × 4 reps • Descanso 2.5 min",
+                "Desde brazos extendidos con activación escapular, tira con máxima aceleración buscando llevar el pecho hacia la barra. Baja de forma controlada durante 2 segundos.",
+                "La calidad importa más que la fatiga: en cuanto notes que la velocidad de subida cae drásticamente, detén la serie.") +
+              exBox("4. Bloqueos Isométricos a 90° en Barra", "3 series × 8 seg • Descanso 2 min",
+                "Sube hasta dejar los codos exactamente a 90° de flexión y sostén la posición completamente inmóvil. Puedes hacerlo a dos manos con lastre o asistido con una mano en banda/toalla.",
+                "Evita encoger los hombros hacia las orejas; mantén el pecho abierto y el core en tensión Hollow.")
           },
           {
             dayLabel: "Día 2",
@@ -377,11 +403,19 @@
               "Drill Hover Hands (pausa de 2 seg antes de agarrar la presa): 4 bloques",
               "Escalada libre controlada (60-70% intensidad) enfocada en cadera pegada al muro"
             ],
-            detailGuide: `
-              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 2 (Técnica & Pies)</h4>
-              <p><strong>Pies Silenciosos:</strong> El sonido al apoyar el pie delata un impacto brusco. Busca colocar la punta de la goma de forma milimétrica y estática al primer intento.</p>
-              <p class="mt-2"><strong>Hover Hands:</strong> Antes de mover la mano hacia la siguiente presa, mantén la mano suspendida en el aire sobre la presa durante 2 segundos asegurando la lectura visual y la tensión corporal.</p>
-            `
+            detailGuide:
+              exBox("1. Calentamiento en Travesía", "15 min • Baja intensidad",
+                "Desplázate lateralmente por el muro usando presas grandes y pies cómodos durante 3 bloques de 3–4 minutos con 1 minuto de pausa.",
+                "Prioriza respiración nasal fluida y brazos estirados siempre que sea posible.") +
+              exBox("2. Drill Pies Silenciosos (Quiet Feet)", "4 bloques fáciles (V0–V2)",
+                "Escala mirando fijamente cada apoyo de pie hasta que la puntera haga contacto con la presa. Está prohibido reacomodar el pie una vez apoyado.",
+                "Si el pie hace ruido al golpear el muro, repite el movimiento. Esto entrena precisión neuromuscular y ahorro de energía.") +
+              exBox("3. Drill Hover Hands (Manos Flotantes)", "4 bloques fáciles",
+                "Antes de cerrar la mano sobre la siguiente presa, detén la mano a 3 cm de distancia en el aire durante 2 segundos completos mientras estabilizas tu centro de gravedad con los pies.",
+                "Obliga a tus piernas y core a cargar el peso en lugar de depender de tirones bruscos de bíceps.") +
+              exBox("4. Escalada Libre Consciente", "30–40 min • 60–70% intensidad",
+                "Resuelve bloques variados en ELBLOQUE enfocándote en girar la cadera (egipcio / drop-knee suave) para acercar el centro de gravedad a la pared.",
+                "Termina la sesión sin llegar al fallo muscular ni congestionar en exceso los antebrazos.")
           },
           {
             dayLabel: "Día 3",
@@ -393,10 +427,16 @@
               "Flexiones escapulares (Push-up Plus) en suelo: 3 series × 12 reps",
               "Movilidad profunda de cadera (90/90) y apertura torácica (15 min)"
             ],
-            detailGuide: `
-              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 3 (Descanso Activo)</h4>
-              <p>Este día está diseñado para contrarrestar el acoplamiento flexor de la escalada. Las extensiones con banda previenen tendinitis y equilibran la musculatura del antebrazo.</p>
-            `
+            detailGuide:
+              exBox("1. Extensiones de Dedos con Banda Elástica", "3 series × 20 reps • Descanso 60 seg",
+                "Coloca una banda elástica alrededor de las uñas de los 5 dedos y abre la mano completamente contra la resistencia, sosteniendo 1 segundo abierto.",
+                "Equilibra la musculatura extensora del antebrazo y previene la epicondilitis lateral (codo de tenista).") +
+              exBox("2. Push-up Plus (Flexiones Escapulares)", "3 series × 12 reps • Descanso 60 seg",
+                "En posición de plancha alta con brazos rectos, junta las escápulas (bajando el pecho) y luego empuja el suelo separando al máximo los omóplatos (protracción).",
+                "Fortalece el serrato anterior, músculo estabilizador clave para evitar lesiones de hombro en muros desplomados.") +
+              exBox("3. Movilidad Cadera 90/90 y Apertura Torácica", "15 min continuos",
+                "Sentado en el suelo con ambas rodillas dobladas a 90°, rota suavemente de un lado al otro sin usar las manos. Complementa con rotaciones torácicas en cuadrupedia.",
+                "Mejora directamente la capacidad de subir pies altos sin despegar la cadera del muro.")
           },
           {
             dayLabel: "Día 4",
@@ -409,10 +449,19 @@
               "Plancha Hollow Body + Pallof Press antirrotación: 3 rondas × 30 seg",
               "Estiramiento activo de isquiotibiales y psoas (10 min)"
             ],
-            detailGuide: `
-              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 4 (Piernas & Psoas)</h4>
-              <p><strong>Psoas y Core:</strong> Las elevaciones colgado deben hacerse sin inercia (evita balancearte). Contrae el abdomen antes de subir las rodillas para proteger la zona lumbar.</p>
-            `
+            detailGuide:
+              exBox("1. Sentadilla Búlgara Unilateral", "3 series × 8 reps/pierna • Descanso 90 seg",
+                "Apoya el empeine del pie trasero en un banco bajo y desciende controladamente hasta que la rodilla trasera roce el suelo. Sube empujando con el metatarso/talón delantero.",
+                "Simula exactamente el empuje unilateral necesario para pararte sobre un apoyo alto en placa o desplome.") +
+              exBox("2. Elevaciones de Pierna Colgado (Psoas)", "3 series × 10 reps • Descanso 90 seg",
+                "Colgado de la barra con hombros activos, eleva las piernas extendidas (o rodillas al pecho) hasta la horizontal sin balancear el torso.",
+                "Inicia el movimiento haciendo retroversión pélvica (metiendo el ombligo) para activar el psoas ilíaco sin sobrecargar lumbares.") +
+              exBox("3. Plancha Hollow Body + Pallof Press", "3 rondas × 30 seg",
+                "En suelo boca arriba, pega completamente la zona lumbar al tapete elevando hombros y piernas estiradas a 15 cm del suelo. Combina con empuje antirrotación con banda.",
+                "Transfiere tensión directa para evitar que los pies se salgan de las presas en techos.") +
+              exBox("4. Estiramiento Activo de Isquiotibiales y Psoas", "10 min",
+                "Zancada baja con contracción de glúteo trasero (30 seg por lado) + estiramiento de cadena posterior.",
+                "Mantiene el rango de movimiento óptimo tras el trabajo de flexores.")
           },
           {
             dayLabel: "Día 5",
@@ -424,10 +473,16 @@
               "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 3 series (3 min descanso)",
               "Circuitos 4×4 suave en bloques de V1-V2 (4 bloques seguidos, 3 min pausa × 2 rondas)"
             ],
-            detailGuide: `
-              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 5 (Repetidores HIT 7:3)</h4>
-              <p>El protocolo 7:3 (7 seg colgado / 3 seg de descanso) × 6 repeticiones forma 1 serie de alta intensidad aeróbico-anaeróbica. Respeta los 3 minutos de pausa entre series.</p>
-            `
+            detailGuide:
+              exBox("1. Calentamiento Progresivo", "15 min",
+                "Movilidad articular + 3 bloques progresivos subiendo gradualmente la exigencia de agarres.",
+                "Asegura buena temperatura en antebrazos antes de iniciar el cronómetro 7:3.") +
+              exBox("2. Repetidores HIT 7:3 en Regleta 20 mm", "3 series × (6 reps de 7s/3s) • Descanso 3 min",
+                "Cuélgate 7 segundos en semiarqueo, descansa 3 segundos apoyando pies en el suelo sin soltar magnesio, y repite 6 veces seguidas (1 minuto total por serie). Descansa 3 minutos completos entre series.",
+                "Desarrolla la capacidad capilar y la resistencia anaeróbica aláctica para aguantar secuencias largas sin abrir la mano.") +
+              exBox("3. Circuitos 4×4 Suave (Capacidad Aeróbica)", "2 rondas × 4 bloques • Descanso 3 min",
+                "Elige 4 bloques fáciles (V1–V2) que domines por completo. Escálalos uno tras otro sin descanso entre bloques, bajando rápido y pasando al siguiente.",
+                "Mantén un ritmo fluido y constante; el objetivo es acumular movimientos con congestión leve y controlada.")
           },
           {
             dayLabel: "Día 6",
@@ -439,10 +494,16 @@
               "Sesión de proyectos de placa / equilibrio y desplomes moderados (60 min)",
               "Enfriamiento y estiramiento suave de antebrazos al terminar"
             ],
-            detailGuide: `
-              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 6 (Escalada Social)</h4>
-              <p>Disfruta del muro compartiendo betas con compañeros en ELBLOQUE, priorizando la fluidez y el disfrute sin sobreentrenar.</p>
-            `
+            detailGuide:
+              exBox("1. Calentamiento Compartido en ELBLOQUE", "15 min",
+                "Movilidad general + 4 bloques de iniciación trabajando transferencias de peso.",
+                "Evita saltar directamente a los bloques duros del día aunque tus amigos ya estén calentando.") +
+              exBox("2. Sesión Variada de Placa y Desplome Moderado", "60 min",
+                "Alterna bloques técnicos de equilibrio/regletas pequeñas con bloques físicos de movimientos amplios.",
+                "Observa cómo resuelven los pasos otros escaladores para ampliar tu repertorio motor.") +
+              exBox("3. Enfriamiento y Estiramiento", "10 min",
+                "Estiramiento suave de flexores de muñeca (palma hacia arriba y hacia abajo, 20 seg por lado) sin dolor.",
+                "Acelera el retorno venoso y deja los antebrazos listos para el descanso total del Día 7.")
           },
           {
             dayLabel: "Día 7",
@@ -453,10 +514,10 @@
               "Cero escalada ni carga en dedos",
               "Hidratación óptima y sueño reparador (7.5–8.5 horas)"
             ],
-            detailGuide: `
-              <h4 class="font-bold text-slate-900 text-sm mb-1">Guía Técnica • Día 7 (Descanso Total)</h4>
-              <p>Jornada clave de supercompensación para iniciar la siguiente semana con el sistema neuromuscular completamente fresco.</p>
-            `
+            detailGuide:
+              exBox("Protocolo de Supercompensación (Día 7)", "24 horas sin carga",
+                "Los tendones y poleas de los dedos tienen un metabolismo mucho más lento que los músculos. Hoy ocurre la síntesis real de colágeno y recuperación del sistema nervioso central.",
+                "Evita cargar bolsas pesadas en arqueo o hacer ejercicios de agarre hoy.")
           }
         ]
       },
@@ -476,7 +537,16 @@
               "Power Pull-ups: 4 series × 5 reps explosivas",
               "Remo en anillas / TRX con pausa de 2 seg arriba: 3 series × 10 reps"
             ],
-            detailGuide: `<p>Aumentamos a 5 series de Max Hangs consolidando la adaptación tendinosa de la primera semana.</p>`
+            detailGuide:
+              exBox("1. Max Hangs 20 mm (Progresión de Volumen)", "5 series × 10 seg • Descanso 3 min • RPE 8.5",
+                "Añadimos una quinta serie respecto a la Semana 1 manteniendo exactamente la misma carga o asistencia. Semiarqueo estricto con pulgar libre y hombros encajados.",
+                "Al final de cada serie de 10 seg debes sentir que podrías haber aguantado máximo 1.5 a 2 segundos extra.") +
+              exBox("2. Power Pull-ups", "4 series × 5 reps • Descanso 2.5 min",
+                "Subida explosiva desde abajo llevando el esternón hacia la barra y bajada controlada de 2 segundos.",
+                "Mantén las piernas juntas y ligeramente al frente (posición Hollow) sin patear.") +
+              exBox("3. Remo en Anillas / TRX con Pausa Isométrica", "3 series × 10 reps • Descanso 90 seg",
+                "Con el cuerpo inclinado a 45°, tira llevando las anillas a las costillas, junta escápulas y sostén 2 segundos arriba antes de bajar.",
+                "Fortalece romboides y trapecio medio para estabilizar tracción en techos.")
           },
           {
             dayLabel: "Día 2",
@@ -488,7 +558,13 @@
               "Práctica específica de taloneos (Heel Hooks) y empeines en desplome suave",
               "4 bloques a vista (Onsight) priorizando lectura previa desde el suelo"
             ],
-            detailGuide: `<p>Enfócate en fijar el talón correctamente antes de soltar la mano de oposición.</p>`
+            detailGuide:
+              exBox("1. Práctica de Taloneos (Heel Hooks) y Empeines", "25 min • Técnica específica",
+                "Selecciona 3 bloques en ELBLOQUE donde puedas colocar el talón a la altura de la cadera o mano. Activa el isquiotibial tirando del talón hacia el glúteo antes de soltar la mano.",
+                "Apunta ligeramente los dedos del pie hacia afuera para encajar el borde externo del talón de la gata.") +
+              exBox("2. Escalada a Vista (Onsight) con Lectura Previa", "4 bloques • Descanso 3 min entre bloques",
+                "Antes de tocar la primera presa, visualiza toda la secuencia de pies y manos desde el suelo (incluyendo cruces y cambios de pie) e intenta encadenar al primer pegue.",
+                "Entrena la toma de decisiones bajo presión y evita dudar a mitad del bloque.")
           },
           {
             dayLabel: "Día 3",
@@ -500,7 +576,13 @@
               "Flexiones en pica o fondo suave: 3 series × 10 reps",
               "Movilidad de cadera y tobillos (15 min)"
             ],
-            detailGuide: `<p>Trabajo enfocado en salud articular de hombros y muñecas.</p>`
+            detailGuide:
+              exBox("1. Rotaciones Externas de Hombro + Extensiones", "3 series × 15 reps",
+                "Con el codo pegado al costado a 90°, rota el antebrazo hacia afuera usando una banda elástica ligera. Combina con 15 aperturas de dedos con goma.",
+                "Protege el manguito rotador frente a movimientos de hombro abierto (gaston / hombro invertido).") +
+              exBox("2. Flexiones en Pica (Pike Push-ups)", "3 series × 10 reps",
+                "Cadera elevada en V invertida, baja la coronilla hacia el suelo formando un triángulo con las manos y empuja.",
+                "Trabaja deltoides anterior y tríceps como antagonistas directos de la tracción.")
           },
           {
             dayLabel: "Día 4",
@@ -512,7 +594,16 @@
               "L-Sit progresivo o elevaciones de rodillas al pecho colgado: 3 series × 12 reps",
               "Plancha lateral con elevación de pierna: 3 series × 25 seg por lado"
             ],
-            detailGuide: `<p>Simula los arranques de pie alto típicos en bloques modernos de inclinación negativa.</p>`
+            detailGuide:
+              exBox("1. Step-ups Altos (Subida a Cajón Alto)", "3 series × 8 reps/pierna • Descanso 90 seg",
+                "Coloca un pie sobre un cajón o banco a la altura de la rodilla/cadera. Sube haciendo fuerza exclusivamente con la pierna de arriba sin impulsarte con el talón del suelo.",
+                "Replica exactamente los pasos de pie alto en muros técnicos.") +
+              exBox("2. L-Sit Progresivo / Elevaciones Colgado", "3 series × 12 reps",
+                "Colgado en barra o apoyado en paralelas, eleva las piernas rectas a 90° (o una pierna extendida y otra recogida) controlando el descenso.",
+                "Desarrolla fuerza isométrica de compresión abdominal y flexores de cadera.") +
+              exBox("3. Plancha Lateral con Abducción", "3 series × 25 seg/lado",
+                "En plancha lateral sobre el antebrazo, eleva la pierna superior manteniendo la cadera alineada sin que caiga hacia atrás.",
+                "Fortalece el glúteo medio para estabilizar apoyos laterales en placa.")
           },
           {
             dayLabel: "Día 5",
@@ -524,7 +615,13 @@
               "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 4 series (3 min descanso)",
               "Travesía continua de 4 minutos sin bajar del muro (2 rondas)"
             ],
-            detailGuide: `<p>Cuarta serie añadida para estimular la tolerancia al lactato local.</p>`
+            detailGuide:
+              exBox("1. Repetidores HIT 7:3 en Regleta 20 mm", "4 series × (6 reps de 7s/3s) • Descanso 3 min",
+                "7 seg colgado / 3 seg pausa × 6 repeticiones = 1 serie. Añadimos la cuarta serie respecto a la semana pasada manteniendo semiarqueo limpio.",
+                "No permitas que los dedos colapsen a arqueo cerrado (full crimp) por fatiga en las últimas repeticiones.") +
+              exBox("2. Travesía Continua de 4 Minutos (ARC)", "2 rondas × 4 min • Descanso 4 min",
+                "Escala sin bajar del muro durante 4 minutos seguidos usando presas cómodas, sacudiendo y relajando un brazo cada 3–4 movimientos.",
+                "Estimula la capilarización del antebrazo y la recuperación activa sobre el muro.")
           },
           {
             dayLabel: "Día 6",
@@ -536,7 +633,10 @@
               "Resolver 5 a 6 bloques variados compartiendo betas con amigos",
               "Estiramiento suave de flexores de antebrazo"
             ],
-            detailGuide: `<p>Sesión recreativa para afianzar confianza y lectura de problemas.</p>`
+            detailGuide:
+              exBox("Sesión Social de Búlder", "60–75 min",
+                "Prueba bloques de diferentes estilos (coordinación, regletas, romos) limitando a 4 o 5 intentos máximos por bloque duro para no acumular fatiga innecesaria.",
+                "Descansa al menos 2–3 minutos entre intentos de alta intensidad.")
           },
           {
             dayLabel: "Día 7",
@@ -547,7 +647,10 @@
               "Descanso pasivo completo",
               "Automasaje suave en antebrazos y espalda alta"
             ],
-            detailGuide: `<p>Recuperación total previa al salto de intensidad de la Fase 2.</p>`
+            detailGuide:
+              exBox("Descanso Total y Descarga Miofascial", "Día libre",
+                "Puedes realizar un masaje suave en los flexores del antebrazo y usar una pelota de lacrosse contra la pared para soltar el infraespinoso y trapecio.",
+                "Cierra la Fase 1 completamente recuperado para entrar a la sobrecarga de Fase 2.")
           }
         ]
       },
@@ -567,7 +670,16 @@
               "Dominadas lastradas o estrictas con pecho a barra: 4 series × 4 reps",
               "Face-pulls o aperturas posteriores para salud escapular: 3 series × 12"
             ],
-            detailGuide: `<p>Inicio de sobrecarga con lastre moderado o asistencia reducida (RPE 9).</p>`
+            detailGuide:
+              exBox("1. Max Hangs 20 mm con Sobrecarga (RPE 9)", "5 series × 10 seg • Descanso 3 min • +2 a 4 kg",
+                "Incrementa ligeramente la carga (añadiendo 2–4 kg en arnés/chaleco o pasando a una banda elástica de menor asistencia) para alcanzar RPE 9 (esfuerzo máximo controlado).",
+                "Si notas dolor punzante en alguna polea o articulación, reduce inmediatamente la carga al peso de la Semana 2.") +
+              exBox("2. Dominadas Lastradas o Pecho a Barra", "4 series × 4 reps • Descanso 3 min",
+                "Realiza 4 repeticiones pesadas o estrictas llevando el pecho hasta tocar la barra sin balanceo de piernas.",
+                "Desarrolla fuerza máxima de tracción para bloquear presas lejanas.") +
+              exBox("3. Face-Pulls con Banda o Polea", "3 series × 12 reps",
+                "Tira de la banda hacia la frente separando las manos y rotando los pulgares hacia atrás al final del recorrido.",
+                "Contrarresta la rotación interna de hombros típica de los escaladores.")
           },
           {
             dayLabel: "Día 2",
@@ -579,7 +691,13 @@
               "Práctica de lances controlados (Deadpoints) atrapando la presa en punto muerto",
               "4 bloques técnicos exigentes de equilibrio / placa vertical"
             ],
-            detailGuide: `<p>Coordina la inercia del cuerpo con el agarre estático en el punto más alto del lance.</p>`
+            detailGuide:
+              exBox("1. Práctica de Deadpoints (Punto Muerto)", "25 min • Potencia coordinada",
+                "Elige movimientos largos en desplome moderado donde debas impulsarte con piernas y caderas para atrapar la presa justo en el instante de gravedad cero (punto más alto antes de caer).",
+                "Mantén la tensión en el pie de empuje para no salir rebotado hacia afuera al agarrar la presa.") +
+              exBox("2. Bloques Técnicos de Placa y Regletas", "4 bloques • Descanso 3 min",
+                "Selecciona bloques verticales o ligeramente tumbados con presas pequeñas de pie y mano. Enfócate en bajar los talones para maximizar fricción.",
+                "Transfiere la fuerza de dedos ganada en regleta de 20 mm a agarres reales.")
           },
           {
             dayLabel: "Día 3",
@@ -590,7 +708,13 @@
               "Extensores de dedos + pronación/supinación de muñeca con peso ligero: 3 series × 15",
               "Yoga / movilidad torácica y apertura de hombros (20 min)"
             ],
-            detailGuide: `<p>Mantenimiento de la salud articular ante cargas de fuerza incrementadas.</p>`
+            detailGuide:
+              exBox("1. Pronación / Supinación de Muñeca + Extensores", "3 series × 15 reps",
+                "Sujeta un martillo o mancuerna ligera por un extremo con el codo apoyado a 90° y gira la muñeca lentamente de palma arriba a palma abajo.",
+                "Fortalece los estabilizadores profundos del codo y muñeca frente a cargas pesadas.") +
+              exBox("2. Movilidad Torácica y Apertura de Hombros", "20 min",
+                "Postura del cachorro (Puppy Pose) en el suelo + rotaciones torácicas.",
+                "Mejora el alcance vertical y reduce rigidez cervical.")
           },
           {
             dayLabel: "Día 4",
@@ -602,7 +726,16 @@
               "Toes-to-bar (pies a la barra) o elevaciones estrictas de psoas: 4 series × 8 reps",
               "Ab-wheel (rueda abdominal) o walkouts en plancha: 3 series × 10 reps"
             ],
-            detailGuide: `<p>Ejercicios de alta exigencia para compresión y tensión abdominal.</p>`
+            detailGuide:
+              exBox("1. Pistols Asistidos / Sentadilla Búlgara con Pausa", "4 series × 6 reps/pierna • Descanso 2 min",
+                "Desciende hasta abajo, haz una pausa estática de 2 segundos eliminando el rebote elástico y sube con explosividad.",
+                "Desarrolla fuerza concéntrica pura desde flexión profunda de rodilla y cadera.") +
+              exBox("2. Toes-to-Bar / Elevaciones Estrictas de Psoas", "4 series × 8 reps • Descanso 90 seg",
+                "Colgado en barra, lleva los empeines hasta tocar la barra sin balancearte, bajando en 3 segundos.",
+                "Clave para colocar pies en techos sin perder tensión abdominal.") +
+              exBox("3. Ab-Wheel / Walkouts en Plancha", "3 series × 10 reps",
+                "Desde rodillas o pies, extiende los brazos hacia adelante manteniendo la pelvis en retroversión (glúteos apretados) sin arquear la espalda baja.",
+                "Entrena la cadena anterior en máxima extensión corporal.")
           },
           {
             dayLabel: "Día 5",
@@ -614,7 +747,13 @@
               "Repetidores 7:3 en regleta 20 mm (6 reps = 1 serie): 4 series (2.5 min descanso)",
               "3 bloques en desplome seguidos sin descanso × 2 rondas"
             ],
-            detailGuide: `<p>Descansos ligeramente más cortos entre series para elevar la densidad metabólica.</p>`
+            detailGuide:
+              exBox("1. Repetidores HIT 7:3 Alta Densidad", "4 series × (6 reps de 7s/3s) • Descanso 2.5 min",
+                "Mismo protocolo de 7 seg colgado / 3 seg descanso × 6 reps, reduciendo el descanso entre series a 2 minutos y 30 segundos.",
+                "Aumenta la tolerancia a la acidosis en el antebrazo bajo esfuerzo sostenido.") +
+              exBox("2. Bloques en Desplome Encadenados (3×2)", "2 rondas × 3 bloques • Descanso 4 min",
+                "Escala 3 bloques en muro desplomado uno tras otro sin pausa, descansa 4 minutos completos y repite.",
+                "Simula la fatiga acumulada de una ruta o búlder largo de resistencia.")
           },
           {
             dayLabel: "Día 6",
@@ -626,7 +765,10 @@
               "Probar 2–3 proyectos de grado límite (máximo 4 intentos de calidad por bloque)",
               "Descanso largo (3–4 min) entre intentos intensos"
             ],
-            detailGuide: `<p>Foco en resolución de problemas complejos al límite de tu grado.</p>`
+            detailGuide:
+              exBox("Sesión de Proyección Límite (Limit Bouldering)", "60–75 min",
+                "Selecciona 2 o 3 bloques en ELBLOQUE que estén en tu límite actual. Analiza cada movimiento aislado y luego intenta enlazar secciones descansando 3–4 minutos completos entre pegues.",
+                "Detén la sesión en cuanto sientas que tu fuerza máxima de dedos empieza a decaer.")
           },
           {
             dayLabel: "Día 7",
@@ -637,7 +779,10 @@
               "Cero actividad de agarre",
               "Recuperación nutricional y sueño"
             ],
-            detailGuide: `<p>Descanso completo para asimilar la Semana 3.</p>`
+            detailGuide:
+              exBox("Descanso Total Semana 3", "24 horas sin carga",
+                "Prioriza ingesta adecuada de proteínas y carbohidratos complejos junto con 8 horas de sueño para consolidar la sobrecarga de la Semana 3.",
+                "Prepara el cuerpo para el pico de volumen de la Semana 4.")
           }
         ]
       },
@@ -657,7 +802,16 @@
               "Power Pull-ups: 5 series × 4 reps explosivas",
               "Suspensión a un brazo asistida con banda: 2 series × 6 seg por brazo"
             ],
-            detailGuide: `<p>Máximo volumen de fuerza del ciclo: 6 series de Max Hangs con alta exigencia.</p>`
+            detailGuide:
+              exBox("1. Max Hangs 20 mm (Pico de Volumen del Ciclo)", "6 series × 10 seg • Descanso 3 min • RPE 9",
+                "Alcanzamos el máximo volumen de fuerza del mesociclo: 6 series de 10 segundos en semiarqueo con la carga de la Semana 3.",
+                "Mantén la concentración neural al 100% en cada serie y respeta rigurosamente los 3 minutos de pausa.") +
+              exBox("2. Power Pull-ups", "5 series × 4 reps • Descanso 2.5 min",
+                "5 series de 4 dominadas explosivas limpias.",
+                "Busca máxima velocidad en el despegue inicial.") +
+              exBox("3. Suspensión a Un Brazo Asistida", "2 series × 6 seg/brazo • Descanso 2.5 min",
+                "Sujeta una presa buena o barra con una mano y usa una banda elástica en la otra mano (o pie) para asistir el peso justo que te permita sostener el hombro encajado y codo ligeramente flexionado durante 6 segundos.",
+                "Entrena la estabilidad unilateral de hombro y dorsal en bloqueos largos.")
           },
           {
             dayLabel: "Día 2",
@@ -669,7 +823,13 @@
               "Escalada consciente exhalando en cada movimiento clave (5 bloques medios)",
               "Drill de repetición perfecta: repetir 3 veces el mismo bloque mejorando fluidez"
             ],
-            detailGuide: `<p>Optimización del gasto energético mediante control respiratorio.</p>`
+            detailGuide:
+              exBox("1. Escalada con Control Respiratorio", "5 bloques medios",
+                "Evita contener la respiración (apnea) en los pasos duros; exhala de forma audibles y controlada justo al ejecutar cada movimiento.",
+                "Reduce la tensión innecesaria en hombros y mejora la oxigenación muscular.") +
+              exBox("2. Drill de Repetición Perfecta", "3 bloques × 3 repeticiones",
+                "Escala un bloque de dificultad media, baja, descansa 2 minutos y repítelo dos veces más buscando eliminar cualquier duda, reacomodo de pie o tirón brusco.",
+                "Convierte la fuerza bruta en economía de movimiento.")
           },
           {
             dayLabel: "Día 3",
@@ -681,7 +841,10 @@
               "Flexiones con rotación torácica: 3 series × 10 reps",
               "Estiramientos suaves de cadena posterior (15 min)"
             ],
-            detailGuide: `<p>Sesión regenerativa clave para evitar sobrecargas articulares.</p>`
+            detailGuide:
+              exBox("1. Extensiones de Dedos + Flexiones con Rotación", "3 series",
+                "25 extensiones de dedos con goma + 10 flexiones llevando un brazo hacia el techo al subir para abrir el pecho y rotar la columna torácica.",
+                "Descarga la fatiga acumulada de la primera mitad de la Semana 4.")
           },
           {
             dayLabel: "Día 4",
@@ -693,7 +856,16 @@
               "Elevaciones de piernas colgado + sostener 3 seg en L: 3 series × 8 reps",
               "Plancha Hollow Body con lastre ligero o brazos extendidos: 3 series × 30 seg"
             ],
-            detailGuide: `<p>Máxima tensión en suspensión para evitar el efecto "arco" en techos.</p>`
+            detailGuide:
+              exBox("1. Sentadilla Búlgara Explosiva", "3 series × 6 reps/pierna • Descanso 2 min",
+                "Baja controlado y sube con máxima intención explosiva terminando en extensión completa de tobillo/punta de pie.",
+                "Entrena la potencia de impulso para movimientos dinámicos.") +
+              exBox("2. Elevaciones de Piernas con Pausa Isométrica en L", "3 series × 8 reps",
+                "Sube las piernas colgado de la barra, sostén 3 segundos completamente horizontal (90°) y baja en 2 segundos.",
+                "Máxima activación de psoas y recto abdominal.") +
+              exBox("3. Hollow Body Hold Brazos Extendidos", "3 series × 30 seg",
+                "Extiende los brazos por detrás de la cabeza manteniendo la zona lumbar pegada al suelo sin arquear.",
+                "Simula la tensión total de cuerpo entero cuando los pies quedan lejos en techo.")
           },
           {
             dayLabel: "Día 5",
@@ -702,10 +874,13 @@
             title: "Repetidores 7:3 (5 Series)",
             tasks: [
               "Calentamiento progresivo",
-              "Repetidores 7:3 in regleta 20 mm: 5 series × 6 reps (3 min descanso)",
+              "Repetidores 7:3 en regleta 20 mm: 5 series × 6 reps (3 min descanso)",
               "Enfriamiento y movilidad de muñecas"
             ],
-            detailGuide: `<p>Pico de series en repetidores antes de la semana de descarga.</p>`
+            detailGuide:
+              exBox("Repetidores HIT 7:3 (Pico de Resistencia)", "5 series × (6 reps de 7s/3s) • Descanso 3 min",
+                "5 series completas del protocolo 7:3 en regleta 20 mm. Es el estímulo de mayor volumen de resistencia del ciclo antes de pasar a la descarga.",
+                "Mantén el semiarqueo limpio y detén la serie si sientes pérdida de control articular.")
           },
           {
             dayLabel: "Día 6",
@@ -716,7 +891,10 @@
               "Calentamiento grupal",
               "Escalada libre combinando placas, techos y coordinación (60 min)"
             ],
-            detailGuide: `<p>Disfrute y variedad de estilos de escalada en ELBLOQUE.</p>`
+            detailGuide:
+              exBox("Sesión Social Variada", "60 min",
+                "Disfruta una sesión variada en ELBLOQUE sin buscar llegar al agotamiento extremo, sabiendo que la próxima semana entras en descarga estratégica.",
+                "Prioriza movimientos fluidos y divertidos.")
           },
           {
             dayLabel: "Día 7",
@@ -726,7 +904,10 @@
             tasks: [
               "Descanso total para preparar la semana de descarga"
             ],
-            detailGuide: `<p>Preparación mental y física para la semana de supercompensación (Deload).</p>`
+            detailGuide:
+              exBox("Cierre de Fase 2 • Descanso Total", "24 horas sin carga",
+                "Has completado las 4 semanas más exigentes del ciclo. Descansa hoy por completo para iniciar la Semana 5 de descarga (Deload).",
+                "La supercompensación ocurrirá durante los próximos 7 días.")
           }
         ]
       },
@@ -745,7 +926,13 @@
               "Max Hangs 20 mm: solo 3 series × 10 seg (misma carga, cero fallo)",
               "Power Pull-ups: 3 series × 3 reps muy rápidas y limpias"
             ],
-            detailGuide: `<p>Reducción de series a la mitad para permitir la reparación completa de los tejidos.</p>`
+            detailGuide:
+              exBox("1. Max Hangs 20 mm (Descarga de Volumen)", "3 series × 10 seg • Descanso 3 min",
+                "Reducimos el volumen a la mitad (solo 3 series), manteniendo exactamente la misma carga pesada de la Semana 4 pero sin acercarnos al fallo.",
+                "Mantiene el reclutamiento neural activo mientras permite que los tendones se reparen por completo.") +
+              exBox("2. Power Pull-ups Rápidas", "3 series × 3 reps • Descanso 2.5 min",
+                "Solo 3 repeticiones por serie enfocadas en máxima velocidad y frescura.",
+                "Debes terminar la sesión sintiéndote más fuerte y fresco que al empezar.")
           },
           {
             dayLabel: "Día 2",
@@ -757,7 +944,10 @@
               "Escalar 6 bloques cómodos enfocándose 100% en elegancia y precisión de pies",
               "Terminar la sesión sintiéndote con energía de sobra"
             ],
-            detailGuide: `<p>Escalada regenerativa y fluida sin acumular ácido láctico.</p>`
+            detailGuide:
+              exBox("Escalada Fluida Regenerativa", "6 bloques cómodos • 45 min",
+                "Selecciona bloques 1 o 2 grados por debajo de tu límite y escálalos con precisión quirúrgica y descanso amplio.",
+                "Prohibido probar proyectos duros o llegar a congestión de antebrazos hoy.")
           },
           {
             dayLabel: "Día 3",
@@ -768,7 +958,10 @@
               "Movilidad completa de hombros, cadera y columna (20 min)",
               "Extensiones suaves de dedos con goma"
             ],
-            detailGuide: `<p>Liberación de tensiones fasciales y movilidad articular.</p>`
+            detailGuide:
+              exBox("Movilidad Profunda y Antagonistas Suaves", "20 min",
+                "Sesión relajada de movilidad articular completa y 2 series suaves de extensiones de dedos con banda.",
+                "Favorece la relajación del sistema nervioso parasimpático.")
           },
           {
             dayLabel: "Día 4",
@@ -780,7 +973,10 @@
               "Elevaciones de rodillas colgado controladas: 2 series × 10 reps",
               "Plancha frontal + lateral: 2 rondas × 30 seg"
             ],
-            detailGuide: `<p>Rutina suave de mantenimiento sin fatiga residual.</p>`
+            detailGuide:
+              exBox("Activación Ligera de Tren Inferior y Core", "2 series por ejercicio",
+                "Mantén el tono muscular de piernas y psoas con solo 2 series sin lastre y descansos cómodos.",
+                "Evita agujetas o fatiga residual de cara a la Semana 6.")
           },
           {
             dayLabel: "Día 5",
@@ -792,7 +988,10 @@
               "Repetidores 7:3 en 20 mm: solo 2 series × 6 reps (3 min pausa)",
               "Estiramiento suave"
             ],
-            detailGuide: `<p>Estímulo mínimo para mantener el tono muscular en regleta.</p>`
+            detailGuide:
+              exBox("Repetidores 7:3 de Mantenimiento", "2 series × (6 reps de 7s/3s) • Descanso 3 min",
+                "Solo 2 series para conservar la activación metabólica sin generar daño muscular.",
+                "Termina con estiramiento suave de flexores.")
           },
           {
             dayLabel: "Día 6",
@@ -802,7 +1001,10 @@
             tasks: [
               "Sesión social ligera en ELBLOQUE (45-60 min) evitando arqueos extremos"
             ],
-            detailGuide: `<p>Escalada relajada para conservar sensaciones frescas en el muro.</p>`
+            detailGuide:
+              exBox("Sesión Social Ligera", "45–60 min",
+                "Escala con amigos en ELBLOQUE priorizando agarres abiertos, placas y movimientos divertidos sin exprimir los dedos.",
+                "Guarda toda tu energía máxima para la Semana 6.")
           },
           {
             dayLabel: "Día 7",
@@ -812,7 +1014,10 @@
             tasks: [
               "Descanso total para llegar al 100% a la Semana 6"
             ],
-            detailGuide: `<p>Cierre de la descarga y preparación para el pico de rendimiento.</p>`
+            detailGuide:
+              exBox("Descanso Total Pre-Pico", "24 horas sin carga",
+                "La fatiga acumulada de las primeras 4 semanas ya se ha disipado. Mañana comienza tu semana de máximo rendimiento.",
+                "Duerme bien e hidrátate adecuadamente.")
           }
         ]
       },
@@ -831,7 +1036,13 @@
               "Test Max Hangs 20 mm: 3 series × 10 seg buscando tu mejor marca limpia del ciclo",
               "Power Pull-ups: 3 series × 4 reps explosivas"
             ],
-            detailGuide: `<p>Evaluación de los gains de fuerza conseguidos a lo largo de las 6 semanas.</p>`
+            detailGuide:
+              exBox("1. Evaluación Max Hangs 20 mm (Test Final)", "3 series × 10 seg • Descanso 3.5 min",
+                "Tras un calentamiento impecable, realiza 3 series de 10 segundos en semiarqueo buscando tu mejor marca del ciclo (más lastre o menor asistencia que en la Semana 1 con técnica perfecta).",
+                "Anota la carga lograda en las observaciones o reporte para compararla en tu próximo ciclo.") +
+              exBox("2. Power Pull-ups Explosivas", "3 series × 4 reps • Descanso 3 min",
+                "3 series de máxima explosividad manteniendo reservas energéticas para los pegues en muro de la semana.",
+                "Disfruta la sensación de ligereza y potencia tras la descarga.")
           },
           {
             dayLabel: "Día 2",
@@ -843,7 +1054,10 @@
               "Intentos de encadenamiento (Redpoint) en 2 bloques clave del ciclo",
               "Descanso completo de 4 min entre pegues de máxima calidad"
             ],
-            detailGuide: `<p>Punto óptimo de realización en tus proyectos principales.</p>`
+            detailGuide:
+              exBox("Pegues de Encadenamiento (Redpoint)", "60 min • Descanso 4 min entre pegues",
+                "Elige tus 2 bloques objetivo principales en ELBLOQUE. Calienta bien, visualiza la beta completa y da pegues desde abajo descansando 4 minutos completos entre cada intento.",
+                "Aplica toda la fuerza de dedos, tensión de psoas y precisión de pies entrenada durante el mesociclo.")
           },
           {
             dayLabel: "Día 3",
@@ -854,7 +1068,10 @@
               "Extensiones de dedos + movilidad articular suave (15 min)",
               "Caminata ligera o estiramiento general"
             ],
-            detailGuide: `<p>Descanso activo enfocado en conservar la chispa neuromuscular.</p>`
+            detailGuide:
+              exBox("Descarga Neural y Antagonistas", "15–20 min",
+                "2 series × 20 extensiones de dedos con banda elástica y movilidad articular suave.",
+                "Mantiene los dedos frescos para el cierre de la semana.")
           },
           {
             dayLabel: "Día 4",
@@ -866,7 +1083,10 @@
               "Elevaciones de piernas colgado (Psoas): 3 series × 8 reps",
               "Hollow Body Hold: 3 series × 30 seg"
             ],
-            detailGuide: `<p>Activación general sin fatiga.</p>`
+            detailGuide:
+              exBox("Activación Neuromuscular de Core y Piernas", "2–3 series",
+                "Rutina corta y explosiva para mantener activado el enlace entre pies y manos sin agotar el glucógeno.",
+                "Descansa 90 segundos entre series.")
           },
           {
             dayLabel: "Día 5",
@@ -877,7 +1097,13 @@
               "Calentamiento",
               "2 series de Repetidores 7:3 + 2 travesías exigentes de 25 movimientos"
             ],
-            detailGuide: `<p>Activación final de resistencia local antes del cierre.</p>`
+            detailGuide:
+              exBox("1. Repetidores 7:3 de Activación", "2 series × (6 reps de 7s/3s) • Descanso 3 min",
+                "2 series rápidas para activar el flujo sanguíneo en el antebrazo.",
+                "Mantiene la capacidad de aguante sin fatigar de cara al festival del Día 6.") +
+              exBox("2. Travesías Exigentes de 25 Movimientos", "2 travesías • Descanso 4 min",
+                "Enlaza 25 movimientos continuos combinando presas medianas y regletas, manteniendo una respiración calmada.",
+                "Entrena la resistencia mental y física en secuencias largas.")
           },
           {
             dayLabel: "Día 6",
@@ -889,7 +1115,10 @@
               "Disfrutar el pico de forma encadenando tus bloques favoritos del mes",
               "Registrar sensaciones finales del ciclo"
             ],
-            detailGuide: `<p>Celebración del ciclo completado y disfrute del pico de forma en ELBLOQUE.</p>`
+            detailGuide:
+              exBox("Festival de Cierre en ELBLOQUE", "75 min",
+                "Disfruta tu pico de rendimiento compartiendo sesión en ELBLOQUE, encadenando los bloques que más te motivaron durante estas 6 semanas.",
+                "Observa cómo ha mejorado tu estabilidad en regletas y tu capacidad de mantener los pies pegados en desplome.")
           },
           {
             dayLabel: "Día 7",
@@ -900,7 +1129,10 @@
               "Descanso total",
               "Generar Informe Final de las 6 Semanas y archivar el ciclo"
             ],
-            detailGuide: `<p>Genera tu informe acumulado para Google Docs, archívalo y prepárate para el siguiente ciclo.</p>`
+            detailGuide:
+              exBox("Cierre Oficial del Mesociclo", "Evaluación y Archivo",
+                "Toca el botón 'Generar Reporte Acumulado Docs' en el pie de página para exportar tu historial completo con fechas reales y archivarlo en tu historial.",
+                "Se recomienda tomar 4 a 5 días suaves antes de iniciar un nuevo bloque estructurado de 6 semanas.")
           }
         ]
       }
@@ -954,14 +1186,12 @@
     }
 
     function saveState() {
-      // 1. Respaldo inmediato en localStorage
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       } catch (e) {}
 
       renderAll();
 
-      // 2. Envío con debounce (600 ms) a Google Sheets
       clearTimeout(syncTimeout);
       setSyncStatus("syncing", "Guardando en Sheets...");
       syncTimeout = setTimeout(() => {
@@ -1128,7 +1358,8 @@
     function openExerciseDetail(weekNum, dayIdx) {
       const wObj = WEEKLY_TEMPLATES[weekNum - 1];
       const dObj = wObj.days[dayIdx];
-      document.getElementById("detailModalTitle").textContent = `Semana ${weekNum} • ${dObj.dayLabel}: ${dObj.title}`;
+      document.getElementById("detailModalSub").textContent = `Semana ${weekNum} • ${dObj.tag}`;
+      document.getElementById("detailModalTitle").textContent = `${dObj.dayLabel}: ${dObj.title}`;
       document.getElementById("detailModalContent").innerHTML = dObj.detailGuide || "<p>No hay notas detalladas adicionales para este bloque.</p>";
       openModal("exerciseDetailModal");
     }
@@ -1278,7 +1509,7 @@
 
               <!-- Botón Ver Detalle de Ejercicios -->
               <button onclick="openExerciseDetail(${wNum}, ${dIdx})"
-                class="w-full mt-3.5 py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-teal-400 font-bold text-xs shadow-sm transition flex items-center justify-center gap-2">
+                class="w-full mt-3.5 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-teal-400 font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 border border-slate-800">
                 <span>Ver Detalle de Ejercicios</span>
               </button>
 
