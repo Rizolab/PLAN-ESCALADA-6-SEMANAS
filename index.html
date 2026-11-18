@@ -52,7 +52,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <!-- Disparador secreto: Doble clic/toque abre el Panel de Comando -->
-        <div id="secretLogoTrigger" ondblclick="openModal('themeCommandModal')" title="Doble clic o Ctrl+Shift+K para ajustar colores"
+        <div id="secretLogoTrigger" ondblclick="openModal('themeCommandModal')" title="Doble clic o Ctrl+Shift+K para ajustar colores HEX"
           class="w-9 h-9 rounded-lg theme-accent-bg font-extrabold flex items-center justify-center text-sm shadow cursor-pointer select-none active:scale-95 transition">
           EH6
         </div>
@@ -183,30 +183,52 @@
     </div>
   </footer>
 
-  <!-- MODAL OCULTO: Panel de Comando de Apariencia (Ctrl+Shift+K o Doble Clic en EH6) -->
+  <!-- MODAL OCULTO: Panel de Comando de Apariencia HEX (Ctrl+Shift+K o Doble Clic en EH6) -->
   <div id="themeCommandModal" class="hidden fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <div>
           <span class="text-[10px] font-extrabold uppercase tracking-widest theme-accent-text block">Comando Oculto • Tiempo Real</span>
-          <h3 class="text-sm font-bold">Personalizar Paleta de Colores</h3>
+          <h3 class="text-sm font-bold">Personalizar Paleta y Códigos HEX</h3>
         </div>
         <button onclick="closeModal('themeCommandModal')" class="text-slate-400 hover:text-white text-xl leading-none">×</button>
       </div>
 
-      <div class="p-5 space-y-5 text-xs">
-        <div>
-          <label class="block font-bold uppercase tracking-wider text-slate-500 mb-2">1. Color Principal (Botones, Barras e Insignias)</label>
+      <div class="p-5 space-y-5 text-xs max-h-[80vh] overflow-y-auto">
+        <!-- SECCIÓN 1: ACENTO -->
+        <div class="space-y-2.5">
+          <label class="block font-bold uppercase tracking-wider text-slate-500">1. Color Principal (Botones, Barras e Insignias)</label>
+          <div class="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <input type="color" id="accentColorPicker" value="#f59e0b" oninput="applyCustomAccentHex(this.value)"
+              class="w-9 h-9 rounded-lg cursor-pointer border-0 bg-transparent shrink-0" />
+            <div class="flex-1">
+              <span class="block text-[10px] font-bold text-slate-400 uppercase">Código Hexadecimal</span>
+              <input type="text" id="accentHexInput" value="#F59E0B" maxlength="7" placeholder="#F59E0B"
+                oninput="handleHexTextInput('accent', this.value)"
+                class="w-full font-mono text-sm font-bold text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1 uppercase focus:outline-none focus:ring-2 focus:ring-slate-900" />
+            </div>
+          </div>
           <div class="grid grid-cols-3 gap-2" id="accentPickerGrid"></div>
         </div>
 
-        <div>
-          <label class="block font-bold uppercase tracking-wider text-slate-500 mb-2">2. Tono de Base Oscura (Cabecera y Tarjetas Activas)</label>
+        <!-- SECCIÓN 2: BASE OSCURA -->
+        <div class="space-y-2.5 pt-2 border-t border-slate-100">
+          <label class="block font-bold uppercase tracking-wider text-slate-500">2. Base Oscura (Cabecera, Pestañas y Botones)</label>
+          <div class="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <input type="color" id="baseColorPicker" value="#0f172a" oninput="applyCustomBaseHex(this.value)"
+              class="w-9 h-9 rounded-lg cursor-pointer border-0 bg-transparent shrink-0" />
+            <div class="flex-1">
+              <span class="block text-[10px] font-bold text-slate-400 uppercase">Código Hexadecimal</span>
+              <input type="text" id="baseHexInput" value="#0F172A" maxlength="7" placeholder="#0F172A"
+                oninput="handleHexTextInput('base', this.value)"
+                class="w-full font-mono text-sm font-bold text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1 uppercase focus:outline-none focus:ring-2 focus:ring-slate-900" />
+            </div>
+          </div>
           <div class="grid grid-cols-2 gap-2" id="basePickerGrid"></div>
         </div>
 
         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center justify-between">
-          <span>Atajo rápido: <strong>Ctrl + Shift + K</strong> o doble clic en <strong>EH6</strong></span>
+          <span>Atajo: <strong>Ctrl + Shift + K</strong> o doble clic en <strong>EH6</strong></span>
           <button onclick="resetDefaultTheme()" class="font-bold text-slate-800 underline hover:text-black">Restaurar</button>
         </div>
       </div>
@@ -417,92 +439,149 @@
     const STORAGE_KEY = "horst_climbing_cycle_v7";
 
     // =========================================================================
-    // CONFIGURACIÓN DEL PANEL DE COMANDO OCULTO DE COLORES
+    // MOTOR DE COLORES HEXADECIMALES EN TIEMPO REAL
     // =========================================================================
-    const ACCENT_THEMES = {
-      amber:  { label: "Ámbar",   swatch: "#f59e0b", c600: "#d97706", c500: "#f59e0b", c400: "#fbbf24", c200: "#fde68a", c100: "#fef3c7", c50: "#fffbeb", text: "#020617" },
-      orange: { label: "Naranja", swatch: "#f97316", c600: "#ea580c", c500: "#f97316", c400: "#fb923c", c200: "#fed7aa", c100: "#ffedd5", c50: "#fff7ed", text: "#ffffff" },
-      sky:    { label: "Azul",    swatch: "#0ea5e9", c600: "#0284c7", c500: "#0ea5e9", c400: "#38bdf8", c200: "#bae6fd", c100: "#e0f2fe", c50: "#f0f9ff", text: "#ffffff" },
-      lime:   { label: "Neón",    swatch: "#84cc16", c600: "#65a30d", c500: "#84cc16", c400: "#a3e635", c200: "#d9f99d", c100: "#ecfccb", c50: "#f7fee7", text: "#020617" },
-      violet: { label: "Violeta", swatch: "#8b5cf6", c600: "#7c3aed", c500: "#8b5cf6", c400: "#a78bfa", c200: "#ddd6fe", c100: "#ede9fe", c50: "#f5f3ff", text: "#ffffff" },
-      rose:   { label: "Carmesí", swatch: "#f43f5e", c600: "#e11d48", c500: "#f43f5e", c400: "#fb7185", c200: "#fecdd3", c100: "#ffe4e6", c50: "#fff1f2", text: "#ffffff" }
-    };
+    const ACCENT_PRESETS = [
+      { label: "Ámbar",   hex: "#f59e0b" },
+      { label: "Naranja", hex: "#f97316" },
+      { label: "Azul",    hex: "#0ea5e9" },
+      { label: "Neón",    hex: "#84cc16" },
+      { label: "Violeta", hex: "#8b5cf6" },
+      { label: "Carmesí", hex: "#f43f5e" }
+    ];
 
-    const BASE_THEMES = {
-      slate:   { label: "Pizarra (Azulado)", c950: "#020617", c900: "#0f172a", c800: "#1e293b", c700: "#334155", c50: "#f8fafc" },
-      zinc:    { label: "Zinc (Neutro)",     c950: "#09090b", c900: "#18181b", c800: "#27272a", c700: "#3f3f46", c50: "#fafafa" },
-      stone:   { label: "Piedra (Cálido)",   c950: "#0c0a09", c900: "#1c1917", c800: "#292524", c700: "#44403c", c50: "#fafaf9" },
-      neutral: { label: "Grafito Puro",      c950: "#0a0a0a", c900: "#171717", c800: "#262626", c700: "#404040", c50: "#f5f5f5" }
-    };
+    const BASE_PRESETS = [
+      { label: "Pizarra",  hex: "#0f172a" },
+      { label: "Zinc",     hex: "#18181b" },
+      { label: "Piedra",   hex: "#1c1917" },
+      { label: "Grafito",  hex: "#141414" }
+    ];
+
+    function normalizeHex(hex) {
+      if (!hex) return null;
+      let clean = hex.trim();
+      if (!clean.startsWith("#")) clean = "#" + clean;
+      if (/^#[0-9A-Fa-f]{6}$/.test(clean)) return clean.toLowerCase();
+      return null;
+    }
+
+    function hexToRgb(hex) {
+      const clean = hex.replace("#", "");
+      return {
+        r: parseInt(clean.substring(0, 2), 16),
+        g: parseInt(clean.substring(2, 4), 16),
+        b: parseInt(clean.substring(4, 6), 16)
+      };
+    }
+
+    function mixHex(hex1, hex2, weight) {
+      const c1 = hexToRgb(hex1);
+      const c2 = hexToRgb(hex2);
+      const r = Math.round(c1.r * (1 - weight) + c2.r * weight);
+      const g = Math.round(c1.g * (1 - weight) + c2.g * weight);
+      const b = Math.round(c1.b * (1 - weight) + c2.b * weight);
+      return "#" + [r, g, b].map(x => x.toString(16).padStart(2, "0")).join("");
+    }
+
+    function getContrastText(hex) {
+      const { r, g, b } = hexToRgb(hex);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      return luminance > 0.58 ? "#09090b" : "#ffffff";
+    }
 
     function applyThemeVariables(themeConfig) {
-      const cfg = themeConfig || { accent: "amber", base: "slate" };
-      const acc = ACCENT_THEMES[cfg.accent] || ACCENT_THEMES.amber;
-      const bas = BASE_THEMES[cfg.base] || BASE_THEMES.slate;
+      const cfg = themeConfig || {};
+      const accentHex = normalizeHex(cfg.accentHex) || "#f59e0b";
+      const baseHex   = normalizeHex(cfg.baseHex)   || "#0f172a";
+
       const root = document.documentElement.style;
 
-      root.setProperty("--base-950", bas.c950);
-      root.setProperty("--base-900", bas.c900);
-      root.setProperty("--base-800", bas.c800);
-      root.setProperty("--base-700", bas.c700);
-      root.setProperty("--base-50",  bas.c50);
+      // Escala derivada automáticamente del HEX base
+      root.setProperty("--base-950", mixHex(baseHex, "#000000", 0.35));
+      root.setProperty("--base-900", baseHex);
+      root.setProperty("--base-800", mixHex(baseHex, "#ffffff", 0.08));
+      root.setProperty("--base-700", mixHex(baseHex, "#ffffff", 0.18));
+      root.setProperty("--base-50",  mixHex(baseHex, "#ffffff", 0.96));
 
-      root.setProperty("--accent-600", acc.c600);
-      root.setProperty("--accent-500", acc.c500);
-      root.setProperty("--accent-400", acc.c400);
-      root.setProperty("--accent-200", acc.c200);
-      root.setProperty("--accent-100", acc.c100);
-      root.setProperty("--accent-50",  acc.c50);
-      root.setProperty("--accent-text", acc.text);
+      // Escala derivada automáticamente del HEX de acento
+      root.setProperty("--accent-600", mixHex(accentHex, "#000000", 0.15));
+      root.setProperty("--accent-500", accentHex);
+      root.setProperty("--accent-400", mixHex(accentHex, "#ffffff", 0.22));
+      root.setProperty("--accent-200", mixHex(accentHex, "#ffffff", 0.72));
+      root.setProperty("--accent-100", mixHex(accentHex, "#ffffff", 0.85));
+      root.setProperty("--accent-50",  mixHex(accentHex, "#ffffff", 0.93));
+      root.setProperty("--accent-text", getContrastText(accentHex));
 
-      renderThemeCommandControls();
+      // Sincronizar inputs del modal
+      const accPicker = document.getElementById("accentColorPicker");
+      const accInput  = document.getElementById("accentHexInput");
+      const basPicker = document.getElementById("baseColorPicker");
+      const basInput  = document.getElementById("baseHexInput");
+
+      if (accPicker) accPicker.value = accentHex;
+      if (accInput && document.activeElement !== accInput) accInput.value = accentHex.toUpperCase();
+      if (basPicker) basPicker.value = baseHex;
+      if (basInput && document.activeElement !== basInput) basInput.value = baseHex.toUpperCase();
+
+      renderThemeCommandControls(accentHex, baseHex);
     }
 
-    function selectAccentTheme(key) {
-      if (!appState.theme) appState.theme = { accent: "amber", base: "slate" };
-      appState.theme.accent = key;
+    function applyCustomAccentHex(hexVal) {
+      const valid = normalizeHex(hexVal);
+      if (!valid) return;
+      if (!appState.theme) appState.theme = { accentHex: "#f59e0b", baseHex: "#0f172a" };
+      appState.theme.accentHex = valid;
       applyThemeVariables(appState.theme);
       saveState();
     }
 
-    function selectBaseTheme(key) {
-      if (!appState.theme) appState.theme = { accent: "amber", base: "slate" };
-      appState.theme.base = key;
+    function applyCustomBaseHex(hexVal) {
+      const valid = normalizeHex(hexVal);
+      if (!valid) return;
+      if (!appState.theme) appState.theme = { accentHex: "#f59e0b", baseHex: "#0f172a" };
+      appState.theme.baseHex = valid;
       applyThemeVariables(appState.theme);
       saveState();
+    }
+
+    function handleHexTextInput(target, rawVal) {
+      const valid = normalizeHex(rawVal);
+      if (valid) {
+        if (target === "accent") applyCustomAccentHex(valid);
+        else applyCustomBaseHex(valid);
+      }
     }
 
     function resetDefaultTheme() {
-      appState.theme = { accent: "amber", base: "slate" };
+      appState.theme = { accentHex: "#f59e0b", baseHex: "#0f172a" };
       applyThemeVariables(appState.theme);
       saveState();
       showToast("Paleta original restaurada");
     }
 
-    function renderThemeCommandControls() {
-      const current = appState.theme || { accent: "amber", base: "slate" };
+    function renderThemeCommandControls(activeAccent, activeBase) {
       const accGrid = document.getElementById("accentPickerGrid");
       const basGrid = document.getElementById("basePickerGrid");
       if (!accGrid || !basGrid) return;
 
-      accGrid.innerHTML = Object.entries(ACCENT_THEMES).map(([k, val]) => {
-        const active = current.accent === k;
+      accGrid.innerHTML = ACCENT_PRESETS.map(p => {
+        const isMatch = activeAccent === p.hex;
         return `
-          <button onclick="selectAccentTheme('${k}')"
-            class="flex items-center gap-2 p-2.5 rounded-xl border text-left font-bold transition ${active ? "border-slate-900 bg-slate-100 ring-1 ring-slate-900" : "border-slate-200 hover:bg-slate-50"}">
-            <span class="w-4 h-4 rounded-full shrink-0 border border-black/10" style="background:${val.swatch}"></span>
-            <span class="text-slate-800">${val.label}</span>
+          <button onclick="applyCustomAccentHex('${p.hex}')"
+            class="flex items-center gap-2 p-2 rounded-xl border text-left font-bold transition ${isMatch ? "border-slate-900 bg-slate-100 ring-1 ring-slate-900" : "border-slate-200 hover:bg-slate-50"}">
+            <span class="w-4 h-4 rounded-full shrink-0 border border-black/10" style="background:${p.hex}"></span>
+            <span class="text-slate-800">${p.label}</span>
           </button>
         `;
       }).join("");
 
-      basGrid.innerHTML = Object.entries(BASE_THEMES).map(([k, val]) => {
-        const active = current.base === k;
+      basGrid.innerHTML = BASE_PRESETS.map(p => {
+        const isMatch = activeBase === p.hex;
         return `
-          <button onclick="selectBaseTheme('${k}')"
-            class="flex items-center gap-2 p-2.5 rounded-xl border text-left font-bold transition ${active ? "border-slate-900 bg-slate-100 ring-1 ring-slate-900" : "border-slate-200 hover:bg-slate-50"}">
-            <span class="w-4 h-4 rounded-md shrink-0" style="background:${val.c900}"></span>
-            <span class="text-slate-800">${val.label}</span>
+          <button onclick="applyCustomBaseHex('${p.hex}')"
+            class="flex items-center gap-2 p-2 rounded-xl border text-left font-bold transition ${isMatch ? "border-slate-900 bg-slate-100 ring-1 ring-slate-900" : "border-slate-200 hover:bg-slate-50"}">
+            <span class="w-4 h-4 rounded-md shrink-0" style="background:${p.hex}"></span>
+            <span class="text-slate-800">${p.label}</span>
           </button>
         `;
       }).join("");
@@ -1160,7 +1239,7 @@
       dayCustomDates: {},
       exceptions: [],
       archivedCycles: [],
-      theme: { accent: "amber", base: "slate" }
+      theme: { accentHex: "#f59e0b", baseHex: "#0f172a" }
     };
 
     let syncTimeout = null;
