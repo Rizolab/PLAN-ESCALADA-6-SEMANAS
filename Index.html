@@ -1,0 +1,2600 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELBLOQUE · HÖRST 3-2-1 | Sistema Periodizado 6 Semanas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Barlow Condensed', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              900: '#064e3b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Utilidades para scrollbar limpio en móviles */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- TOP NAVBAR -->
+  <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/15 border border-teal-500/40 flex items-center justify-center shrink-0 shadow-inner">
+          <span class="font-display font-extrabold text-xl tracking-wider text-teal-400">EB</span>
+        </div>
+        <div class="truncate">
+          <h1 class="font-display font-extrabold text-xl sm:text-2xl tracking-wide text-white leading-none truncate">
+            ELBLOQUE • HÖRST 3-2-1
+          </h1>
+          <p class="text-[11px] sm:text-xs text-slate-400 font-medium mt-0.5 truncate">
+            Menú Semanal Flexible 6 Semanas · Fuerza, Dedos & Psoas
+          </p>
+        </div>
+      </div>
+
+      <!-- Actions & Progress Pill -->
+      <div class="flex items-center gap-2.5 sm:gap-4 shrink-0">
+        <div class="hidden sm:flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-full">
+          <span class="text-xs text-slate-400 font-medium">Progreso Bloques:</span>
+          <span id="nav-progress-badge" class="text-xs font-bold text-teal-400">0%</span>
+        </div>
+        <a href="https://docs.google.com/spreadsheets/d/18ebRMzipRHDG9KQJAcJ790lsoVOmjHUkpVDJRqNjrLA/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="hidden md:flex bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 font-semibold text-xs px-3.5 py-2 rounded-xl transition items-center gap-2">
+          <svg class="w-4 h-4 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span>Bitácora Sheets</span>
+        </a>
+        <button onclick="openWarmupModal()" class="bg-teal-600 hover:bg-teal-500 active:scale-95 text-white font-semibold text-xs sm:text-sm px-3.5 sm:px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-lg shadow-teal-950/50 cursor-pointer">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span>Protocolo de Calentamiento</span>
+        </button>
+        <button onclick="openGlossary()" class="bg-slate-800 hover:bg-slate-700 text-teal-300 border border-teal-500/30 font-semibold text-xs sm:text-sm px-3.5 sm:px-4 py-2 rounded-xl transition flex items-center gap-2 cursor-pointer">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          <span>Glosario</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+
+    <!-- KPI CARDS -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">INICIO DEL CICLO (DÍA 1 · S1)</span>
+          <span class="text-[11px] text-teal-400 font-semibold">ELBLOQUE</span>
+        </div>
+        <div class="flex items-center justify-between gap-2 mt-2">
+          <input type="date" id="cycle-start-date" onchange="updateStartDate(this.value)" class="bg-slate-950 border border-slate-700 text-slate-100 text-xs sm:text-sm font-semibold rounded-xl px-3 py-1.5 focus:outline-none focus:border-teal-500 w-full cursor-pointer">
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">FASES COMPLETADAS</span>
+        <div class="flex items-baseline justify-between mt-2">
+          <span id="kpi-completed-count" class="font-display font-extrabold text-2xl sm:text-3xl text-white">0 / 136</span>
+          <span class="text-xs text-slate-400">Bloques y justificados</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">AVANCE DEL CICLO</span>
+          <span id="kpi-progress-pct" class="text-sm font-bold text-teal-400">0%</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2.5 rounded-full mt-3 overflow-hidden">
+          <div id="kpi-progress-bar" class="bg-teal-500 h-full w-0 rounded-full transition-all duration-300"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANNER DE CIERRE DE CICLO (VISIBLE AL COMPLETAR SEMANA 6) -->
+    <section id="cycle-complete-banner" class="hidden bg-gradient-to-r from-emerald-950/90 via-slate-900 to-teal-950/80 border border-emerald-500/50 rounded-2xl p-5 sm:p-6 shadow-2xl animate-fade">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>¡Mesociclo de 6 Semanas Completado!</span>
+          </div>
+          <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-white tracking-wide">
+            Listo para Convertir en Informe Ejecutivo y Archivar
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-2xl">
+            Has cerrado la Semana 6 (Descarga y Supercompensación). Genera tu informe definitivo con todas las fechas reales de ejecución y archiva este ciclo en tu historial antes de iniciar uno nuevo.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <button onclick="openReportExportModal(true)" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm px-4 py-3 rounded-xl transition shadow-lg shadow-emerald-950/50 cursor-pointer">
+            Generar Informe Final del Ciclo
+          </button>
+          <button onclick="archiveCurrentCycle()" class="bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 font-semibold text-xs sm:text-sm px-4 py-3 rounded-xl transition cursor-pointer">
+            Archivar en Historial
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DYNAMIC PHASE STRATEGIC OBJECTIVES BANNER -->
+    <section id="strategic-objectives-banner" class="bg-gradient-to-br from-slate-900 via-slate-900 to-teal-950/30 border border-teal-500/25 rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+      <div class="absolute -right-12 -top-12 w-48 h-48 bg-teal-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+        <div>
+          <div class="inline-flex items-center gap-2 text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">
+            <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+            <span id="obj-phase-tag">Objetivos Estratégicos · Fase 1 (Semanas 1-3)</span>
+          </div>
+          <h2 id="obj-phase-headline" class="font-display font-bold text-2xl sm:text-3xl text-white tracking-wide">
+            Reclutamiento Neuromuscular, Fuerza Máxima de Dedos y Psoas
+          </h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+          <button onclick="openHistoryModal()" class="inline-flex items-center justify-center gap-2 bg-slate-800/90 hover:bg-slate-800 text-emerald-300 border border-emerald-500/30 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition cursor-pointer">
+            <span>Historial (<span id="archived-count-badge">0</span>)</span>
+          </button>
+          <a href="https://docs.google.com/spreadsheets/d/18ebRMzipRHDG9KQJAcJ790lsoVOmjHUkpVDJRqNjrLA/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-slate-800/90 hover:bg-slate-800 text-teal-300 border border-teal-500/30 px-4 py-2.5 rounded-xl text-xs font-semibold transition">
+            <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span>Bitácora Google Sheets</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3 Dynamic Pillar Cards -->
+      <div id="obj-pillars-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+        <!-- Populated dynamically per phase -->
+      </div>
+    </section>
+
+    <!-- GUÍA RÁPIDA DE FLEXIBILIDAD (2 REGLAS FISIOLÓGICAS) -->
+    <section class="bg-slate-900/90 border border-cyan-500/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+      <details class="group" open>
+        <summary class="flex items-center justify-between cursor-pointer list-none select-none">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold text-xs">⚡</span>
+            <div>
+              <h3 class="font-display font-bold text-lg sm:text-xl text-white tracking-wide">
+                Menú Semanal Flexible · 2 Reglas de Oro Fisiológicas para Reordenar Días
+              </h3>
+              <p class="text-[11px] text-slate-400">Puedes ejecutar los bloques Día 1 a Día 7 en el orden que mejor se adapte a tu semana respetando estas dos pautas:</p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-cyan-400 group-open:rotate-180 transition-transform px-2">▼</span>
+        </summary>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-4 pt-3.5 border-t border-slate-800/80 text-xs">
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 font-bold shrink-0">Regla 1</span>
+            <p class="text-slate-300 leading-relaxed">
+              <strong class="text-white">Nunca pegues Max Hangs (Día 1) tras escalada intensa:</strong> Requiere al menos <strong class="text-cyan-400">24h previas sin carga alta de dedos</strong> (descanso total, regenerativo o Día 4 de Piernas/Psoas) para reclutar fibras máximas y blindar tus poleas A2/A4.
+            </p>
+          </div>
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 flex items-start gap-3">
+            <span class="px-2 py-0.5 rounded bg-teal-500/15 text-teal-400 border border-teal-500/30 font-bold shrink-0">Regla 2</span>
+            <p class="text-slate-300 leading-relaxed">
+              <strong class="text-white">Separa al menos 48h entre Max Hangs (Día 1) y Repetidores HIT 7:3 (Día 5):</strong> Intercala sesiones de técnica suave (Día 2), descanso activo (Día 3) o tren inferior/core (Día 4) entre ambos estímulos de antebrazo.
+            </p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- WEEK SELECTOR TABS -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 no-scrollbar" id="week-tabs-container">
+        <!-- Injected by JS -->
+      </div>
+
+      <!-- PHASE HEADER BANNER -->
+      <div id="phase-banner" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 mb-1">
+            <span id="phase-badge" class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-teal-500/15 text-teal-400 border border-teal-500/30">
+              Fase 1
+            </span>
+            <span id="phase-intensity" class="text-xs font-semibold text-amber-400">
+              Intensidad 85-95% | RPE 8.5-9.5
+            </span>
+          </div>
+          <h2 id="week-title" class="font-display font-bold text-2xl sm:text-3xl text-white">
+            Semana 1 · Reclutamiento Neuromuscular
+          </h2>
+          <p id="phase-desc" class="text-xs sm:text-sm text-slate-400 mt-1">
+            Fuerza máxima de dedos y tracción explosiva con descansos completos para adaptación neural y tendinosa.
+          </p>
+        </div>
+        <button onclick="resetProgressPrompt()" class="self-start md:self-center text-xs text-slate-400 hover:text-rose-400 underline underline-offset-4 transition cursor-pointer shrink-0">
+          Reiniciar Progreso
+        </button>
+      </div>
+    </section>
+
+    <!-- DAILY CARDS GRID -->
+    <section id="days-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <!-- Injected by JS -->
+    </section>
+
+  </main>
+
+  <!-- FOOTER (EXACTAMENTE 3 BOTONES) -->
+  <footer class="bg-slate-900/70 border-t border-slate-800/90 mt-12 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-teal-500/15 border border-teal-500/40 flex items-center justify-center text-teal-400 font-display font-bold text-sm">
+          EB
+        </div>
+        <div class="text-xs text-slate-400">
+          <p class="font-semibold text-slate-200">Portal de Entrenamiento ELBLOQUE · Eric Hörst Menú Flexible</p>
+          <p>Bloques Día 1 a Día 7 · Fechas reales editables · Sincronizado con Bitácora</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <button onclick="openImprevistaModal()" class="bg-amber-600/90 hover:bg-amber-500 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-md cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span>Registrar Imprevisto / Cambio</span>
+        </button>
+
+        <button onclick="copyFullHtmlToClipboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 cursor-pointer">
+          <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+          </svg>
+          <span>Copiar HTML para Google Sites</span>
+        </button>
+
+        <button onclick="openReportExportModal(false)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-md cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span>Generar Reporte Acumulado Docs</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: DETAILED EXERCISE BREAKDOWN -->
+  <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="closeDetailModal()"></div>
+    <div class="relative bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-2xl shadow-2xl z-10 flex flex-col max-h-[88vh] overflow-hidden animate-fade">
+      <!-- Modal Header -->
+      <div class="p-5 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="modal-badge" class="text-xs font-bold uppercase tracking-wider text-teal-400">Lunes · Semana 1</span>
+            <span id="modal-center" class="text-xs font-medium px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">ELBLOQUE</span>
+          </div>
+          <h3 id="modal-heading" class="font-display font-bold text-2xl text-white mt-1">Título de la Sesión</h3>
+        </div>
+        <button onclick="closeDetailModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div id="modal-exercises-list" class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <!-- Injected dynamically -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 sm:px-6 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between gap-3">
+        <button id="modal-toggle-all-btn" onclick="" class="bg-slate-800 hover:bg-slate-700 text-teal-400 border border-teal-500/30 font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition cursor-pointer">
+          Completar todos los bloques del día
+        </button>
+        <button onclick="closeDetailModal()" class="bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition cursor-pointer">
+          Cerrar Detalle
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRO DE IMPREVISTOS Y CAMBIOS DE ENFOQUE -->
+  <div id="imprevista-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="closeImprevistaModal()"></div>
+    <div class="relative bg-slate-900 border border-amber-500/30 w-full max-w-xl rounded-2xl shadow-2xl z-10 flex flex-col max-h-[90vh] overflow-hidden animate-fade">
+      <div class="p-5 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex items-start justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Bitácora de Modificaciones</span>
+          <h3 class="font-display font-bold text-2xl text-white mt-1">Registrar Imprevisto o Cambio de Enfoque</h3>
+        </div>
+        <button onclick="closeImprevistaModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Semana y Día a Modificar</label>
+          <select id="imp-day-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Tipo de Incidencia / Cambio</label>
+          <select id="imp-type-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+            <option value="Modificación de Enfoque (Sí se entrenó)">Modificación de Enfoque (Sí se entrenó con variantes)</option>
+            <option value="Cancelación Total / Descanso Forzado">Cancelación Total / Descanso Forzado (Imprevisto)</option>
+            <option value="Recorte de Tiempo / Sesión Parcial">Recorte de Tiempo / Sesión Parcial</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">Razón / Justificación Técnica o Personal</label>
+          <textarea id="imp-reason-input" rows="4" placeholder="Ej: Fatiga acumulada en antebrazos tras mudanza, se cambió max hangs por escalada aeróbica suave a 125 ppm..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"></textarea>
+        </div>
+      </div>
+      <div class="p-4 sm:px-6 border-t border-slate-800 bg-slate-950/60 flex items-center justify-end gap-3">
+        <button onclick="closeImprevistaModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer">Cancelar</button>
+        <button onclick="saveImprevistaLog()" class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold cursor-pointer">Guardar Bitácora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REPORTE ACUMULADO PARA GOOGLE DOCS -->
+  <div id="report-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="closeReportExportModal()"></div>
+    <div class="relative bg-slate-900 border border-indigo-500/30 w-full max-w-2xl rounded-2xl shadow-2xl z-10 flex flex-col max-h-[90vh] overflow-hidden animate-fade">
+      <div class="p-5 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex items-start justify-between gap-4">
+        <div>
+          <span id="report-modal-tag" class="text-xs font-bold uppercase tracking-wider text-indigo-400">Extensión Google Docs</span>
+          <h3 id="report-modal-title" class="font-display font-bold text-2xl text-white mt-1">Informe Ejecutivo del Ciclo</h3>
+        </div>
+        <button onclick="closeReportExportModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Este informe incluye el rango exacto de fechas de tus 6 semanas, el sello de fecha/hora de cada entrenamiento realizado, el porcentaje de cumplimiento y las justificaciones de imprevistos.
+        </p>
+        <textarea id="report-text-area" rows="13" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-200 focus:outline-none"></textarea>
+      </div>
+      <div class="p-4 sm:px-6 border-t border-slate-800 bg-slate-950/60 flex flex-wrap items-center justify-between gap-3">
+        <button onclick="archiveCurrentCycle()" class="px-4 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 text-xs font-semibold cursor-pointer">
+          Archivar Ciclo en Historial
+        </button>
+        <div class="flex gap-2">
+          <button onclick="copyReportToClipboard()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold cursor-pointer flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+            </svg>
+            <span>Copiar Informe Completo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: HISTORIAL DE CICLOS ARCHIVADOS -->
+  <div id="history-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="closeHistoryModal()"></div>
+    <div class="relative bg-slate-900 border border-emerald-500/30 w-full max-w-2xl rounded-2xl shadow-2xl z-10 flex flex-col max-h-[90vh] overflow-hidden animate-fade">
+      <div class="p-5 sm:p-6 border-b border-slate-800 bg-slate-950/60 flex items-start justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Archivo Histórico · ELBLOQUE</span>
+          <h3 class="font-display font-bold text-2xl text-white mt-1">Ciclos Completados y Archivados</h3>
+        </div>
+        <button onclick="closeHistoryModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div id="history-list-container" class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="p-4 sm:px-6 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between gap-3">
+        <span class="text-xs text-slate-400">Cada ciclo archivado guarda su informe con fechas reales.</span>
+        <button onclick="closeHistoryModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold cursor-pointer">
+          Cerrar Historial
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER: GLOSSARY & ERIC HÖRST PROTOCOLS -->
+  <div id="glossary-drawer" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="closeGlossary()"></div>
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
+      <div class="w-screen max-w-xl bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col justify-between overflow-y-auto">
+        <div class="p-6 space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Manual de Campo</span>
+              <h3 class="font-display font-bold text-2xl text-white">Glosario & Reglas de Oro Hörst</h3>
+            </div>
+            <button onclick="closeGlossary()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Golden Rule Alert -->
+          <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+            <h4 class="font-display font-bold text-lg text-amber-400 flex items-center gap-2">
+              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              <span>Regla de Oro: Cero Full Crimp</span>
+            </h4>
+            <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+              En suspensiones (Hangboard) usa estrictamente <strong>semiarqueo (half crimp, nudillos a 90°)</strong> o <strong>mano abierta (open hand)</strong>. Nunca bloquees el pulgar sobre el índice en entrenamientos aislados; protege tus poleas A2 y A4.
+            </p>
+          </div>
+
+          <!-- Protocol Cards -->
+          <div class="space-y-4">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+              <h4 class="font-display font-bold text-lg text-teal-400">1. Max Hangs (Protocolo 7-53)</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                <strong>Ejecución:</strong> 7 segundos de suspensión máxima en regleta de 20mm + 53 segundos de descanso completo (1 minuto por repetición). Realizar 5 a 7 repeticiones por serie. Si no sostienes 7s limpios, usa banda elástica de asistencia.
+              </p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+              <h4 class="font-display font-bold text-lg text-teal-400">2. Power Pull-ups (Dominadas al Pecho)</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                <strong>Ejecución:</strong> Depresión y retracción escapular antes de tirar. Fase concéntrica ultraexplosiva buscando tocar la barra con el pecho, seguida de descenso controlado de 2 segundos. Descanso total de 3 minutos entre series.
+              </p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+              <h4 class="font-display font-bold text-lg text-teal-400">3. Bloque Jueves: Piernas Funcionales & Psoas</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                <strong>Por qué:</strong> Fortalece la flexión de cadera (psoas ilíaco) y la estabilidad lumbo-pélvica para techos y taloneos sin generar hipertrofia pesada que penalice la relación fuerza-peso. Controla siempre la retroversión pélvica sin balanceos.
+              </p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+              <h4 class="font-display font-bold text-lg text-amber-400">4. Repetidores HIT (7:3)</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                <strong>Ejecución:</strong> 7 segundos colgado / 3 segundos de reposo continuo durante 6 repeticiones (1 minuto de trabajo metabólico). Descansa 3 minutos entre series. Diseñado para tolerancia al lactato en Semanas 4 y 5.
+              </p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+              <h4 class="font-display font-bold text-lg text-teal-400">5. Prehabilitación de Muñecas y Antagonistas</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                <strong>Ejecución:</strong> Extensiones de dedos con banda (pausa de 2s abierto), flexiones/extensiones de muñeca con mancuerna ligera (3x15) y pronación/supinación lenta para equilibrar flexores y extensores del antebrazo.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 border-t border-slate-800 bg-slate-950/60">
+          <button onclick="closeGlossary()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-3 rounded-xl transition cursor-pointer text-sm">
+            Entendido · Volver al Plan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PROTOCOLO DE CALENTAMIENTO INTEGRAL -->
+  <div id="warmup-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-950/85 backdrop-blur-md transition-opacity" onclick="closeWarmupModal()"></div>
+    <div class="relative bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl z-10 flex flex-col max-h-[90vh] overflow-hidden animate-fade">
+      
+      <!-- Header -->
+      <div class="p-5 sm:p-6 border-b border-slate-800 bg-slate-950/80 flex items-start justify-between gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Preparación Biomecánica · Cara B</span>
+          <h3 class="font-display font-bold text-2xl sm:text-3xl text-white mt-1">Protocolo de Calentamiento Infaltable</h3>
+          <p class="text-xs text-slate-400 mt-1">Muro (15–20 min) y Sala de Pesas (8–10 min) con control de telemetría (125–145 PPM).</p>
+        </div>
+        <button onclick="closeWarmupModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body Tabs / Content -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-6">
+        
+        <!-- Reglas de Oro Card -->
+        <div class="bg-gradient-to-r from-teal-950/40 via-slate-900 to-slate-900 border border-teal-500/30 rounded-2xl p-5">
+          <h4 class="font-display font-bold text-lg text-teal-400 mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <span>Reglas de Oro Previas</span>
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+              <span class="font-bold text-teal-300 block text-sm mb-1">125–145 PPM</span>
+              <p class="text-slate-300">Zona aeróbica suave. Mantén ritmo conversacional en el cardio inicial. Evita picos &gt;170 ppm.</p>
+            </div>
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+              <span class="font-bold text-amber-400 block text-sm mb-1">0% Arqueo (Full Crimp)</span>
+              <p class="text-slate-300">Prohibido el arqueo cerrado durante los primeros 15 minutos. Usa estrictamente mano abierta o cazos.</p>
+            </div>
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+              <span class="font-bold text-teal-300 block text-sm mb-1">Estructura 3 Fases</span>
+              <p class="text-slate-300">1. Temperatura y movilidad. <br>2. Estabilidad escapular. <br>3. Aproximación específica en muro.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protocolo A: Muro -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h4 class="font-display font-bold text-xl text-white">PROTOCOLO A · Calentamiento para Muro (15–20 Min)</h4>
+            <span class="text-xs bg-teal-500/10 text-teal-400 border border-teal-500/30 px-2.5 py-1 rounded-lg font-medium">Escalada Indoor</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Fase 1 · Movilidad Articular (5 min)</span>
+                <span class="text-xs text-slate-400">Trote / Cardio 3 min</span>
+              </div>
+              <h5 class="font-bold text-sm text-white">Dislocaciones de Hombro & Rotaciones</h5>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Usa una banda elástica o tubo PVC con agarre amplio para llevar brazos sobre la cabeza (2x10 reps). Continúa con rotaciones torácicas en cuadrupedia ("abrir el libro", 1x8 por lado) y sentadilla profunda con movilidad de tobillo (60s).
+              </p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Fase 2 · Escápulas y Dedos (5 min)</span>
+                <span class="text-xs text-slate-400">Banda Ligera</span>
+              </div>
+              <h5 class="font-bold text-sm text-white">Band Pull-Aparts & Rotación Externa</h5>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Realiza 2x15 Band Pull-Aparts frontales para juntar escápulas, rotación externa de manguito rotador a 90° (2x12), retracciones colgado en barra (2x8) y bombeo rápido de dedos (2x25 aperturas para irrigar antebrazos).
+              </p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2 md:col-span-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Fase 3 · Específica en Pared (8–10 min)</span>
+                <span class="text-xs text-slate-400">Pies Silenciosos</span>
+              </div>
+              <h5 class="font-bold text-sm text-white">Progresión de Bloques V0 → V3</h5>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                • <b>Bloques V0–V1 (3-4 min):</b> Sube y destrepa 2-3 bloques fáciles con agarre abierto.<br>
+                • <b>Bloques V2–V3 (4-5 min):</b> Introduce pasos altos y taloneos suaves.<br>
+                • <b>Aproximación al proyecto:</b> Aísla 2-3 movimientos clave al 80% de intensidad antes de tus pegues duros.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protocolo B: Pesas -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h4 class="font-display font-bold text-xl text-white">PROTOCOLO B · Calentamiento Sala de Pesas (8–10 Min)</h4>
+            <span class="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-medium">Empuje / Tirón / Pierna</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Parte 1 · Activación Articular (5 min)</span>
+              <h5 class="font-bold text-sm text-white">Movilidad Específica del Día</h5>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                • <b>Cardio suave:</b> 3 min en bici o remo (125-140 ppm).<br>
+                • <b>Combo escapular o cadera:</b> 10 dislocaciones + 15 Pull-Aparts (o buenos días sin peso para piernas).<br>
+                • <b>Core activo:</b> 2x20s plancha frontal con retroversión pélvica.
+              </p>
+            </div>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Parte 2 · Series de Aproximación</span>
+              <h5 class="font-bold text-sm text-white">Rampa Progresiva al Ejercicio Básico</h5>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Antes de iniciar tus series pesadas de Press Militar, Dominadas Lastradas o Sentadilla:<br>
+                • <b>Serie 1:</b> Barra vacía / peso corporal (8-10 reps, 45s pausa).<br>
+                • <b>Serie 2:</b> 50% del peso de trabajo (5 reps, 60s pausa).<br>
+                • <b>Serie 3:</b> 75-80% del peso de trabajo (2-3 reps, 90s pausa).
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="p-4 sm:px-6 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-3">
+        <span class="text-xs text-slate-400">Calienta con intención, protege tus poleas y hombros.</span>
+        <button onclick="closeWarmupModal()" class="bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition cursor-pointer">
+          Cerrar Protocolo
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CUSTOM TOAST / NOTIFICATION BANNER -->
+  <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-slate-900 border border-teal-500/50 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-fade">
+    <div class="w-2.5 h-2.5 rounded-full bg-teal-400 shrink-0"></div>
+    <p id="toast-message" class="text-xs font-medium text-slate-200"></p>
+  </div>
+
+  <!-- CUSTOM CONFIRMATION MODAL -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeConfirmModal()"></div>
+    <div class="relative bg-slate-900 border border-slate-700 max-w-md w-full rounded-2xl p-6 shadow-2xl z-10 space-y-4">
+      <h3 class="font-display font-bold text-xl text-white">¿Reiniciar todo el progreso?</h3>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Se desmarcarán todos los bloques individuales completados de las 6 semanas en este dispositivo. Esta acción no afecta tu archivo de Google Sheets.
+      </p>
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer">
+          Cancelar
+        </button>
+        <button onclick="confirmResetProgress()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold cursor-pointer">
+          Sí, reiniciar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // DATOS DEL PLAN PERIODIZADO ERIC HÖRST (6 SEMANAS) - MENÚ FLEXIBLE DÍA 1-7
+    // =========================================================================
+    const weeksData = [
+      {
+        week: 1,
+        phaseNumber: 1,
+        title: "Semana 1 · Reclutamiento Neuromuscular",
+        phaseBadge: "Fase 1 · Fuerza Máxima y Potencia",
+        intensity: "Intensidad 85-95% | RPE 8.5-9.5 | RIR 1-2",
+        description: "Activación neural en dedos (Max Hangs 7-53), tracción explosiva al pecho y establecimiento del bloque funcional de piernas y psoas.",
+        days: [
+          {
+            day: "Día 1",
+            focusTag: "Fuerza Máxima & Dedos",
+            title: "Fuerza Máxima de Dedos & Tracción",
+            center: "ELBLOQUE",
+            rpe: "RPE 9.0",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro 15-20 min)",
+                dose: "15-20 min",
+                cue: "Usa el Protocolo de Calentamiento Infaltable (Muro): dislocaciones, rotaciones y progresión V0-V3 con cero full crimp."
+              },
+              {
+                name: "2. Max Hangs 7-53 en regleta 20mm (semiarqueo o mano abierta)",
+                dose: "1 serie x 7 reps (7s colgado / 53s pausa)",
+                cue: "Estrictamente semiarqueo (half crimp) o mano abierta. Cero full crimp. Usa banda elástica de descarga si no sostienes 7s limpios."
+              },
+              {
+                name: "3. Power Pull-ups / Dominadas explosivas al pecho",
+                dose: "3 series x 4-5 reps · Descanso 3 min",
+                cue: "Depresión escapular previa. Tirón ultraexplosivo buscando tocar la barra con el pecho y bajada controlada en 2s."
+              },
+              {
+                name: "4. Prehabilitación de muñecas y antagonistas",
+                dose: "3 series x 15 reps",
+                cue: "Extensiones de dedos con banda (pausa 2s), flexión/extensión de muñeca y pronación/supinación lenta con mancuerna ligera."
+              }
+            ]
+          },
+          {
+            day: "Día 2",
+            focusTag: "Escalada Libre & Técnica",
+            title: "Escalada Técnica & Core",
+            center: "ELBLOQUE",
+            rpe: "RPE 7.0",
+            exercises: [
+              {
+                name: "1. Escalada técnica en muro / pies silenciosos y control de caderas",
+                dose: "45 min (V1 - V3)",
+                cue: "Escala bloques 2-3 grados debajo de tu límite. Coloca cada pie sin hacer ruido y mantén la cadera pegada al muro."
+              },
+              {
+                name: "2. Bloque de Core y estabilización pélvica",
+                dose: "3 series por ejercicio · Descanso 2 min",
+                cue: "Front Lever progresión (10-15s), Limpiaparabrisas (8 reps totales) y planchas con retroversión pélvica (30-40s)."
+              }
+            ]
+          },
+          {
+            day: "Día 3",
+            focusTag: "Descanso Activo / Regenerativo",
+            title: "Descanso Activo / Regenerativo",
+            center: "Libre",
+            rpe: "RPE 4.0",
+            exercises: [
+              {
+                name: "1. Movilidad articular general y apertura de cadera",
+                dose: "15 min",
+                cue: "Rotaciones torácicas en cuadrupedia, retracciones escapulares suaves y respiración diafragmática."
+              },
+              {
+                name: "2. Estiramientos suaves de antebrazos, flexores y manguito rotador",
+                dose: "10 min · Cero carga en dedos",
+                cue: "Estiramiento suave de antebrazo con codo extendido (3x30s) y rotaciones externas de hombro con banda ligera."
+              }
+            ]
+          },
+          {
+            day: "Día 4",
+            focusTag: "Piernas, Psoas & Core",
+            title: "Fuerza Funcional de Piernas, Psoas & Core",
+            center: "ELBLOQUE / Gym",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo B (Pesas 8-10 min)",
+                dose: "8-10 min",
+                cue: "Realiza el calentamiento exprés de sala de pesas (cardio suave, combo de cadera y series de aproximación)."
+              },
+              {
+                name: "2. Elevaciones de rodillas a la barra / Hanging Knee Raises",
+                dose: "3 series x 8-10 reps estrictas · Pausa 2 min",
+                cue: "Colgado en barra, sube las rodillas al pecho evitando cualquier balanceo. Fuerza pura desde el psoas y recto abdominal."
+              },
+              {
+                name: "3. Zancadas búlgaras controladas",
+                dose: "3 series x 8 reps/pierna · Bajada 2s",
+                cue: "Carga moderada (sin buscar hipertrofia pesada). Enfoca el equilibrio pélvico y el estiramiento activo del psoas trasero."
+              },
+              {
+                name: "4. Peso Muerto Rumano a una pierna",
+                dose: "3 series x 8 reps/pierna",
+                cue: "Bisagra de cadera controlada para fortalecer isquiotibiales, glúteos y estabilidad en taloneos."
+              },
+              {
+                name: "5. Paseo del granjero / estabilidad lumbopélvica",
+                dose: "3 series x 30 metros",
+                cue: "Postura erguida, hombros encajados, abdomen bloqueado y agarre firme con mancuernas moderadas."
+              }
+            ]
+          },
+          {
+            day: "Día 5",
+            focusTag: "Repetidores HIT 7:3",
+            title: "Repetidores & Resistencia Local",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro 15-20 min)",
+                dose: "15-20 min",
+                cue: "Usa el Protocolo de Calentamiento Infaltable para preparar la sesión de repetidores lácticos."
+              },
+              {
+                name: "2. Repetidores HIT 7:3 en multipresas",
+                dose: "4 series x 6 reps (7s colgado / 3s pausa)",
+                cue: "Presas cómodas (cazos o regleta grande). Descanso de 3 min entre series completas."
+              },
+              {
+                name: "3. Bloques de continuidad en muro (15-25 movimientos)",
+                dose: "4 recorridos largos",
+                cue: "Ritmo fluido sin detenerse, gestionando la respiración en presas intermedias."
+              },
+              {
+                name: "4. Compensación de antagonistas y extensiones de dedos",
+                dose: "3 series x 15 reps",
+                cue: "Banda elástica de apertura palmar (pausa 2s) y movilidad suave de muñeca."
+              }
+            ]
+          },
+          {
+            day: "Día 6",
+            focusTag: "Escalada Social & Búlder Libre",
+            title: "Escalada Libre & Proyectos",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.0",
+            exercises: [
+              {
+                name: "1. Sesión de bloques proyecto / test de sensaciones",
+                dose: "45 min · Descansos 3-4 min",
+                cue: "Aplica la fuerza reclutada en la semana sobre bloques desafiantes con descansos completos."
+              },
+              {
+                name: "2. Trabajo de precisión de pies en desplome",
+                dose: "20 min",
+                cue: "Fija la punta del pie con tensión de core antes de mover las manos."
+              },
+              {
+                name: "3. Cierre con movilidad de muñecas y antebrazos",
+                dose: "10 min",
+                cue: "Descarga suave de flexores, pronadores y cintura escapular."
+              }
+            ]
+          },
+          {
+            day: "Día 7",
+            focusTag: "Descanso Total Absoluto",
+            title: "Descanso Total y Supercompensación",
+            center: "Casa",
+            rpe: "Reposo",
+            exercises: [
+              {
+                name: "1. Recuperación pasiva completa del SNC y poleas A2/A4",
+                dose: "24 horas · Cero escalada",
+                cue: "Único día de descanso absoluto de la semana. Cero estrés mecánico en dedos ni tracción."
+              },
+              {
+                name: "2. Hidratación, nutrición y sueño reparador (7-8h)",
+                dose: "Todo el día",
+                cue: "Prioriza proteínas, vitamina C y descanso profundo para consolidar la adaptación tendinosa."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        week: 2,
+        phaseNumber: 1,
+        title: "Semana 2 · Sobrecarga Neural Progresiva",
+        phaseBadge: "Fase 1 · Fuerza Máxima y Potencia",
+        intensity: "Intensidad 88-95% | RPE 9.0 | RIR 1-2",
+        description: "Incremento ligero de carga (+1.25kg a +2.5kg o menor asistencia) en Max Hangs y mayor control explosivo en Power Pull-ups.",
+        days: [
+          {
+            day: "Día 1",
+            focusTag: "Fuerza Máxima & Dedos",
+            title: "Fuerza Máxima de Dedos & Tracción (+Carga)",
+            center: "ELBLOQUE",
+            rpe: "RPE 9.0",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "15-20 min",
+                cue: "Activación progresiva en ELBLOQUE utilizando el protocolo de calentamiento."
+              },
+              {
+                name: "2. Max Hangs 7-53 en regleta 20mm (semiarqueo o mano abierta)",
+                dose: "2 series x 6 reps (7s colgado / 53s pausa)",
+                cue: "Incrementa +1.25kg respecto a Semana 1 o reduce asistencia de banda. Cero full crimp."
+              },
+              {
+                name: "3. Power Pull-ups / Dominadas explosivas al pecho",
+                dose: "3 series x 5 reps · Descanso 3 min",
+                cue: "Máxima velocidad en el tirón vertical manteniendo escápulas encajadas."
+              },
+              {
+                name: "4. Prehabilitación de muñecas y antagonistas",
+                dose: "3 series x 15 reps",
+                cue: "Extensiones de dedos con banda, flexión/extensión de muñeca y pronación/supinación con mancuerna."
+              }
+            ]
+          },
+          {
+            day: "Día 2",
+            focusTag: "Escalada Libre & Técnica",
+            title: "Escalada Técnica & Core",
+            center: "ELBLOQUE",
+            rpe: "RPE 7.0",
+            exercises: [
+              {
+                name: "1. Escalada técnica en muro / pies silenciosos y control de caderas",
+                dose: "45 min en ELBLOQUE",
+                cue: "Practica acercar la cadera al muro (drop knees) en desplomes suaves para reducir carga en los brazos."
+              },
+              {
+                name: "2. Bloque de Core y estabilización pélvica",
+                dose: "3 series por ejercicio · Descanso 2 min",
+                cue: "Front Lever progresión (12-15s), Limpiaparabrisas (10 reps) y planchas con retroversión pélvica (35s)."
+              }
+            ]
+          },
+          {
+            day: "Día 3",
+            focusTag: "Descanso Activo / Regenerativo",
+            title: "Descanso Activo / Regenerativo",
+            center: "Libre",
+            rpe: "RPE 4.0",
+            exercises: [
+              {
+                name: "1. Movilidad articular general y apertura de cadera",
+                dose: "15 min",
+                cue: "Estiramientos dinámicos suaves de columna torácica y caderas."
+              },
+              {
+                name: "2. Estiramientos suaves de antebrazos, flexores y manguito rotador",
+                dose: "10 min · Cero carga en dedos",
+                cue: "Trabajo ligero preventivo sin fatiga."
+              }
+            ]
+          },
+          {
+            day: "Día 4",
+            focusTag: "Piernas, Psoas & Core",
+            title: "Fuerza Funcional de Piernas, Psoas & Core",
+            center: "ELBLOQUE / Gym",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo B (Pesas)",
+                dose: "8-10 min",
+                cue: "Activación específica de cadera y aproximación al peso muerto o sentadilla."
+              },
+              {
+                name: "2. Elevaciones de rodillas a la barra / Hanging Knee Raises",
+                dose: "3 series x 10 reps estrictas · Pausa 2 min",
+                cue: "Control estricto en la bajada (2s) sin balancear el tronco."
+              },
+              {
+                name: "3. Zancadas búlgaras controladas",
+                dose: "3 series x 8-10 reps/pierna",
+                cue: "Bajada en 2 segundos, torso erguido y estabilidad pélvica."
+              },
+              {
+                name: "4. Peso Muerto Rumano a una pierna",
+                dose: "3 series x 8 reps/pierna",
+                cue: "Control de equilibrio y activación de isquiotibiales."
+              },
+              {
+                name: "5. Paseo del granjero / estabilidad lumbopélvica",
+                dose: "3 series x 35 metros",
+                cue: "Core bloqueado y agarre sólido."
+              }
+            ]
+          },
+          {
+            day: "Día 5",
+            focusTag: "Repetidores HIT 7:3",
+            title: "Repetidores & Resistencia Local",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "15-20 min",
+                cue: "Preparación específica de poleas y antebrazos."
+              },
+              {
+                name: "2. Repetidores HIT 7:3 en multipresas",
+                dose: "5 series x 6 reps (7s colgado / 3s pausa)",
+                cue: "Misma presa cómoda que Semana 1, añadiendo 1 serie más."
+              },
+              {
+                name: "3. Bloques de continuidad en muro (15-25 movimientos)",
+                dose: "4 bloques largos",
+                cue: "Enlaza subidas y destrepes controlados."
+              },
+              {
+                name: "4. Compensación de antagonistas y extensiones de dedos",
+                dose: "3 series x 15 reps",
+                cue: "Extensiones de dedos con banda y pronación/supinación."
+              }
+            ]
+          },
+          {
+            day: "Día 6",
+            focusTag: "Escalada Social & Búlder Libre",
+            title: "Escalada Libre & Proyectos",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Sesión de bloques proyecto / test de sensaciones",
+                dose: "45 min · Pausas 3-4 min",
+                cue: "Calidad máxima en cada pegue, evitando saturar los dedos al final."
+              },
+              {
+                name: "2. Trabajo de precisión de pies en desplome",
+                dose: "20 min",
+                cue: "Taloneos y empeines activos manteniendo cadera cerca."
+              },
+              {
+                name: "3. Cierre con movilidad de muñecas y antebrazos",
+                dose: "10 min",
+                cue: "Estiramientos suaves de cierre."
+              }
+            ]
+          },
+          {
+            day: "Día 7",
+            focusTag: "Descanso Total Absoluto",
+            title: "Descanso Total y Supercompensación",
+            center: "Casa",
+            rpe: "Reposo",
+            exercises: [
+              {
+                name: "1. Recuperación pasiva completa del SNC y poleas A2/A4",
+                dose: "24 horas · Cero escalada",
+                cue: "Reposo absoluto del tren superior y dedos."
+              },
+              {
+                name: "2. Hidratación, nutrición y sueño reparador (7-8h)",
+                dose: "Todo el día",
+                cue: "Buena alimentación y descanso profundo."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        week: 3,
+        phaseNumber: 1,
+        title: "Semana 3 · Pico de Fuerza Máxima (Fase 1)",
+        phaseBadge: "Fase 1 · Fuerza Máxima y Potencia",
+        intensity: "Intensidad 90-95% | RPE 9.5 | RIR 1",
+        description: "Semana cumbre de reclutamiento neural. Máxima calidad de ejecución en regleta de 20mm y tracción explosiva.",
+        days: [
+          {
+            day: "Día 1",
+            focusTag: "Fuerza Máxima & Dedos",
+            title: "Fuerza Máxima de Dedos & Tracción (Pico)",
+            center: "ELBLOQUE",
+            rpe: "RPE 9.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "20 min",
+                cue: "Activación progresiva en ELBLOQUE hasta regletas medianas."
+              },
+              {
+                name: "2. Max Hangs 7-53 en regleta 20mm (semiarqueo o mano abierta)",
+                dose: "2 series x 6 reps (7s colgado / 53s pausa)",
+                cue: "Carga máxima controlada en regleta 20mm (semiarqueo o mano abierta). Descansa 3 min entre series."
+              },
+              {
+                name: "3. Power Pull-ups / Dominadas explosivas al pecho",
+                dose: "4 series x 4 reps · Descanso 3 min",
+                cue: "Máxima velocidad y control escapular."
+              },
+              {
+                name: "4. Prehabilitación de muñecas y antagonistas",
+                dose: "3 series x 15 reps",
+                cue: "Extensiones de dedos con banda, flexión/extensión de muñeca y pronación/supinación."
+              }
+            ]
+          },
+          {
+            day: "Día 2",
+            focusTag: "Escalada Libre & Técnica",
+            title: "Escalada Técnica & Core",
+            center: "ELBLOQUE",
+            rpe: "RPE 7.0",
+            exercises: [
+              {
+                name: "1. Escalada técnica en muro / pies silenciosos y control de caderas",
+                dose: "45 min en ELBLOQUE",
+                cue: "Enfoque en transferencia de peso sobre apoyos pequeños."
+              },
+              {
+                name: "2. Bloque de Core y estabilización pélvica",
+                dose: "3 series por ejercicio · Descanso 2 min",
+                cue: "Front Lever progresión (15s), Limpiaparabrisas (10 reps) y planchas con retroversión pélvica (40s)."
+              }
+            ]
+          },
+          {
+            day: "Día 3",
+            focusTag: "Descanso Activo / Regenerativo",
+            title: "Descanso Activo / Regenerativo",
+            center: "Libre",
+            rpe: "RPE 4.0",
+            exercises: [
+              {
+                name: "1. Movilidad articular general y apertura de cadera",
+                dose: "15 min",
+                cue: "Hombros, columna torácica y caderas."
+              },
+              {
+                name: "2. Estiramientos suaves de antebrazos, flexores y manguito rotador",
+                dose: "10 min · Cero carga en dedos",
+                cue: "Banda elástica ligera para manguito rotador y estiramiento palmar suave."
+              }
+            ]
+          },
+          {
+            day: "Día 4",
+            focusTag: "Piernas, Psoas & Core",
+            title: "Fuerza Funcional de Piernas, Psoas & Core",
+            center: "ELBLOQUE / Gym",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo B (Pesas)",
+                dose: "8 min",
+                cue: "Activación y aproximación para sentadilla y peso muerto."
+              },
+              {
+                name: "2. Elevaciones de rodillas a la barra / Hanging Knee Raises",
+                dose: "3 series x 10 reps estrictas · Pausa 2 min",
+                cue: "Elevación estricta sin impulso lumbar."
+              },
+              {
+                name: "3. Zancadas búlgaras controladas",
+                dose: "3 series x 8-10 reps/pierna",
+                cue: "Bajada controlada de 2s, estabilidad de rodilla y cadera."
+              },
+              {
+                name: "4. Peso Muerto Rumano a una pierna",
+                dose: "3 series x 8 reps/pierna",
+                cue: "Fortalecimiento de cadena posterior y equilibrio."
+              },
+              {
+                name: "5. Paseo del granjero / estabilidad lumbopélvica",
+                dose: "3 series x 35 metros",
+                cue: "Estabilidad de tronco y agarre."
+              }
+            ]
+          },
+          {
+            day: "Día 5",
+            focusTag: "Repetidores HIT 7:3",
+            title: "Repetidores & Resistencia Local",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "15 min",
+                cue: "Travesías suaves en ELBLOQUE."
+              },
+              {
+                name: "2. Repetidores HIT 7:3 en multipresas",
+                dose: "5 series x 6 reps (7s colgado / 3s pausa)",
+                cue: "Ritmo constante y relajación rápida en los 3s de pausa."
+              },
+              {
+                name: "3. Bloques de continuidad en muro (15-25 movimientos)",
+                dose: "4 recorridos largos",
+                cue: "Escalada fluida sin detenerse."
+              },
+              {
+                name: "4. Compensación de antagonistas y extensiones de dedos",
+                dose: "3 series x 15 reps",
+                cue: "Extensiones de dedos y trabajo de muñeca ligero."
+              }
+            ]
+          },
+          {
+            day: "Día 6",
+            focusTag: "Escalada Social & Búlder Libre",
+            title: "Escalada Libre & Proyectos (Test Fase 1)",
+            center: "ELBLOQUE",
+            rpe: "RPE 9.0",
+            exercises: [
+              {
+                name: "1. Sesión de bloques proyecto / test de sensaciones",
+                dose: "45 min · Descansos completos",
+                cue: "Evalúa tu mejora de fuerza en agarres pequeños y tracción."
+              },
+              {
+                name: "2. Trabajo de precisión de pies en desplome",
+                dose: "20 min",
+                cue: "Control pélvico y empuje desde puntas."
+              },
+              {
+                name: "3. Cierre con movilidad de muñecas y antebrazos",
+                dose: "10 min",
+                cue: "Estiramientos suaves."
+              }
+            ]
+          },
+          {
+            day: "Día 7",
+            focusTag: "Descanso Total Absoluto",
+            title: "Descanso Total y Supercompensación",
+            center: "Casa",
+            rpe: "Reposo",
+            exercises: [
+              {
+                name: "1. Recuperación pasiva completa del SNC y poleas A2/A4",
+                dose: "24 horas · Cero escalada",
+                cue: "Descanso total antes de iniciar la Fase 2 (Fuerza-Resistencia)."
+              },
+              {
+                name: "2. Hidratación, nutrición y sueño reparador (7-8h)",
+                dose: "Todo el día",
+                cue: "Reposo absoluto y sueño profundo."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        week: 4,
+        phaseNumber: 2,
+        title: "Semana 4 · Tolerancia al Lactato (Fase 2)",
+        phaseBadge: "Fase 2 · Fuerza-Resistencia",
+        intensity: "Intensidad 70-80% | RPE 8.0-8.5 | RIR 2",
+        description: "Transición a capacidad anaeróbica láctica: Repetidores HIT 7:3 en hangboard y protocolos de resistencia en el muro.",
+        days: [
+          {
+            day: "Día 1",
+            focusTag: "Repetidores HIT & Tracción",
+            title: "Repetidores HIT & Tracción de Resistencia",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "15 min",
+                cue: "Travesías suaves para activar circulación en antebrazos."
+              },
+              {
+                name: "2. Repetidores HIT 7:3 en regleta mediana",
+                dose: "5 series x 6 reps (7s colgado / 3s pausa)",
+                cue: "Regleta mediana/cómoda en semiarqueo. Descanso de 3 min entre series."
+              },
+              {
+                name: "3. Power Pull-ups / Dominadas estrictas",
+                dose: "3 series x 6 reps · Descanso 2.5 min",
+                cue: "Control escapular y fase excéntrica de 2 segundos."
+              },
+              {
+                name: "4. Prehabilitación de muñecas y antagonistas",
+                dose: "3 series x 15 reps",
+                cue: "Extensiones de dedos con banda y pronación/supinación."
+              }
+            ]
+          },
+          {
+            day: "Día 2",
+            focusTag: "Escalada Libre & Técnica",
+            title: "Escalada Técnica & Core",
+            center: "ELBLOQUE",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Escalada técnica en muro / pies silenciosos y control de caderas",
+                dose: "45 min en ELBLOQUE",
+                cue: "Evita sobre-apretar las presas bajo fatiga; usa solo la fuerza mínima necesaria."
+              },
+              {
+                name: "2. Bloque de Core y estabilización pélvica",
+                dose: "3 series por ejercicio · Descanso 2 min",
+                cue: "Front Lever progresión (12-15s), Limpiaparabrisas (10 reps) y planchas con retroversión pélvica (40s)."
+              }
+            ]
+          },
+          {
+            day: "Día 3",
+            focusTag: "Descanso Activo / Regenerativo",
+            title: "Descanso Activo / Regenerativo",
+            center: "Libre",
+            rpe: "RPE 4.0",
+            exercises: [
+              {
+                name: "1. Movilidad articular general y apertura de cadera",
+                dose: "15 min",
+                cue: "Enfoque en flujo sanguíneo y movilidad escapular."
+              },
+              {
+                name: "2. Estiramientos suaves de antebrazos, flexores y manguito rotador",
+                dose: "10 min · Cero carga en dedos",
+                cue: "Drenaje suave de antebrazos y rotaciones de hombro."
+              }
+            ]
+          },
+          {
+            day: "Día 4",
+            focusTag: "Piernas, Psoas & Core",
+            title: "Fuerza Funcional de Piernas, Psoas & Core",
+            center: "ELBLOQUE / Gym",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo B (Pesas)",
+                dose: "8 min",
+                cue: "Activación y aproximación para tren inferior."
+              },
+              {
+                name: "2. Elevaciones de rodillas a la barra / Hanging Knee Raises",
+                dose: "3 series x 10 reps estrictas · Pausa 90s",
+                cue: "Flexión de cadera estricta sin balanceo."
+              },
+              {
+                name: "3. Zancadas búlgaras controladas",
+                dose: "3 series x 8-10 reps/pierna",
+                cue: "Bajada controlada y estabilidad de pelvis."
+              },
+              {
+                name: "4. Peso Muerto Rumano a una pierna",
+                dose: "3 series x 8 reps/pierna",
+                cue: "Fortalecimiento unilateral de cadena posterior."
+              },
+              {
+                name: "5. Paseo del granjero / estabilidad lumbopélvica",
+                dose: "3 series x 35 metros",
+                cue: "Estabilidad postural y resistencia de agarre."
+              }
+            ]
+          },
+          {
+            day: "Día 5",
+            focusTag: "Repetidores HIT 7:3",
+            title: "Repetidores & Resistencia Local (4x4)",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "15 min",
+                cue: "Activación láctica suave en travesías."
+              },
+              {
+                name: "2. Repetidores HIT 7:3 en multipresas",
+                dose: "3 series x 6 reps (7s colgado / 3s pausa)",
+                cue: "Mantenimiento de tolerancia láctica."
+              },
+              {
+                name: "3. Bloques de continuidad en muro (15-25 movs / Búlder 4x4)",
+                dose: "4 series · Pausa 4 min",
+                cue: "Escala 4 bloques continuos sin descanso entre ellos; descansa 4 min al completar la ronda."
+              },
+              {
+                name: "4. Compensación de antagonistas y extensiones de dedos",
+                dose: "3 series x 15 reps",
+                cue: "Compensación muscular tras el bombeo intenso."
+              }
+            ]
+          },
+          {
+            day: "Día 6",
+            focusTag: "Escalada Social & Búlder Libre",
+            title: "Escalada Libre & Proyectos",
+            center: "ELBLOQUE",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Sesión de bloques proyecto / test de sensaciones",
+                dose: "45 min",
+                cue: "Practica reposos activos y sacudidas de brazos en presas intermedias."
+              },
+              {
+                name: "2. Trabajo de precisión de pies en desplome",
+                dose: "20 min",
+                cue: "Eficiencia de movimiento bajo fatiga moderada."
+              },
+              {
+                name: "3. Cierre con movilidad de muñecas y antebrazos",
+                dose: "10 min",
+                cue: "Estiramientos suaves."
+              }
+            ]
+          },
+          {
+            day: "Día 7",
+            focusTag: "Descanso Total Absoluto",
+            title: "Descanso Total y Supercompensación",
+            center: "Casa",
+            rpe: "Reposo",
+            exercises: [
+              {
+                name: "1. Recuperación pasiva completa del SNC y poleas A2/A4",
+                dose: "24 horas · Cero escalada",
+                cue: "Reposo absoluto del tren superior y antebrazos."
+              },
+              {
+                name: "2. Hidratación, nutrición y sueño reparador (7-8h)",
+                dose: "Todo el día",
+                cue: "Reposición de glucógeno y sueño reparador."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        week: 5,
+        phaseNumber: 2,
+        title: "Semana 5 · Pico de Fuerza-Resistencia",
+        phaseBadge: "Fase 2 · Fuerza-Resistencia",
+        intensity: "Intensidad 75-80% | RPE 8.5 | RIR 2",
+        description: "Máxima capacidad de tamponamiento muscular en antebrazos antes de la semana de descarga.",
+        days: [
+          {
+            day: "Día 1",
+            focusTag: "Repetidores HIT & Tracción",
+            title: "Repetidores HIT Avanzados & Tracción",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "15 min",
+                cue: "Travesías suaves en ELBLOQUE."
+              },
+              {
+                name: "2. Repetidores HIT 7:3 en regleta mediana",
+                dose: "6 series x 6 reps (7s colgado / 3s pausa)",
+                cue: "Máxima concentración en mantener el semiarqueo limpio pese a la fatiga."
+              },
+              {
+                name: "3. Power Pull-ups / Dominadas estrictas",
+                dose: "3 series x 6 reps · Descanso 2.5 min",
+                cue: "Tracción explosiva con bajada controlada."
+              },
+              {
+                name: "4. Prehabilitación de muñecas y antagonistas",
+                dose: "3 series x 15 reps",
+                cue: "Extensiones de dedos, flexiones/extensiones de muñeca y pronación/supinación."
+              }
+            ]
+          },
+          {
+            day: "Día 2",
+            focusTag: "Escalada Libre & Técnica",
+            title: "Escalada Técnica & Core",
+            center: "ELBLOQUE",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Escalada técnica en muro / pies silenciosos y control de caderas",
+                dose: "45 min en ELBLOQUE",
+                cue: "Exhala en los movimientos difíciles; evita contener la respiración."
+              },
+              {
+                name: "2. Bloque de Core y estabilización pélvica",
+                dose: "3 series por ejercicio · Descanso 2 min",
+                cue: "Front Lever progresión (15s), Limpiaparabrisas (10 reps) y planchas RKC (40s)."
+              }
+            ]
+          },
+          {
+            day: "Día 3",
+            focusTag: "Descanso Activo / Regenerativo",
+            title: "Descanso Activo / Regenerativo",
+            center: "Libre",
+            rpe: "RPE 4.0",
+            exercises: [
+              {
+                name: "1. Movilidad articular general y apertura de cadera",
+                dose: "15 min",
+                cue: "Hombros, columna y cadera."
+              },
+              {
+                name: "2. Estiramientos suaves de antebrazos, flexores y manguito rotador",
+                dose: "10 min · Cero carga en dedos",
+                cue: "Trabajo ligero preventivo."
+              }
+            ]
+          },
+          {
+            day: "Día 4",
+            focusTag: "Piernas, Psoas & Core",
+            title: "Fuerza Funcional de Piernas, Psoas & Core",
+            center: "ELBLOQUE / Gym",
+            rpe: "RPE 7.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo B (Pesas)",
+                dose: "8 min",
+                cue: "Activación y aproximación para tren inferior."
+              },
+              {
+                name: "2. Elevaciones de rodillas a la barra / Hanging Knee Raises",
+                dose: "3 series x 10 reps estrictas · Pausa 90s",
+                cue: "Control estricto sin balanceo."
+              },
+              {
+                name: "3. Zancadas búlgaras controladas",
+                dose: "3 series x 8-10 reps/pierna",
+                cue: "Estabilidad unilateral y control pélvico."
+              },
+              {
+                name: "4. Peso Muerto Rumano a una pierna",
+                dose: "3 series x 8 reps/pierna",
+                cue: "Cadena posterior y equilibrio."
+              },
+              {
+                name: "5. Paseo del granjero / estabilidad lumbopélvica",
+                dose: "3 series x 35 metros",
+                cue: "Postura y agarre firme."
+              }
+            ]
+          },
+          {
+            day: "Día 5",
+            focusTag: "Repetidores HIT 7:3",
+            title: "Repetidores & Resistencia Local",
+            center: "ELBLOQUE",
+            rpe: "RPE 8.5",
+            exercises: [
+              {
+                name: "1. Calentamiento con Protocolo A (Muro)",
+                dose: "15 min",
+                cue: "Travesías en ELBLOQUE."
+              },
+              {
+                name: "2. Repetidores HIT 7:3 en multipresas",
+                dose: "3 series x 6 reps (7s colgado / 3s pausa)",
+                cue: "Mantenimiento de resistencia local."
+              },
+              {
+                name: "3. Bloques de continuidad en muro (15-25 movimientos)",
+                dose: "4 series · Pausa 4 min",
+                cue: "Resolución de movimientos clave con antebrazos congestionados."
+              },
+              {
+                name: "4. Compensación de antagonistas y extensiones de dedos",
+                dose: "3 series x 15 reps",
+                cue: "Compensación palmar."
+              }
+            ]
+          },
+          {
+            day: "Día 6",
+            focusTag: "Escalada Social & Búlder Libre",
+            title: "Escalada Libre & Proyectos",
+            center: "ELBLOQUE",
+            rpe: "RPE 7.0",
+            exercises: [
+              {
+                name: "1. Sesión de bloques proyecto / test de sensaciones",
+                dose: "40 min",
+                cue: "Disfruta el movimiento sin llegar al fallo muscular antes de la descarga."
+              },
+              {
+                name: "2. Trabajo de precisión de pies en desplome",
+                dose: "15 min",
+                cue: "Apoyos limpios y silenciosos."
+              },
+              {
+                name: "3. Cierre con movilidad de muñecas y antebrazos",
+                dose: "10 min",
+                cue: "Estiramientos suaves."
+              }
+            ]
+          },
+          {
+            day: "Día 7",
+            focusTag: "Descanso Total Absoluto",
+            title: "Descanso Total y Supercompensación",
+            center: "Casa",
+            rpe: "Reposo",
+            exercises: [
+              {
+                name: "1. Recuperación pasiva completa del SNC y poleas A2/A4",
+                dose: "24 horas · Cero escalada",
+                cue: "Iniciando la semana de descarga y supercompensación."
+              },
+              {
+                name: "2. Hidratación, nutrición y sueño reparador (7-8h)",
+                dose: "Todo el día",
+                cue: "Descanso profundo."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        week: 6,
+        phaseNumber: 3,
+        title: "Semana 6 · Descarga y Supercompensación",
+        phaseBadge: "Fase 3 · Descarga (Deload) y Pico de Forma",
+        intensity: "Intensidad 50-60% | RPE 5.0-6.5 | RIR 3-4",
+        description: "Reducción del 50% del volumen. Cero hangboard pesado para disipar fatiga del SNC y alcanzar el pico de rendimiento.",
+        days: [
+          {
+            day: "Día 1",
+            focusTag: "Escalada Técnica Ligera (-50%)",
+            title: "Escalada Técnica Ligera (Volumen -50%)",
+            center: "ELBLOQUE",
+            rpe: "RPE 5.5",
+            exercises: [
+              {
+                name: "1. Escalada técnica fluida (V0-V2 · Sin Hangboard Pesado)",
+                dose: "30-35 min en ELBLOQUE",
+                cue: "Cero suspensiones máximas ni repetidores. Enfócate en movimiento perfecto y ligereza."
+              },
+              {
+                name: "2. Prehabilitación ligera de muñecas y antagonistas",
+                dose: "2 series x 15 reps",
+                cue: "Extensiones de dedos con banda ligera para flujo sanguíneo."
+              }
+            ]
+          },
+          {
+            day: "Día 2",
+            focusTag: "Descanso Activo & Movilidad",
+            title: "Descanso Activo & Movilidad",
+            center: "Libre",
+            rpe: "RPE 4.0",
+            exercises: [
+              {
+                name: "1. Movilidad de hombros y columna torácica",
+                dose: "15 min",
+                cue: "Estiramientos dinámicos relajados."
+              },
+              {
+                name: "2. Activación suave de core",
+                dose: "2 series x 30 seg",
+                cue: "Plancha postural sin fatiga."
+              }
+            ]
+          },
+          {
+            day: "Día 3",
+            focusTag: "Descanso Activo / Regenerativo",
+            title: "Descanso Activo / Regenerativo",
+            center: "Libre",
+            rpe: "RPE 4.0",
+            exercises: [
+              {
+                name: "1. Movilidad articular general y apertura de cadera",
+                dose: "15 min",
+                cue: "Cero impacto en dedos y tendones."
+              },
+              {
+                name: "2. Estiramientos suaves de antebrazos y manguito rotador",
+                dose: "10 min",
+                cue: "Relajación muscular."
+              }
+            ]
+          },
+          {
+            day: "Día 4",
+            focusTag: "Movilidad Psoas & Piernas (-50%)",
+            title: "Movilidad de Psoas & Piernas (Volumen -50%)",
+            center: "ELBLOQUE / Gym",
+            rpe: "RPE 5.5",
+            exercises: [
+              {
+                name: "1. Movilidad profunda de cadera y psoas (50% volumen)",
+                dose: "10 min",
+                cue: "Estiramientos dinámicos del flexor de cadera y apertura articular."
+              },
+              {
+                name: "2. Elevaciones de rodillas a la barra (Suave)",
+                dose: "2 series x 6-8 reps",
+                cue: "Activación limpia sin llegar cerca del fallo."
+              },
+              {
+                name: "3. Zancadas sin lastre (Peso corporal)",
+                dose: "2 series x 8 reps/pierna",
+                cue: "Rango de movimiento completo y fluido."
+              }
+            ]
+          },
+          {
+            day: "Día 5",
+            focusTag: "Activación Neural Corta",
+            title: "Activación Neural Corta en Muro",
+            center: "ELBLOQUE",
+            rpe: "RPE 6.5",
+            exercises: [
+              {
+                name: "1. Calentamiento y tono neural corto",
+                dose: "35 min en ELBLOQUE",
+                cue: "Haz 2 o 3 pegues sueltos a bloques divertidos y retírate sintiéndote fresco y explosivo."
+              },
+              {
+                name: "2. Extensiones de dedos ligeras",
+                dose: "2 series x 15 reps",
+                cue: "Mantenimiento articular."
+              }
+            ]
+          },
+          {
+            day: "Día 6",
+            focusTag: "Test Pico / Encadenamiento",
+            title: "Test de Rendimiento / Encadenamiento",
+            center: "ELBLOQUE",
+            rpe: "RPE 9.0",
+            exercises: [
+              {
+                name: "1. Sesión de encadenamiento en ELBLOQUE (Pico de Forma)",
+                dose: "60-75 min · Descansos completos",
+                cue: "Calienta con calma y disfruta la máxima fuerza y resistencia acumuladas tras las 6 semanas."
+              },
+              {
+                name: "2. Cierre con movilidad de muñecas y antebrazos",
+                dose: "10 min",
+                cue: "Estiramientos suaves de cierre."
+              }
+            ]
+          },
+          {
+            day: "Día 7",
+            focusTag: "Descanso Total Absoluto",
+            title: "Descanso Total y Supercompensación",
+            center: "Casa",
+            rpe: "Reposo",
+            exercises: [
+              {
+                name: "1. Recuperación pasiva completa y cierre del mesociclo",
+                dose: "24 horas",
+                cue: "Registra tus logros en la Bitácora Google Sheets."
+              },
+              {
+                name: "2. Hidratación, nutrición y sueño reparador (7-8h)",
+                dose: "Todo el día",
+                cue: "Planifica la transición al siguiente bloque."
+              }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const phaseObjectivesMap = {
+      1: {
+        tag: "Objetivos Estratégicos · Fase 1 (Semanas 1-3)",
+        headline: "Reclutamiento Neuromuscular, Fuerza Máxima de Dedos y Psoas",
+        pillars: [
+          {
+            num: "1",
+            title: "Fuerza Máxima de Dedos (Día 1 · 7-53)",
+            desc: "Max Hangs en regleta 20mm usando estrictamente semiarqueo (half crimp) o mano abierta. Cero full crimp para blindar poleas."
+          },
+          {
+            num: "2",
+            title: "Potencia de Tracción & Psoas (Día 4)",
+            desc: "Power Pull-ups explosivas al pecho + bloque dedicado de piernas funcionales y psoas para estabilidad lumbo-pélvica."
+          },
+          {
+            num: "3",
+            title: "Prehabilitación de Muñecas",
+            desc: "Extensiones de dedos con banda, flexión/extensión y pronación/supinación para prevenir epicondilitis."
+          }
+        ]
+      },
+      2: {
+        tag: "Objetivos Estratégicos · Fase 2 (Semanas 4-5)",
+        headline: "Fuerza-Resistencia Anaeróbica Láctica y Repetidores HIT 7:3",
+        pillars: [
+          {
+            num: "1",
+            title: "Repetidores HIT 7:3 (Días 1 y 5)",
+            desc: "Intervalos de 7s colgado / 3s de pausa en multipresas para aumentar la tolerancia a la acidosis muscular en antebrazos."
+          },
+          {
+            num: "2",
+            title: "Continuidad & Estabilidad Pélvica",
+            desc: "Bloques de 15-25 movimientos y protocolos 4x4 en ELBLOQUE manteniendo el bloque funcional de piernas y psoas (Día 4)."
+          },
+          {
+            num: "3",
+            title: "Compensación Antagonista",
+            desc: "Descarga activa de flexores mediante extensiones de dedos y movilidad de muñecas tras el bombeo intenso."
+          }
+        ]
+      },
+      3: {
+        tag: "Objetivos Estratégicos · Fase 3 (Semana 6)",
+        headline: "Descarga (Deload -50%) y Supercompensación Pico",
+        pillars: [
+          {
+            num: "1",
+            title: "Disipación de Fatiga Neural",
+            desc: "Reducción del 50% en el volumen semanal y eliminación del hangboard pesado para recuperar el SNC y tendones."
+          },
+          {
+            num: "2",
+            title: "Movilidad Profunda de Psoas (Día 4)",
+            desc: "Sesión ligera enfocada en rango articular de cadera y activación suave sin fatiga."
+          },
+          {
+            num: "3",
+            title: "Encadenamiento & Test Final (Día 6)",
+            desc: "Cosecha de resultados en ELBLOQUE y registro completo de métricas en tu Bitácora Google Sheets."
+          }
+        ]
+      }
+    };
+
+    // =========================================================================
+    // ESTADO Y PERSISTENCIA POR ÍTEM INDIVIDUAL + FECHAS REALES POR BLOQUE
+    // =========================================================================
+    const STORAGE_KEY = 'elbloque_horst_items_v3';
+    const IMPREVISTOS_KEY = 'elbloque_horst_imprevistos_v2';
+    const START_DATE_KEY = 'elbloque_horst_startdate_v2';
+    const BLOCK_DATES_KEY = 'elbloque_horst_blockdates_v1';
+    const ARCHIVED_CYCLES_KEY = 'elbloque_horst_archived_v2';
+
+    let currentWeek = 1;
+    let completedItems = {}; // { "w1-d0-e0": "18/11/2026 14:30" }
+    let imprevistosLogs = {}; // { "Semana 1 - Día 1": { type: "...", reason: "...", date: "..." } }
+    let customBlockDates = {}; // { "w1-d0": "2026-11-18" }
+    let cycleStartDate = '2026-11-18'; // Por defecto hoy miércoles 2026-11-18
+    let archivedCycles = [];
+
+    function getSuggestedISOForBlock(weekNum, dayIdx) {
+      const baseStr = cycleStartDate || '2026-11-18';
+      const parts = baseStr.split('-');
+      if (parts.length !== 3) return '2026-11-18';
+      const base = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      const offsetDays = (weekNum - 1) * 7 + dayIdx;
+      base.setDate(base.getDate() + offsetDays);
+      const y = base.getFullYear();
+      const m = String(base.getMonth() + 1).padStart(2, '0');
+      const d = String(base.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getEffectiveBlockISO(weekNum, dayIdx) {
+      const key = `w${weekNum}-d${dayIdx}`;
+      return customBlockDates[key] || getSuggestedISOForBlock(weekNum, dayIdx);
+    }
+
+    function formatSpanishCalendarLabel(isoStr) {
+      if (!isoStr) return '';
+      const parts = isoStr.split('-');
+      if (parts.length !== 3) return isoStr;
+      const dateObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      const weekday = dateObj.toLocaleDateString('es-CO', { weekday: 'short' });
+      const capWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1).replace('.', '');
+      const rest = dateObj.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
+      return `${capWeekday} ${rest}`;
+    }
+
+    function updateBlockRealDate(weekNum, dayIdx, newIso) {
+      const key = `w${weekNum}-d${dayIdx}`;
+      if (newIso) {
+        customBlockDates[key] = newIso;
+      } else {
+        delete customBlockDates[key];
+      }
+      saveProgress();
+      renderDaysGrid();
+      showToast(`Fecha de ejecución actualizada: ${formatSpanishCalendarLabel(getEffectiveBlockISO(weekNum, dayIdx))}`);
+    }
+
+    function updateStartDate(val) {
+      cycleStartDate = val || '2026-11-18';
+      saveProgress();
+      renderDaysGrid();
+      showToast('Fecha base de inicio del ciclo actualizada.');
+    }
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) completedItems = JSON.parse(raw);
+
+        const rawImp = localStorage.getItem(IMPREVISTOS_KEY);
+        if (rawImp) imprevistosLogs = JSON.parse(rawImp);
+
+        const rawBlockDates = localStorage.getItem(BLOCK_DATES_KEY);
+        if (rawBlockDates) customBlockDates = JSON.parse(rawBlockDates);
+
+        const rawDate = localStorage.getItem(START_DATE_KEY);
+        cycleStartDate = rawDate ? rawDate : '2026-11-18';
+
+        const rawArch = localStorage.getItem(ARCHIVED_CYCLES_KEY);
+        if (rawArch) archivedCycles = JSON.parse(rawArch);
+      } catch (e) {
+        completedItems = {};
+        imprevistosLogs = {};
+        customBlockDates = {};
+        cycleStartDate = '2026-11-18';
+        archivedCycles = [];
+      }
+      const dateInput = document.getElementById('cycle-start-date');
+      if (dateInput) dateInput.value = cycleStartDate;
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(completedItems));
+        localStorage.setItem(IMPREVISTOS_KEY, JSON.stringify(imprevistosLogs));
+        localStorage.setItem(BLOCK_DATES_KEY, JSON.stringify(customBlockDates));
+        localStorage.setItem(START_DATE_KEY, cycleStartDate);
+        localStorage.setItem(ARCHIVED_CYCLES_KEY, JSON.stringify(archivedCycles));
+      } catch (e) {}
+    }
+
+    function getCurrentTimestampStr() {
+      const now = new Date();
+      return now.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+        ' ' + now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function toggleItemComplete(weekNum, dayIdx, exIdx) {
+      const key = `w${weekNum}-d${dayIdx}-e${exIdx}`;
+      if (completedItems[key]) {
+        delete completedItems[key];
+      } else {
+        completedItems[key] = getCurrentTimestampStr();
+      }
+      saveProgress();
+      renderWeekTabs();
+      renderDaysGrid();
+      updateKPIs();
+    }
+
+    function toggleAllDayItems(weekNum, dayIdx) {
+      const wObj = weeksData.find(w => w.week === weekNum);
+      const dObj = wObj.days[dayIdx];
+      const allDone = dObj.exercises.every((_, eIdx) => !!completedItems[`w${weekNum}-d${dayIdx}-e${eIdx}`]);
+      const ts = getCurrentTimestampStr();
+
+      dObj.exercises.forEach((_, eIdx) => {
+        const key = `w${weekNum}-d${dayIdx}-e${eIdx}`;
+        if (allDone) {
+          delete completedItems[key];
+        } else {
+          completedItems[key] = ts;
+        }
+      });
+
+      saveProgress();
+      renderWeekTabs();
+      renderDaysGrid();
+      updateKPIs();
+    }
+
+    // Cálculo inteligente: cuenta bloques marcados + bloques justificados por imprevisto/cambio
+    function getTotalCounts() {
+      let totalBlocks = 0;
+      let doneBlocks = 0;
+
+      weeksData.forEach(w => {
+        w.days.forEach((d, dIdx) => {
+          const impKey = `Semana ${w.week} - ${d.day}`;
+          const hasJustifiedChange = !!imprevistosLogs[impKey];
+
+          d.exercises.forEach((_, eIdx) => {
+            totalBlocks++;
+            const isChecked = !!completedItems[`w${w.week}-d${dIdx}-e${eIdx}`];
+            if (isChecked || hasJustifiedChange) {
+              doneBlocks++;
+            }
+          });
+        });
+      });
+
+      return { totalBlocks, doneBlocks };
+    }
+
+    function updateKPIs() {
+      const { totalBlocks, doneBlocks } = getTotalCounts();
+      const pct = totalBlocks > 0 ? Math.round((doneBlocks / totalBlocks) * 100) : 0;
+
+      document.getElementById('nav-progress-badge').textContent = `${pct}%`;
+      document.getElementById('kpi-completed-count').textContent = `${doneBlocks} / ${totalBlocks}`;
+      document.getElementById('kpi-progress-pct').textContent = `${pct}%`;
+      document.getElementById('kpi-progress-bar').style.width = `${pct}%`;
+
+      const archBadge = document.getElementById('archived-count-badge');
+      if (archBadge) archBadge.textContent = archivedCycles.length;
+
+      // Verificar si la Semana 6 está completada
+      const w6 = weeksData.find(w => w.week === 6);
+      let w6Total = 0;
+      let w6Done = 0;
+      w6.days.forEach((d, dIdx) => {
+        const hasImp = !!imprevistosLogs[`Semana 6 - ${d.day}`];
+        d.exercises.forEach((_, eIdx) => {
+          w6Total++;
+          if (completedItems[`w6-d${dIdx}-e${eIdx}`] || hasImp) w6Done++;
+        });
+      });
+      const day7S6Done = !!completedItems['w6-d6-e0'] || !!imprevistosLogs['Semana 6 - Día 7'];
+      const completeBanner = document.getElementById('cycle-complete-banner');
+      if (completeBanner) {
+        if (day7S6Done || (w6Total > 0 && w6Done === w6Total)) {
+          completeBanner.classList.remove('hidden');
+        } else {
+          completeBanner.classList.add('hidden');
+        }
+      }
+    }
+
+    // =========================================================================
+    // RENDERIZADO DE PESTAÑAS, OBJETIVOS Y TARJETAS DIARIAS (DÍA 1 A DÍA 7)
+    // =========================================================================
+    function renderWeekTabs() {
+      const container = document.getElementById('week-tabs-container');
+      container.innerHTML = weeksData.map(w => {
+        const isActive = w.week === currentWeek;
+        const baseClasses = "px-4 sm:px-5 py-2.5 rounded-xl font-display font-bold text-base sm:text-lg tracking-wide whitespace-nowrap transition cursor-pointer flex items-center gap-2";
+        const activeClasses = isActive
+          ? "bg-teal-600 text-white shadow-lg shadow-teal-950/60 border border-teal-400/40"
+          : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800";
+
+        let weekTotal = 0;
+        let weekDone = 0;
+        w.days.forEach((d, dIdx) => {
+          const hasImp = !!imprevistosLogs[`Semana ${w.week} - ${d.day}`];
+          d.exercises.forEach((_, eIdx) => {
+            weekTotal++;
+            if (completedItems[`w${w.week}-d${dIdx}-e${eIdx}`] || hasImp) weekDone++;
+          });
+        });
+
+        return `
+          <button onclick="selectWeek(${w.week})" class="${baseClasses} ${activeClasses}">
+            <span>Semana ${w.week}</span>
+            <span class="text-[11px] font-sans font-semibold px-1.5 py-0.5 rounded ${isActive ? 'bg-slate-950/30 text-teal-100' : 'bg-slate-800 text-slate-400'}">
+              ${weekDone}/${weekTotal}
+            </span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectWeek(weekNum) {
+      currentWeek = weekNum;
+      renderWeekTabs();
+      renderPhaseBanner();
+      renderDaysGrid();
+    }
+
+    function renderPhaseBanner() {
+      const wObj = weeksData.find(w => w.week === currentWeek);
+      if (!wObj) return;
+
+      document.getElementById('phase-badge').textContent = wObj.phaseBadge;
+      document.getElementById('phase-intensity').textContent = wObj.intensity;
+      document.getElementById('week-title').textContent = wObj.title;
+      document.getElementById('phase-desc').textContent = wObj.description;
+
+      const objInfo = phaseObjectivesMap[wObj.phaseNumber];
+      if (objInfo) {
+        document.getElementById('obj-phase-tag').textContent = objInfo.tag;
+        document.getElementById('obj-phase-headline').textContent = objInfo.headline;
+        document.getElementById('obj-pillars-grid').innerHTML = objInfo.pillars.map(p => `
+          <div class="bg-slate-950/60 border border-slate-800/90 rounded-xl p-4 flex items-start gap-3">
+            <div class="w-7 h-7 rounded-lg bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400 font-display font-bold text-base shrink-0">${p.num}</div>
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">${p.title}</h3>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">${p.desc}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function renderDaysGrid() {
+      const grid = document.getElementById('days-grid');
+      const wObj = weeksData.find(w => w.week === currentWeek);
+      if (!wObj) return;
+
+      grid.innerHTML = wObj.days.map((d, dIdx) => {
+        const totalEx = d.exercises.length;
+        const doneEx = d.exercises.filter((_, eIdx) => !!completedItems[`w${currentWeek}-d${dIdx}-e${eIdx}`]).length;
+        const impKey = `Semana ${currentWeek} - ${d.day}`;
+        const hasImp = imprevistosLogs[impKey];
+        const isDayComplete = (totalEx > 0 && doneEx === totalEx) || !!hasImp;
+
+        const isDay4 = d.day === "Día 4";
+        const isDay7 = d.day === "Día 7";
+
+        const blockKey = `w${currentWeek}-d${dIdx}`;
+        const effectiveIso = getEffectiveBlockISO(currentWeek, dIdx);
+        const isCustomDate = !!customBlockDates[blockKey];
+        const calendarLabel = formatSpanishCalendarLabel(effectiveIso);
+
+        let cardBorder = "border-slate-800 bg-slate-900";
+        if (totalEx > 0 && doneEx === totalEx) {
+          cardBorder = "border-teal-500/60 bg-teal-950/15";
+        } else if (hasImp) {
+          cardBorder = "border-amber-500/60 bg-amber-950/15";
+        } else if (isDay4) {
+          cardBorder = "border-cyan-500/35 bg-slate-900";
+        }
+
+        let centerBadgeClass = "bg-slate-800 text-slate-300 border-slate-700";
+        if (d.center.includes("ELBLOQUE")) {
+          centerBadgeClass = "bg-teal-500/10 text-teal-400 border-teal-500/30";
+        } else if (isDay7) {
+          centerBadgeClass = "bg-amber-500/10 text-amber-400 border-amber-500/30";
+        }
+
+        const checklistHtml = d.exercises.map((ex, eIdx) => {
+          const val = completedItems[`w${currentWeek}-d${dIdx}-e${eIdx}`];
+          const isChecked = !!val;
+          const stampText = typeof val === 'string' ? val : '';
+          return `
+            <label class="flex items-start gap-2.5 p-2 rounded-xl bg-slate-950/70 border ${isChecked ? 'border-teal-500/30 bg-teal-950/20' : 'border-slate-800/80 hover:border-slate-700'} cursor-pointer transition select-none group">
+              <input
+                type="checkbox"
+                ${isChecked ? 'checked' : ''}
+                onchange="toggleItemComplete(${currentWeek}, ${dIdx}, ${eIdx})"
+                class="mt-0.5 w-4 h-4 rounded bg-slate-900 border-slate-600 text-teal-500 focus:ring-teal-500 focus:ring-offset-slate-950 cursor-pointer shrink-0"
+              >
+              <div class="flex-1 min-w-0">
+                <span class="block text-xs leading-snug transition ${isChecked ? 'line-through text-slate-500' : 'text-slate-200 group-hover:text-white'}">
+                  ${ex.name}
+                </span>
+                ${stampText ? `<span class="block text-[10px] text-teal-400/80 font-medium mt-0.5">✓ Marcado: ${stampText}</span>` : ''}
+              </div>
+            </label>
+          `;
+        }).join('');
+
+        const impBadgeHtml = hasImp ? `
+          <div class="mt-2.5 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-200 flex items-start gap-2">
+            <svg class="w-4 h-4 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <div class="min-w-0">
+              <span class="font-bold text-amber-300 block">${hasImp.type}</span>
+              <span class="text-slate-300 break-words">${hasImp.reason}</span>
+            </div>
+          </div>
+        ` : '';
+
+        return `
+          <article class="rounded-2xl border ${cardBorder} p-5 flex flex-col justify-between transition hover:border-slate-700 shadow-lg animate-fade">
+            <div>
+              <!-- Card Header: Día 1..7 + Enfoque -->
+              <div class="flex items-start justify-between gap-2 pb-3 border-b border-slate-800/80">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="font-display font-extrabold text-xl text-white tracking-wide">${d.day}</span>
+                    <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded ${isDay4 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/35' : 'bg-slate-800 text-teal-300 border border-slate-700'}">
+                      ${d.focusTag}
+                    </span>
+                  </div>
+                  <h3 class="font-bold text-sm text-slate-100 mt-1.5 leading-snug">${d.title}</h3>
+                </div>
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full border shrink-0 ${centerBadgeClass}">
+                  ${d.center}
+                </span>
+              </div>
+
+              <!-- Selector Discreto de Fecha Real de Ejecución -->
+              <div class="mt-3 p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/90 flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <span class="block text-[10px] uppercase tracking-wider font-semibold ${isCustomDate ? 'text-emerald-400' : 'text-slate-400'}">
+                    ${isCustomDate ? '✓ Fecha Ejecución Real' : 'Fecha Sugerida'}
+                  </span>
+                  <span class="block text-xs font-bold text-slate-200 truncate mt-0.5">${calendarLabel}</span>
+                </div>
+                <input
+                  type="date"
+                  value="${effectiveIso}"
+                  onchange="updateBlockRealDate(${currentWeek}, ${dIdx}, this.value)"
+                  title="Cambiar fecha real en que ejecutaste este bloque"
+                  class="bg-slate-900 border border-slate-700 text-slate-200 text-[11px] font-medium rounded-lg px-2 py-1 focus:outline-none focus:border-cyan-500 cursor-pointer shrink-0"
+                >
+              </div>
+
+              <!-- Checklist de Ejercicios -->
+              <div class="mt-3 space-y-2">
+                ${checklistHtml}
+              </div>
+
+              ${impBadgeHtml}
+            </div>
+
+            <!-- Card Footer Actions -->
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+              <button onclick="openDetailModal(${currentWeek}, ${dIdx})" class="flex-1 bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 font-semibold text-xs py-2 px-3 rounded-xl transition cursor-pointer text-center">
+                Ver Detalle de Ejercicios
+              </button>
+              <button onclick="openImprevistaModalFor(${currentWeek}, ${dIdx})" title="Reportar cambio de plan o imprevisto" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-600/20 text-amber-400 border border-slate-700 hover:border-amber-500/40 transition cursor-pointer shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                </svg>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // MODALES IMPREVISTOS Y REPORTE GOOGLE DOCS
+    // =========================================================================
+    function openImprevistaModalFor(weekNum, dayIdx) {
+      openImprevistaModal();
+      const select = document.getElementById('imp-day-select');
+      const targetVal = `Semana ${weekNum} - ${weeksData[weekNum - 1].days[dayIdx].day}`;
+      select.value = targetVal;
+      loadExistingImprevistaForSelect();
+    }
+
+    function loadExistingImprevistaForSelect() {
+      const key = document.getElementById('imp-day-select').value;
+      if (imprevistosLogs[key]) {
+        document.getElementById('imp-type-select').value = imprevistosLogs[key].type;
+        document.getElementById('imp-reason-input').value = imprevistosLogs[key].reason;
+      } else {
+        document.getElementById('imp-reason-input').value = '';
+      }
+    }
+
+    function openImprevistaModal() {
+      const select = document.getElementById('imp-day-select');
+      let optionsHtml = '';
+      weeksData.forEach(w => {
+        w.days.forEach((d, dIdx) => {
+          const effDate = formatSpanishCalendarLabel(getEffectiveBlockISO(w.week, dIdx));
+          optionsHtml += `<option value="Semana ${w.week} - ${d.day}">Semana ${w.week} · ${d.day} (${d.focusTag}) [${effDate}]</option>`;
+        });
+      });
+      select.innerHTML = optionsHtml;
+      select.onchange = loadExistingImprevistaForSelect;
+
+      const currentKey = `Semana ${currentWeek} - ${weeksData[currentWeek - 1].days[0].day}`;
+      select.value = currentKey;
+      loadExistingImprevistaForSelect();
+
+      const modal = document.getElementById('imprevista-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeImprevistaModal() {
+      const modal = document.getElementById('imprevista-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveImprevistaLog() {
+      const targetDay = document.getElementById('imp-day-select').value;
+      const type = document.getElementById('imp-type-select').value;
+      const reason = document.getElementById('imp-reason-input').value.trim();
+
+      if (!reason) {
+        showToast('Por favor escribe la razón del imprevisto o cambio.');
+        return;
+      }
+
+      imprevistosLogs[targetDay] = { type, reason, date: getCurrentTimestampStr() };
+      saveProgress();
+      closeImprevistaModal();
+      renderWeekTabs();
+      renderDaysGrid();
+      updateKPIs();
+      showToast(`Bitácora guardada para ${targetDay}. Barra de progreso protegida.`);
+    }
+
+    function buildCycleReportText(isFinal = false) {
+      const { totalBlocks, doneBlocks } = getTotalCounts();
+      const pct = totalBlocks > 0 ? Math.round((doneBlocks / totalBlocks) * 100) : 0;
+      const startStr = formatSpanishCalendarLabel(getEffectiveBlockISO(1, 0));
+      const endStr = formatSpanishCalendarLabel(getEffectiveBlockISO(6, 6));
+
+      let report = isFinal
+        ? `INFORME FINAL DE CIERRE DE MESOCICLO (6 SEMANAS) · ELBLOQUE HÖRST MENÚ FLEXIBLE\n`
+        : `REPORTE ACUMULADO DE ENTRENAMIENTO · ELBLOQUE HÖRST MENÚ FLEXIBLE\n`;
+      report += `=========================================================================\n`;
+      report += `Inicio del Ciclo: ${startStr} | Cierre Estimado: ${endStr}\n`;
+      report += `Fecha de Emisión del Informe: ${getCurrentTimestampStr()}\n`;
+      report += `Cumplimiento Global (Ejecutados + Justificados): ${doneBlocks} de ${totalBlocks} bloques (${pct}%)\n\n`;
+
+      report += `--- 1. RESUMEN DE CUMPLIMIENTO POR SEMANA ---\n`;
+      weeksData.forEach(w => {
+        let wDone = 0;
+        let wTotal = 0;
+        w.days.forEach((d, dIdx) => {
+          const hasImp = !!imprevistosLogs[`Semana ${w.week} - ${d.day}`];
+          d.exercises.forEach((_, eIdx) => {
+            wTotal++;
+            if (completedItems[`w${w.week}-d${dIdx}-e${eIdx}`] || hasImp) wDone++;
+          });
+        });
+        report += `• Semana ${w.week} (${w.title}): ${wDone}/${wTotal} bloques (${Math.round((wDone / wTotal) * 100)}%)\n`;
+      });
+
+      report += `\n--- 2. REGISTRO DE IMPREVISTOS Y CAMBIOS DE ENFOQUE ---\n`;
+      const impKeys = Object.keys(imprevistosLogs);
+      if (impKeys.length === 0) {
+        report += `Sin imprevistos ni modificaciones de enfoque registradas.\n`;
+      } else {
+        impKeys.forEach(k => {
+          report += `• [${k}] (${imprevistosLogs[k].type}) - Reg: ${imprevistosLogs[k].date || 'N/A'}:\n  "${imprevistosLogs[k].reason}"\n`;
+        });
+      }
+
+      report += `\n--- 3. BITÁCORA POR BLOQUE (DÍA 1 A DÍA 7) Y FECHA REAL DE EJECUCIÓN ---\n`;
+      weeksData.forEach(w => {
+        report += `\n[SEMANA ${w.week} · ${w.title.toUpperCase()}]\n`;
+        w.days.forEach((d, dIdx) => {
+          const realDateLabel = formatSpanishCalendarLabel(getEffectiveBlockISO(w.week, dIdx));
+          const impEntry = imprevistosLogs[`Semana ${w.week} - ${d.day}`];
+          const doneList = [];
+          d.exercises.forEach((ex, eIdx) => {
+            const val = completedItems[`w${w.week}-d${dIdx}-e${eIdx}`];
+            if (val) {
+              const ts = typeof val === 'string' ? ` [${val}]` : '';
+              doneList.push(`   ✓ ${ex.name}${ts}`);
+            }
+          });
+          if (doneList.length > 0) {
+            report += `  ${d.day} (${d.focusTag}) | Fecha Real: ${realDateLabel} (${doneList.length}/${d.exercises.length}):\n`;
+            report += doneList.join('\n') + '\n';
+          } else if (impEntry) {
+            report += `  ${d.day} (${d.focusTag}) | Fecha Real: ${realDateLabel} -> JUSTIFICADO: ${impEntry.type} ("${impEntry.reason}")\n`;
+          } else {
+            report += `  ${d.day} (${d.focusTag}) | Fecha Sugerida: ${realDateLabel} - Pendiente\n`;
+          }
+        });
+      });
+
+      return report;
+    }
+
+    function openReportExportModal(isFinal = false) {
+      document.getElementById('report-modal-tag').textContent = isFinal ? 'Cierre Definitivo de Mesociclo' : 'Extensión Google Docs';
+      document.getElementById('report-modal-title').textContent = isFinal ? 'Informe Final de 6 Semanas (Completado)' : 'Informe Ejecutivo del Ciclo';
+      document.getElementById('report-text-area').value = buildCycleReportText(isFinal);
+
+      const modal = document.getElementById('report-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeReportExportModal() {
+      const modal = document.getElementById('report-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function copyReportToClipboard() {
+      const textarea = document.getElementById('report-text-area');
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('¡Reporte acumulado copiado! Pégalo en tu Google Docs.');
+      } catch (err) {
+        showToast('No se pudo copiar automáticamente.');
+      }
+    }
+
+    function archiveCurrentCycle() {
+      const { totalBlocks, doneBlocks } = getTotalCounts();
+      const pct = totalBlocks > 0 ? Math.round((doneBlocks / totalBlocks) * 100) : 0;
+      const startStr = formatSpanishCalendarLabel(getEffectiveBlockISO(1, 0));
+      const endStr = formatSpanishCalendarLabel(getEffectiveBlockISO(6, 6));
+      const reportText = buildCycleReportText(true);
+
+      archivedCycles.unshift({
+        id: Date.now(),
+        period: `${startStr} al ${endStr}`,
+        archivedAt: getCurrentTimestampStr(),
+        completion: `${doneBlocks}/${totalBlocks} (${pct}%)`,
+        reportText
+      });
+
+      saveProgress();
+      updateKPIs();
+      closeReportExportModal();
+      showToast('¡Ciclo archivado en el historial con sus fechas reales!');
+    }
+
+    function openHistoryModal() {
+      const container = document.getElementById('history-list-container');
+      if (archivedCycles.length === 0) {
+        container.innerHTML = `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 text-center space-y-2">
+            <p class="text-sm font-semibold text-slate-200">Aún no tienes ciclos archivados</p>
+            <p class="text-xs text-slate-400">Cuando completes tu Semana 6 (o desde el botón de Informe en el pie de página), pulsa "Archivar Ciclo en Historial" para guardar una copia definitiva con fechas.</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = archivedCycles.map((c, idx) => `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">Ciclo #${archivedCycles.length - idx} · ${c.period}</span>
+                <p class="text-xs text-slate-400 mt-0.5">Archivado el: ${c.archivedAt} · Cumplimiento: <strong class="text-white">${c.completion}</strong></p>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="copyArchivedReport(${idx})" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition cursor-pointer">
+                  Copiar Informe
+                </button>
+                <button onclick="deleteArchivedCycle(${idx})" class="bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-300 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition cursor-pointer">
+                  Eliminar
+                </button>
+              </div>
+            </div>
+            <pre class="bg-slate-900 border border-slate-800/80 rounded-lg p-3 text-[11px] font-mono text-slate-300 max-h-40 overflow-y-auto whitespace-pre-wrap">${c.reportText}</pre>
+          </div>
+        `).join('');
+      }
+
+      const modal = document.getElementById('history-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeHistoryModal() {
+      const modal = document.getElementById('history-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function copyArchivedReport(idx) {
+      const item = archivedCycles[idx];
+      if (!item) return;
+      const textarea = document.createElement('textarea');
+      textarea.value = item.reportText;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('¡Informe histórico copiado al portapapeles!');
+      } catch (e) {}
+      document.body.removeChild(textarea);
+    }
+
+    function deleteArchivedCycle(idx) {
+      archivedCycles.splice(idx, 1);
+      saveProgress();
+      updateKPIs();
+      openHistoryModal();
+      showToast('Registro histórico eliminado.');
+    }
+
+    // =========================================================================
+    // MODAL DE DETALLE QUIRÚRGICO DE EJERCICIOS
+    // =========================================================================
+    function openDetailModal(weekNum, dayIdx) {
+      const wObj = weeksData.find(w => w.week === weekNum);
+      const dObj = wObj.days[dayIdx];
+      const allDone = dObj.exercises.every((_, eIdx) => !!completedItems[`w${weekNum}-d${dayIdx}-e${eIdx}`]);
+      const realDateLabel = formatSpanishCalendarLabel(getEffectiveBlockISO(weekNum, dayIdx));
+
+      document.getElementById('modal-badge').textContent = `Semana ${weekNum} · ${dObj.day} (${dObj.focusTag}) · ${realDateLabel}`;
+      document.getElementById('modal-center').textContent = dObj.center;
+      document.getElementById('modal-heading').textContent = dObj.title;
+
+      const listContainer = document.getElementById('modal-exercises-list');
+      listContainer.innerHTML = dObj.exercises.map((ex, eIdx) => {
+        const isChecked = !!completedItems[`w${weekNum}-d${dayIdx}-e${eIdx}`];
+        return `
+          <div class="bg-slate-950 border ${isChecked ? 'border-teal-500/40' : 'border-slate-800'} rounded-xl p-4 space-y-1.5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+              <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  ${isChecked ? 'checked' : ''}
+                  onchange="toggleItemComplete(${weekNum}, ${dayIdx}, ${eIdx}); openDetailModal(${weekNum}, ${dayIdx});"
+                  class="w-4 h-4 rounded bg-slate-900 border-slate-600 text-teal-500 focus:ring-teal-500 cursor-pointer shrink-0"
+                >
+                <h4 class="font-bold text-sm ${isChecked ? 'line-through text-slate-500' : 'text-teal-400'}">${ex.name}</h4>
+              </label>
+              <span class="inline-block self-start sm:self-auto text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-teal-500/10 text-teal-300 border border-teal-500/25 shrink-0">
+                ${ex.dose}
+              </span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed pl-6">
+              ${ex.cue}
+            </p>
+          </div>
+        `;
+      }).join('');
+
+      const doneBtn = document.getElementById('modal-toggle-all-btn');
+      doneBtn.textContent = allDone ? 'Desmarcar todos los bloques del día' : 'Completar todos los bloques del día';
+      doneBtn.onclick = function() {
+        toggleAllDayItems(weekNum, dayIdx);
+        closeDetailModal();
+        showToast(`${dObj.day} (Semana ${weekNum}) actualizado.`);
+      };
+
+      const modal = document.getElementById('detail-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detail-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // =========================================================================
+    // DRAWER GLOSARIO & WARMUP MODAL
+    // =========================================================================
+    function openGlossary() {
+      document.getElementById('glossary-drawer').classList.remove('hidden');
+    }
+
+    function closeGlossary() {
+      document.getElementById('glossary-drawer').classList.add('hidden');
+    }
+
+    function openWarmupModal() {
+      const modal = document.getElementById('warmup-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeWarmupModal() {
+      const modal = document.getElementById('warmup-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function resetProgressPrompt() {
+      const modal = document.getElementById('confirm-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeConfirmModal() {
+      const modal = document.getElementById('confirm-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function confirmResetProgress() {
+      completedItems = {};
+      imprevistosLogs = {};
+      customBlockDates = {};
+      saveProgress();
+      closeConfirmModal();
+      renderWeekTabs();
+      renderDaysGrid();
+      updateKPIs();
+      showToast('Ciclo reiniciado a 0%. Listo para un nuevo mesociclo.');
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      document.getElementById('toast-message').textContent = msg;
+      box.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        box.classList.add('hidden');
+      }, 3200);
+    }
+
+    function copyFullHtmlToClipboard() {
+      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const textarea = document.createElement('textarea');
+      textarea.value = fullHtml;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('¡Código HTML copiado! Pégalo en "Insertar código" en Google Sites.');
+      } catch (err) {
+        showToast('No se pudo copiar automáticamente.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // =========================================================================
+    // INICIALIZACIÓN
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProgress();
+      renderWeekTabs();
+      renderPhaseBanner();
+      renderDaysGrid();
+      updateKPIs();
+    });
+  </script>
+</body>
+</html>
