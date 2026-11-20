@@ -15,7 +15,6 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     .task-done { text-decoration: line-through; color: #94a3b8; }
 
-    /* Variables dinámicas del Panel de Comando Oculto */
     :root {
       --base-950: #020617;
       --base-900: #0f172a;
@@ -46,32 +45,33 @@
   </style>
 </head>
 <body class="theme-body-bg text-slate-800 min-h-screen flex flex-col transition-colors duration-300">
-<!-- PANTALLA DE BLOQUEO INICIAL (ACCESO RESTRINGIDO) -->
+
+  <!-- PANTALLA DE BLOQUEO INICIAL (PIN: 2026) -->
   <div id="accessGateScreen" class="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-5">
-      <div class="w-12 h-12 rounded-xl bg-amber-500 text-slate-950 font-extrabold flex items-center justify-center text-base mx-auto shadow-lg">
+      <div class="w-12 h-12 rounded-xl theme-accent-bg font-extrabold flex items-center justify-center text-base mx-auto shadow-lg">
         EH6
       </div>
       <div class="space-y-1">
         <h2 class="text-white font-bold text-base">Acceso Privado • ELBLOQUE</h2>
-        <p class="text-xs text-slate-400">Ingresa tu código personal para visualizar y gestionar tu ciclo de 6 semanas.</p>
+        <p class="text-xs text-slate-400">Ingresa tu PIN personal para visualizar y gestionar tu ciclo de 6 semanas.</p>
       </div>
       <form onsubmit="verifyGateAccess(event)" class="space-y-3 text-left">
         <input type="password" inputmode="numeric" maxlength="4" id="gatePasswordInput" placeholder="PIN (4 dígitos)" autocomplete="current-password"
-          class="w-full bg-slate-950 border border-slate-700 text-white text-sm font-mono tracking-widest rounded-xl px-4 py-3 text-center focus:outline-none focus:border-amber-500" />
-        <p id="gateErrorMsg" class="hidden text-xs text-rose-400 font-semibold text-center">Contraseña incorrecta.</p>
+          class="w-full bg-slate-950 border border-slate-700 text-white text-lg font-mono tracking-[0.4em] rounded-xl px-4 py-3 text-center focus:outline-none focus:border-amber-500" />
+        <p id="gateErrorMsg" class="hidden text-xs text-rose-400 font-semibold text-center">PIN incorrecto. Intenta nuevamente.</p>
         <button type="submit"
-          class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs uppercase tracking-wider transition shadow-md">
+          class="w-full py-3 rounded-xl theme-accent-bg font-extrabold text-xs uppercase tracking-wider transition shadow-md">
           Ingresar al Plan
         </button>
       </form>
     </div>
   </div>
+
   <!-- Barra Superior -->
   <header class="theme-bg-900 text-white sticky top-0 z-30 shadow-md border-b theme-border-800 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <!-- Disparador secreto: Doble clic/toque abre el Panel de Comando -->
         <div id="secretLogoTrigger" ondblclick="openModal('themeCommandModal')" title="Doble clic o Ctrl+Shift+K para ajustar colores HEX"
           class="w-9 h-9 rounded-lg theme-accent-bg font-extrabold flex items-center justify-center text-sm shadow cursor-pointer select-none active:scale-95 transition">
           EH6
@@ -86,7 +86,12 @@
       </div>
 
       <div class="flex items-center gap-2 flex-wrap">
-        <!-- Indicador de Sincronización Google Sheets -->
+        <button onclick="lockSessionNow()" title="Bloquear pantalla ahora"
+          class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg theme-bg-800 text-slate-200 border theme-border-700 hover:opacity-90 transition">
+          <span>🔒</span>
+          <span>Bloquear</span>
+        </button>
+
         <div id="syncBadge" class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg theme-bg-800 border theme-border-700 text-slate-300">
           <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
           <span id="syncText">Conectando...</span>
@@ -178,12 +183,12 @@
     <!-- Encabezado de Fase de la Semana Activa -->
     <div id="weekPhaseHeader" class="bg-white rounded-xl border border-slate-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-3 shadow-sm"></div>
 
-    <!-- Grilla de 7 Bloques Diarios (Menú Flexible Día 1 a Día 7) -->
+    <!-- Grilla de 7 Bloques Diarios -->
     <section id="daysGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></section>
 
   </main>
 
-  <!-- Pie de Página Simplificado -->
+  <!-- Pie de Página -->
   <footer class="bg-white border-t border-slate-200 mt-10 py-5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <p class="text-xs text-slate-500">
@@ -203,6 +208,59 @@
     </div>
   </footer>
 
+  <!-- MODAL: Registrar Sensaciones del Día -->
+  <div id="feelingModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
+        <div>
+          <span id="feelingModalSub" class="text-[10px] font-bold uppercase tracking-wider theme-accent-text block">Bitácora Post-Entrenamiento</span>
+          <h3 id="feelingModalTitle" class="text-sm font-bold">Sensaciones de la Sesión</h3>
+        </div>
+        <button onclick="closeModal('feelingModal')" class="text-slate-400 hover:text-white text-xl leading-none">&times;</button>
+      </div>
+      <div class="p-5 space-y-4 text-xs">
+        <input type="hidden" id="feelWeek" />
+        <input type="hidden" id="feelDay" />
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">Esfuerzo Percibido (RPE 1–10)</label>
+          <select id="feelRpe" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-800">
+            <option value="RPE 6 • Suave / Controlado">RPE 6 • Suave / Sobrado</option>
+            <option value="RPE 7 • Moderado / Fluido">RPE 7 • Moderado / Fluido</option>
+            <option value="RPE 8 • Óptimo / Exigente" selected>RPE 8 • Óptimo / Exigente</option>
+            <option value="RPE 9 • Muy Duro (Cerca del límite)">RPE 9 • Muy Duro (Cerca del límite)</option>
+            <option value="RPE 10 • Al límite / Fallo">RPE 10 • Al límite / Fallo</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">Estado de Dedos, Poleas y Codos</label>
+          <select id="feelFingers" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 text-slate-800">
+            <option value="Dedos frescos y sin molestias">Dedos frescos y sin molestias</option>
+            <option value="Carga normal / buena respuesta">Carga normal / buena respuesta</option>
+            <option value="Fatiga alta en antebrazo">Fatiga alta en antebrazo</option>
+            <option value="Rigidez leve en poleas/dedos (vigilar)">Rigidez leve en poleas/dedos (vigilar)</option>
+            <option value="Molestia o alerta articular">Molestia o alerta articular</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nota libre de sensaciones</label>
+          <textarea id="feelNote" rows="3" placeholder="Ej: Muy buen agarre en 20 mm, sentí explosividad en las dominadas y buena movilidad de cadera."
+            class="w-full text-sm border border-slate-300 rounded-lg p-3 focus:outline-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <button type="button" onclick="deleteDayFeeling()" class="text-xs font-semibold text-rose-600 hover:underline">Borrar nota</button>
+          <div class="flex gap-2">
+            <button type="button" onclick="closeModal('feelingModal')" class="text-xs font-semibold px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">Cancelar</button>
+            <button type="button" onclick="saveDayFeeling()" class="text-xs font-bold px-4 py-2 rounded-lg theme-accent-bg">Guardar Sensación</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL OCULTO: Panel de Comando de Apariencia HEX (Ctrl+Shift+K o Doble Clic en EH6) -->
   <div id="themeCommandModal" class="hidden fixed inset-0 z-50 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
@@ -211,11 +269,10 @@
           <span class="text-[10px] font-extrabold uppercase tracking-widest theme-accent-text block">Comando Oculto • Tiempo Real</span>
           <h3 class="text-sm font-bold">Personalizar Paleta y Códigos HEX</h3>
         </div>
-        <button onclick="closeModal('themeCommandModal')" class="text-slate-400 hover:text-white text-xl leading-none">×</button>
+        <button onclick="closeModal('themeCommandModal')" class="text-slate-400 hover:text-white text-xl leading-none">&times;</button>
       </div>
 
       <div class="p-5 space-y-5 text-xs max-h-[80vh] overflow-y-auto">
-        <!-- SECCIÓN 1: ACENTO -->
         <div class="space-y-2.5">
           <label class="block font-bold uppercase tracking-wider text-slate-500">1. Color Principal (Botones, Barras e Insignias)</label>
           <div class="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
@@ -231,7 +288,6 @@
           <div class="grid grid-cols-3 gap-2" id="accentPickerGrid"></div>
         </div>
 
-        <!-- SECCIÓN 2: BASE OSCURA -->
         <div class="space-y-2.5 pt-2 border-t border-slate-100">
           <label class="block font-bold uppercase tracking-wider text-slate-500">2. Base Oscura (Cabecera, Pestañas y Botones)</label>
           <div class="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
@@ -264,7 +320,7 @@
     <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Registrar Imprevisto o Cambio de Enfoque</h3>
-        <button onclick="closeModal('exceptionModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+        <button onclick="closeModal('exceptionModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
       </div>
       <div class="p-5 space-y-4">
         <div class="grid grid-cols-2 gap-3">
@@ -336,7 +392,7 @@
           <span id="detailModalSub" class="text-[10px] font-bold uppercase tracking-wider text-teal-400 block">Guía Paso a Paso de Cada Ejercicio</span>
           <h3 id="detailModalTitle" class="text-sm sm:text-base font-bold">Detalle de Ejercicios</h3>
         </div>
-        <button onclick="closeModal('exerciseDetailModal')" class="text-slate-400 hover:text-white text-xl leading-none px-1">×</button>
+        <button onclick="closeModal('exerciseDetailModal')" class="text-slate-400 hover:text-white text-xl leading-none px-1">&times;</button>
       </div>
       <div id="detailModalContent" class="p-5 space-y-3.5 text-xs sm:text-sm text-slate-700 overflow-y-auto leading-relaxed flex-1"></div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
@@ -351,10 +407,10 @@
     <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 id="reportModalTitle" class="text-sm font-bold">Reporte Acumulado para Google Docs</h3>
-        <button onclick="closeModal('reportModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+        <button onclick="closeModal('reportModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
       </div>
       <div class="p-5 overflow-y-auto space-y-3 flex-1">
-        <p class="text-xs text-slate-600">Copia este informe estructurado con fechas reales, marcas de tiempo y novedades para pegarlo directamente en tu documento de Google Docs:</p>
+        <p class="text-xs text-slate-600">Copia esta bitácora con entrenamientos realizados, sensaciones y novedades para pegarla directamente en Google Docs:</p>
         <textarea id="reportOutput" rows="16" readonly
           class="w-full text-xs font-mono bg-slate-50 border border-slate-300 rounded-xl p-3.5 text-slate-800 focus:outline-none"></textarea>
       </div>
@@ -375,7 +431,7 @@
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Protocolo de Calentamiento Obligatorio (15–20 min)</h3>
-        <button onclick="closeModal('warmupModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+        <button onclick="closeModal('warmupModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
       </div>
       <div class="p-5 space-y-3 text-xs text-slate-700 leading-relaxed max-h-[75vh] overflow-y-auto">
         <div class="p-3 rounded-xl theme-accent-soft border text-slate-900">
@@ -399,7 +455,7 @@
     <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Glosario Completo de Ejercicios y Términos</h3>
-        <button onclick="closeModal('glossaryModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+        <button onclick="closeModal('glossaryModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
       </div>
       <div class="p-5 space-y-3 text-xs text-slate-700 max-h-[75vh] overflow-y-auto leading-relaxed">
         <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
@@ -442,7 +498,7 @@
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Historial de Ciclos Completados</h3>
-        <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
+        <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
       </div>
       <div id="historyList" class="p-5 space-y-3 text-xs text-slate-700 max-h-[70vh] overflow-y-auto"></div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
@@ -456,19 +512,22 @@
 
   <script>
     // =========================================================================
-    // BLOQUEO TOTAL DE ACCESO AL ABRIR LA PÁGINA
+    // SEGURIDAD DE ACCESO (PIN: 2026) Y SINCRONIZACIÓN GOOGLE SHEETS
     // =========================================================================
-    const SECRET_PASSCODE = "2026"; // <-- CAMBIA AQUÍ TU CONTRASEÑA PERSONAL
-    const UNLOCK_STORAGE_KEY = "eh6_full_access_v2";
+    const SECRET_PASSCODE = "2026";
+    const UNLOCK_STORAGE_KEY = "eh6_full_access_v3";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwf7Naopzt_A6chJDFLo2Gq5VMykynfWmU3BztAFPdtvygadIhHi4wLMJlfs6p-UDd46A/exec";
+    const STORAGE_KEY = "horst_climbing_cycle_v7";
 
     let isUnlocked = localStorage.getItem(UNLOCK_STORAGE_KEY) === "true";
 
     function initAccessGate() {
       const gate = document.getElementById("accessGateScreen");
+      if (!gate) return;
       if (isUnlocked) {
-        if (gate) gate.classList.add("hidden");
+        gate.classList.add("hidden");
       } else {
-        if (gate) gate.classList.remove("hidden");
+        gate.classList.remove("hidden");
         setTimeout(() => {
           const inp = document.getElementById("gatePasswordInput");
           if (inp) inp.focus();
@@ -478,34 +537,26 @@
 
     function verifyGateAccess(e) {
       e.preventDefault();
-      const inputVal = document.getElementById("gatePasswordInput").value.trim();
-      const err = document.getElementById("gateErrorMsg");
+      const inputEl = document.getElementById("gatePasswordInput");
+      const errEl = document.getElementById("gateErrorMsg");
+      const val = (inputEl.value || "").trim();
 
-      if (inputVal === SECRET_PASSCODE) {
+      if (val === SECRET_PASSCODE) {
         isUnlocked = true;
         localStorage.setItem(UNLOCK_STORAGE_KEY, "true");
         document.getElementById("accessGateScreen").classList.add("hidden");
-        err.classList.add("hidden");
-        updateLockUI();
+        errEl.classList.add("hidden");
+        applyThemeVariables(appState.theme);
         renderAll();
         showToast("Acceso concedido");
       } else {
-        err.classList.remove("hidden");
-        document.getElementById("gatePasswordInput").value = "";
-        document.getElementById("gatePasswordInput").focus();
+        errEl.classList.remove("hidden");
+        inputEl.value = "";
+        inputEl.focus();
       }
     }
 
-    function requireUnlock(actionCallback) {
-      if (isUnlocked) {
-        if (typeof actionCallback === "function") actionCallback();
-        return true;
-      }
-      initAccessGate();
-      return false;
-    }
-
-    function handleLockButtonClick() {
+    function lockSessionNow() {
       isUnlocked = false;
       localStorage.removeItem(UNLOCK_STORAGE_KEY);
       document.getElementById("gatePasswordInput").value = "";
@@ -513,19 +564,6 @@
       showToast("Sesión bloqueada");
     }
 
-    function updateLockUI() {
-      const btn = document.getElementById("lockStatusBtn");
-      const icon = document.getElementById("lockIcon");
-      const label = document.getElementById("lockLabel");
-      const banner = document.getElementById("readOnlyBanner");
-
-      if (btn && icon && label) {
-        icon.textContent = "🔒";
-        label.textContent = "Bloquear";
-        btn.className = "flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700 transition";
-      }
-      if (banner) banner.classList.add("hidden");
-    }
     // =========================================================================
     // MOTOR DE COLORES HEXADECIMALES EN TIEMPO REAL
     // =========================================================================
@@ -583,15 +621,12 @@
       const baseHex   = normalizeHex(cfg.baseHex)   || "#0f172a";
 
       const root = document.documentElement.style;
-
-      // Escala derivada automáticamente del HEX base
       root.setProperty("--base-950", mixHex(baseHex, "#000000", 0.35));
       root.setProperty("--base-900", baseHex);
       root.setProperty("--base-800", mixHex(baseHex, "#ffffff", 0.08));
       root.setProperty("--base-700", mixHex(baseHex, "#ffffff", 0.18));
       root.setProperty("--base-50",  mixHex(baseHex, "#ffffff", 0.96));
 
-      // Escala derivada automáticamente del HEX de acento
       root.setProperty("--accent-600", mixHex(accentHex, "#000000", 0.15));
       root.setProperty("--accent-500", accentHex);
       root.setProperty("--accent-400", mixHex(accentHex, "#ffffff", 0.22));
@@ -600,7 +635,6 @@
       root.setProperty("--accent-50",  mixHex(accentHex, "#ffffff", 0.93));
       root.setProperty("--accent-text", getContrastText(accentHex));
 
-      // Sincronizar inputs del modal
       const accPicker = document.getElementById("accentColorPicker");
       const accInput  = document.getElementById("accentHexInput");
       const basPicker = document.getElementById("baseColorPicker");
@@ -675,7 +709,6 @@
       }).join("");
     }
 
-    // Atajo de teclado Ctrl + Shift + K (o Cmd + Shift + K)
     document.addEventListener("keydown", (e) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "k") {
         e.preventDefault();
@@ -684,7 +717,6 @@
       }
     });
 
-    // Renderizador de tarjeta individual de ejercicio dentro del modal de detalle
     function exCard(num, name, prescription, whatIsIt, stepByStep, proTip) {
       return `
         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
@@ -1325,6 +1357,7 @@
       cycleStartDate: new Date().toISOString().split("T")[0],
       completedTasks: {},
       dayCustomDates: {},
+      dayFeelings: {},
       exceptions: [],
       archivedCycles: [],
       theme: { accentHex: "#f59e0b", baseHex: "#0f172a" }
@@ -1343,11 +1376,13 @@
     function setSyncStatus(status, text) {
       const dot = document.getElementById("syncDot");
       const label = document.getElementById("syncText");
-      label.textContent = text;
-      dot.className = "w-2 h-2 rounded-full";
-      if (status === "syncing") dot.classList.add("bg-amber-400", "animate-pulse");
-      else if (status === "ok") dot.classList.add("bg-emerald-400");
-      else dot.classList.add("bg-rose-400");
+      if (label) label.textContent = text;
+      if (dot) {
+        dot.className = "w-2 h-2 rounded-full";
+        if (status === "syncing") dot.classList.add("bg-amber-400", "animate-pulse");
+        else if (status === "ok") dot.classList.add("bg-emerald-400");
+        else dot.classList.add("bg-rose-400");
+      }
     }
 
     function loadFromLocal() {
@@ -1356,6 +1391,7 @@
         if (raw) {
           const parsed = JSON.parse(raw);
           appState = { ...appState, ...parsed };
+          if (!appState.dayFeelings) appState.dayFeelings = {};
         }
       } catch (e) {}
     }
@@ -1401,6 +1437,7 @@
 
         if (cloudData && typeof cloudData === "object" && Object.keys(cloudData).length > 0) {
           appState = { ...appState, ...cloudData };
+          if (!appState.dayFeelings) appState.dayFeelings = {};
           localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
           applyThemeVariables(appState.theme);
           renderAll();
@@ -1523,6 +1560,53 @@
       saveState();
     }
 
+    function openFeelingModal(weekNum, dayIdx) {
+      const wObj = WEEKLY_TEMPLATES[weekNum - 1];
+      const dObj = wObj.days[dayIdx];
+      const existing = (appState.dayFeelings || {})[`w${weekNum}_d${dayIdx}`];
+
+      document.getElementById("feelWeek").value = weekNum;
+      document.getElementById("feelDay").value = dayIdx;
+      document.getElementById("feelingModalSub").textContent = `Semana ${weekNum} • ${dObj.dayLabel}`;
+      document.getElementById("feelingModalTitle").textContent = dObj.title;
+
+      document.getElementById("feelRpe").value = existing?.rpe || "RPE 8 • Óptimo / Exigente";
+      document.getElementById("feelFingers").value = existing?.fingers || "Dedos frescos y sin molestias";
+      document.getElementById("feelNote").value = existing?.note || "";
+
+      openModal("feelingModal");
+    }
+
+    function saveDayFeeling() {
+      const w = document.getElementById("feelWeek").value;
+      const d = document.getElementById("feelDay").value;
+      const key = `w${w}_d${d}`;
+
+      if (!appState.dayFeelings) appState.dayFeelings = {};
+      appState.dayFeelings[key] = {
+        rpe: document.getElementById("feelRpe").value,
+        fingers: document.getElementById("feelFingers").value,
+        note: document.getElementById("feelNote").value.trim(),
+        updatedAt: new Date().toLocaleString("es-CO")
+      };
+
+      closeModal("feelingModal");
+      saveState();
+      showToast("Sensación guardada y sincronizada");
+    }
+
+    function deleteDayFeeling() {
+      const w = document.getElementById("feelWeek").value;
+      const d = document.getElementById("feelDay").value;
+      const key = `w${w}_d${d}`;
+      if (appState.dayFeelings && appState.dayFeelings[key]) {
+        delete appState.dayFeelings[key];
+        saveState();
+        showToast("Nota de sensación eliminada");
+      }
+      closeModal("feelingModal");
+    }
+
     function openExerciseDetail(weekNum, dayIdx) {
       const wObj = WEEKLY_TEMPLATES[weekNum - 1];
       const dObj = wObj.days[dayIdx];
@@ -1534,7 +1618,8 @@
 
     function renderAll() {
       const startInput = document.getElementById("cycleStartDate");
-      startInput.value = appState.cycleStartDate;
+      if (startInput) startInput.value = appState.cycleStartDate;
+
       const endIso = addDaysToIso(appState.cycleStartDate, 41);
       document.getElementById("cycleEndDateBadge").textContent = `Fin estimado: ${formatShortDate(endIso)}`;
 
@@ -1610,6 +1695,8 @@
         const dayKey = `w${wNum}_d${dIdx}`;
         const defaultSuggestedDate = addDaysToIso(appState.cycleStartDate, (wNum - 1) * 7 + dIdx);
         const assignedDate = appState.dayCustomDates[dayKey] || "";
+        const feeling = (appState.dayFeelings || {})[dayKey];
+
         const displayDateLabel = assignedDate
           ? `Ejecutado: ${formatShortDate(assignedDate)}`
           : `Sugerido: ${formatShortDate(defaultSuggestedDate)}`;
@@ -1635,6 +1722,16 @@
             </li>
           `;
         }).join("");
+
+        const feelingHtml = feeling ? `
+          <div class="mt-3 p-2.5 rounded-lg bg-teal-50/80 border border-teal-200 text-[11px] text-slate-800">
+            <div class="flex items-center justify-between font-bold text-teal-900">
+              <span>💬 ${feeling.rpe}</span>
+              <span>${feeling.fingers}</span>
+            </div>
+            ${feeling.note ? `<p class="mt-1 text-slate-700 italic">"${feeling.note}"</p>` : ""}
+          </div>
+        ` : "";
 
         const exceptionHtml = status.justifiedExc ? `
           <div class="mt-3 p-2.5 rounded-lg theme-accent-soft border text-[11px] text-slate-900">
@@ -1673,21 +1770,32 @@
                 <span>Ver Detalle de Ejercicios</span>
               </button>
 
+              ${feelingHtml}
               ${exceptionHtml}
             </div>
 
-            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
               <span class="text-[11px] font-semibold ${status.isComplete ? "text-emerald-700" : "text-slate-400"}">
-                ${status.isComplete ? "✓ Bloque completado" : `${status.doneCount}/${status.totalTasks} ítems`}
+                ${status.isComplete ? "✓ Bloque listo" : `${status.doneCount}/${status.totalTasks} ítems`}
               </span>
-              <button onclick="toggleAllDayTasks(${wNum}, ${dIdx})"
-                class="text-[11px] font-bold px-2.5 py-1 rounded-lg transition ${
-                  status.doneCount === status.totalTasks
-                    ? "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
-                }">
-                ${status.doneCount === status.totalTasks ? "Desmarcar día" : "Completar día"}
-              </button>
+              <div class="flex items-center gap-1.5">
+                <button onclick="openFeelingModal(${wNum}, ${dIdx})"
+                  class="text-[11px] font-bold px-2.5 py-1 rounded-lg border transition ${
+                    feeling
+                      ? "bg-teal-50 text-teal-800 border-teal-300 hover:bg-teal-100"
+                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                  }">
+                  ${feeling ? "✓ Sensación" : "+ Sensación"}
+                </button>
+                <button onclick="toggleAllDayTasks(${wNum}, ${dIdx})"
+                  class="text-[11px] font-bold px-2.5 py-1 rounded-lg transition ${
+                    status.doneCount === status.totalTasks
+                      ? "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+                  }">
+                  ${status.doneCount === status.totalTasks ? "Desmarcar" : "Completar día"}
+                </button>
+              </div>
             </div>
           </article>
         `;
@@ -1743,46 +1851,81 @@
       const endIso = addDaysToIso(appState.cycleStartDate, 41);
       const header = isFinal
         ? "INFORME FINAL DE CIERRE • CICLO DE ESCALADA 6 SEMANAS (ERIC HÖRST)"
-        : "REPORTE ACUMULADO DE ENTRENAMIENTO • CICLO 6 SEMANAS (ERIC HÖRST)";
+        : "BITÁCORA DE ENTRENAMIENTOS REALIZADOS Y NOVEDADES • CICLO 6 SEMANAS";
 
       let lines = [
         "====================================================================",
         header,
-        "Sede: ELBLOQUE | Sincronizado con Google Sheets",
+        "Sede: ELBLOQUE | Datos sincronizados desde Google Sheets",
         `Rango del Ciclo: ${formatShortDate(appState.cycleStartDate)} al ${formatShortDate(endIso)}`,
-        `Cumplimiento Global: ${percent}% (${completedDays} de 42 bloques completados)`,
-        `Fecha de generación: ${new Date().toLocaleString("es-CO")}`,
+        `Avance Ejecutado: ${percent}% (${completedDays} de 42 bloques completados)`,
+        `Corte de reporte: ${new Date().toLocaleString("es-CO")}`,
         "====================================================================",
-        ""
+        "",
+        "1. BITÁCORA DIARIA DE ENTRENAMIENTOS EJECUTADOS Y SENSACIONES",
+        "--------------------------------------------------------------------"
       ];
 
+      let hasAnyActivity = false;
+
       WEEKLY_TEMPLATES.forEach(w => {
-        lines.push(`--- SEMANA ${w.week}: ${w.phase.toUpperCase()} ---`);
+        let weekLines = [];
+
         w.days.forEach((day, dIdx) => {
           const status = getDayStatus(w.week, dIdx);
-          const customDate = appState.dayCustomDates[`w${w.week}_d${dIdx}`];
-          const dateStr = customDate ? formatShortDate(customDate) : "Sin fecha asignada";
-          const stateTag = status.isComplete ? "[COMPLETADO]" : `[PENDIENTE ${status.doneCount}/${status.totalTasks}]`;
+          const feeling = (appState.dayFeelings || {})[`w${w.week}_d${dIdx}`];
+          const hasActivity = status.doneCount > 0 || Boolean(status.justifiedExc) || Boolean(feeling);
 
-          lines.push(`• ${day.dayLabel} (${day.tag}) - ${day.title} | Fecha: ${dateStr} ${stateTag}`);
+          if (!hasActivity) return;
+
+          hasAnyActivity = true;
+          const customDate = appState.dayCustomDates[`w${w.week}_d${dIdx}`];
+          const dateStr = customDate ? formatShortDate(customDate) : "Fecha sin definir";
+          const stateTag = status.isComplete
+            ? "[COMPLETADO]"
+            : `[PARCIAL ${status.doneCount}/${status.totalTasks}]`;
+
+          weekLines.push(`• ${day.dayLabel} (${day.tag}) - ${day.title} | Fecha: ${dateStr} ${stateTag}`);
+
           day.tasks.forEach((t, tIdx) => {
             const stamp = appState.completedTasks[`w${w.week}_d${dIdx}_t${tIdx}`];
             if (stamp) {
-              lines.push(`    ✓ ${t} (${stamp})`);
+              weekLines.push(`    ✓ ${t} — Ejecutado: ${stamp}`);
             }
           });
+
+          if (feeling) {
+            weekLines.push(`    💬 SENSACIONES: [${feeling.rpe} | ${feeling.fingers}]${feeling.note ? ` — "${feeling.note}"` : ""}`);
+          }
+
           if (status.justifiedExc) {
-            lines.push(`    ⚡ NOVEDAD (${status.justifiedExc.type}): ${status.justifiedExc.reason}`);
+            weekLines.push(`    ⚡ NOVEDAD DEL DÍA (${status.justifiedExc.type}): ${status.justifiedExc.reason}`);
           }
         });
-        lines.push("");
+
+        if (weekLines.length > 0) {
+          lines.push(`\n[SEMANA ${w.week} • ${w.phase}]`);
+          lines.push(...weekLines);
+        }
       });
 
+      if (!hasAnyActivity) {
+        lines.push("Aún no hay sesiones ejecutadas ni novedades registradas en este ciclo.");
+      }
+
+      lines.push("");
+      lines.push("2. REGISTRO CONSOLIDADO DE NOVEDADES E IMPREVISTOS");
+      lines.push("--------------------------------------------------------------------");
+
       if (appState.exceptions.length > 0) {
-        lines.push("--- BITÁCORA CONSOLIDADA DE IMPREVISTOS Y CAMBIOS ---");
-        appState.exceptions.forEach(ex => {
-          lines.push(`• Semana ${ex.week} - Día ${ex.dayIdx + 1} (${ex.date}): [${ex.type}] ${ex.reason}`);
+        const sortedExceptions = [...appState.exceptions].sort((a, b) => a.date.localeCompare(b.date));
+        sortedExceptions.forEach(ex => {
+          const statusLabel = ex.justified ? "Justificado/Cumplido" : "Pendiente";
+          lines.push(`• ${formatShortDate(ex.date)} (Semana ${ex.week} - Día ${ex.dayIdx + 1}) | [${ex.type}] (${statusLabel})`);
+          lines.push(`  Detalle: ${ex.reason}`);
         });
+      } else {
+        lines.push("Sin imprevistos ni cambios de enfoque registrados a la fecha.");
       }
 
       return lines.join("\n");
@@ -1826,6 +1969,7 @@
       appState.cycleStartDate = new Date().toISOString().split("T")[0];
       appState.completedTasks = {};
       appState.dayCustomDates = {};
+      appState.dayFeelings = {};
       appState.exceptions = [];
 
       closeModal("reportModal");
