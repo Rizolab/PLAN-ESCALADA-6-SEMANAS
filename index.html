@@ -188,25 +188,84 @@
 
   </main>
 
-  <!-- Pie de Página -->
+  <!-- Pie de Página Limpio con Menú Desplegable -->
   <footer class="bg-white border-t border-slate-200 mt-10 py-5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <p class="text-xs text-slate-500">
         Sincronizado con Google Sheets • <span class="font-semibold text-slate-700">ELBLOQUE</span>
       </p>
+
       <div class="flex flex-wrap items-center justify-center gap-2.5">
         <button onclick="openExceptionModal()" class="text-xs font-bold px-4 py-2.5 rounded-xl theme-accent-bg shadow-sm transition">
           Registrar Imprevisto / Cambio
         </button>
-        <button onclick="copyHtmlForSites()" class="text-xs font-bold px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition">
-          Copiar HTML
-        </button>
+
         <button onclick="openReportExportModal(false)" class="text-xs font-bold px-4 py-2.5 rounded-xl theme-bg-900 hover:opacity-90 text-white shadow-sm transition">
-          Generar Reporte Acumulado Docs
+          Generar Reporte Docs
         </button>
+
+        <!-- Menú Desplegable de Herramientas y Respaldos -->
+        <div class="relative" id="footerToolsDropdownWrap">
+          <button onclick="toggleFooterMenu(event)"
+            class="text-xs font-bold px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition flex items-center gap-1.5">
+            <span>Datos y Respaldos</span>
+            <span class="text-[10px]">▲</span>
+          </button>
+
+          <div id="footerToolsMenu" class="hidden absolute right-0 bottom-12 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-40 text-xs">
+            <div class="px-3.5 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+              Bitácora y Nube
+            </div>
+            <button onclick="closeFooterMenu(); openFeelingsLogModal()"
+              class="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-800">
+              <span>💬 Ver Reporte de Sensaciones</span>
+              <span id="feelingsBadgeCount" class="px-1.5 py-0.5 rounded bg-teal-100 text-teal-800 text-[10px] font-bold">0</span>
+            </button>
+            <button onclick="closeFooterMenu(); openGoogleSheetBackup()"
+              class="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 flex items-center justify-between font-semibold text-slate-800">
+              <span>📊 Abrir Google Sheets (Backup)</span>
+              <span class="text-slate-400">↗</span>
+            </button>
+            <button onclick="closeFooterMenu(); configureSheetUrl()"
+              class="w-full text-left px-3.5 py-2 hover:bg-slate-50 text-[11px] text-slate-500">
+              ⚙️ Enlazar / editar URL del Sheet
+            </button>
+
+            <div class="my-1 border-t border-slate-100"></div>
+
+            <button onclick="closeFooterMenu(); copyHtmlForSites()"
+              class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700">
+              📋 Copiar código HTML
+            </button>
+            <button onclick="closeFooterMenu(); resetSabotageData()"
+              class="w-full text-left px-3.5 py-2 hover:bg-rose-50 font-semibold text-rose-600">
+              🧹 Limpiar registros de prueba (0%)
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </footer>
+
+  <!-- MODAL: Reporte Exclusivo de Sensaciones -->
+  <div id="feelingsLogModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[85vh]">
+      <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider theme-accent-text block">Seguimiento Fisiológico • ELBLOQUE</span>
+          <h3 class="text-sm font-bold">Historial de Sensaciones y RPE del Ciclo</h3>
+        </div>
+        <button onclick="closeModal('feelingsLogModal')" class="text-slate-400 hover:text-white text-xl leading-none">×</button>
+      </div>
+      <div id="feelingsLogContent" class="p-5 space-y-3 overflow-y-auto flex-1 text-xs"></div>
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <button onclick="copyFeelingsOnlyText()" class="text-xs font-bold px-3.5 py-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white transition">
+          Copiar solo sensaciones
+        </button>
+        <button onclick="closeModal('feelingsLogModal')" class="text-xs font-bold px-4 py-2 rounded-lg theme-bg-900 text-white">Cerrar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: Registrar Sensaciones del Día -->
   <div id="feelingModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -216,7 +275,7 @@
           <span id="feelingModalSub" class="text-[10px] font-bold uppercase tracking-wider theme-accent-text block">Bitácora Post-Entrenamiento</span>
           <h3 id="feelingModalTitle" class="text-sm font-bold">Sensaciones de la Sesión</h3>
         </div>
-        <button onclick="closeModal('feelingModal')" class="text-slate-400 hover:text-white text-xl leading-none">&times;</button>
+        <button onclick="closeModal('feelingModal')" class="text-slate-400 hover:text-white text-xl leading-none">×</button>
       </div>
       <div class="p-5 space-y-4 text-xs">
         <input type="hidden" id="feelWeek" />
@@ -269,7 +328,7 @@
           <span class="text-[10px] font-extrabold uppercase tracking-widest theme-accent-text block">Comando Oculto • Tiempo Real</span>
           <h3 class="text-sm font-bold">Personalizar Paleta y Códigos HEX</h3>
         </div>
-        <button onclick="closeModal('themeCommandModal')" class="text-slate-400 hover:text-white text-xl leading-none">&times;</button>
+        <button onclick="closeModal('themeCommandModal')" class="text-slate-400 hover:text-white text-xl leading-none">×</button>
       </div>
 
       <div class="p-5 space-y-5 text-xs max-h-[80vh] overflow-y-auto">
@@ -320,7 +379,7 @@
     <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Registrar Imprevisto o Cambio de Enfoque</h3>
-        <button onclick="closeModal('exceptionModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+        <button onclick="closeModal('exceptionModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
       <div class="p-5 space-y-4">
         <div class="grid grid-cols-2 gap-3">
@@ -392,7 +451,7 @@
           <span id="detailModalSub" class="text-[10px] font-bold uppercase tracking-wider text-teal-400 block">Guía Paso a Paso de Cada Ejercicio</span>
           <h3 id="detailModalTitle" class="text-sm sm:text-base font-bold">Detalle de Ejercicios</h3>
         </div>
-        <button onclick="closeModal('exerciseDetailModal')" class="text-slate-400 hover:text-white text-xl leading-none px-1">&times;</button>
+        <button onclick="closeModal('exerciseDetailModal')" class="text-slate-400 hover:text-white text-xl leading-none px-1">×</button>
       </div>
       <div id="detailModalContent" class="p-5 space-y-3.5 text-xs sm:text-sm text-slate-700 overflow-y-auto leading-relaxed flex-1"></div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
@@ -407,7 +466,7 @@
     <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 id="reportModalTitle" class="text-sm font-bold">Reporte Acumulado para Google Docs</h3>
-        <button onclick="closeModal('reportModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+        <button onclick="closeModal('reportModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
       <div class="p-5 overflow-y-auto space-y-3 flex-1">
         <p class="text-xs text-slate-600">Copia esta bitácora con entrenamientos realizados, sensaciones y novedades para pegarla directamente en Google Docs:</p>
@@ -431,7 +490,7 @@
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Protocolo de Calentamiento Obligatorio (15–20 min)</h3>
-        <button onclick="closeModal('warmupModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+        <button onclick="closeModal('warmupModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
       <div class="p-5 space-y-3 text-xs text-slate-700 leading-relaxed max-h-[75vh] overflow-y-auto">
         <div class="p-3 rounded-xl theme-accent-soft border text-slate-900">
@@ -455,7 +514,7 @@
     <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Glosario Completo de Ejercicios y Términos</h3>
-        <button onclick="closeModal('glossaryModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+        <button onclick="closeModal('glossaryModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
       <div class="p-5 space-y-3 text-xs text-slate-700 max-h-[75vh] overflow-y-auto leading-relaxed">
         <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
@@ -498,7 +557,7 @@
     <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden">
       <div class="px-5 py-4 theme-bg-900 text-white flex items-center justify-between">
         <h3 class="text-sm font-bold">Historial de Ciclos Completados</h3>
-        <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+        <button onclick="closeModal('historyModal')" class="text-slate-400 hover:text-white text-lg leading-none">×</button>
       </div>
       <div id="historyList" class="p-5 space-y-3 text-xs text-slate-700 max-h-[70vh] overflow-y-auto"></div>
       <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-right">
@@ -1360,6 +1419,7 @@
       dayFeelings: {},
       exceptions: [],
       archivedCycles: [],
+      sheetBackupUrl: "",
       theme: { accentHex: "#f59e0b", baseHex: "#0f172a" }
     };
 
@@ -2004,6 +2064,121 @@
         navigator.clipboard.writeText(item.reportText);
         showToast("Informe histórico copiado al portapapeles");
       }
+    }
+
+    // =========================================================================
+    // MENÚ DESPLEGABLE: SENSACIONES, GOOGLE SHEETS Y LIMPIEZA RÁPIDA
+    // =========================================================================
+    function toggleFooterMenu(e) {
+      e.stopPropagation();
+      const menu = document.getElementById("footerToolsMenu");
+      const count = Object.keys(appState.dayFeelings || {}).length;
+      const badge = document.getElementById("feelingsBadgeCount");
+      if (badge) badge.textContent = count;
+      menu.classList.toggle("hidden");
+    }
+
+    function closeFooterMenu() {
+      const menu = document.getElementById("footerToolsMenu");
+      if (menu) menu.classList.add("hidden");
+    }
+
+    document.addEventListener("click", (e) => {
+      const wrap = document.getElementById("footerToolsDropdownWrap");
+      if (wrap && !wrap.contains(e.target)) closeFooterMenu();
+    });
+
+    function openGoogleSheetBackup() {
+      if (appState.sheetBackupUrl) {
+        window.open(appState.sheetBackupUrl, "_blank", "noopener,noreferrer");
+      } else {
+        configureSheetUrl(true);
+      }
+    }
+
+    function configureSheetUrl(openAfter = false) {
+      const current = appState.sheetBackupUrl || "";
+      const url = prompt(
+        "Pega aquí el enlace completo de tu hoja de Google Sheets (donde guarda tu Apps Script):",
+        current
+      );
+      if (url !== null && url.trim() !== "") {
+        appState.sheetBackupUrl = url.trim();
+        saveState();
+        showToast("Enlace de Google Sheets guardado en la nube");
+        if (openAfter) window.open(appState.sheetBackupUrl, "_blank", "noopener,noreferrer");
+      }
+    }
+
+    function openFeelingsLogModal() {
+      const container = document.getElementById("feelingsLogContent");
+      const feelings = appState.dayFeelings || {};
+      const entries = [];
+
+      WEEKLY_TEMPLATES.forEach(w => {
+        w.days.forEach((day, dIdx) => {
+          const key = `w${w.week}_d${dIdx}`;
+          if (feelings[key]) {
+            const customDate = appState.dayCustomDates[key];
+            entries.push({
+              week: w.week,
+              dayLabel: day.dayLabel,
+              title: day.title,
+              dateLabel: customDate ? formatShortDate(customDate) : "Sin fecha",
+              ...feelings[key]
+            });
+          }
+        });
+      });
+
+      if (entries.length === 0) {
+        container.innerHTML = `<p class="text-slate-500 text-center py-8">Aún no has registrado sensaciones. Usa el botón <strong>"+ Sensación"</strong> al pie de cualquier tarjeta de entrenamiento.</p>`;
+      } else {
+        container.innerHTML = entries.map(item => `
+          <div class="p-3.5 rounded-xl border border-teal-200 bg-teal-50/40 space-y-1.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="font-extrabold text-slate-900">Semana ${item.week} • ${item.dayLabel}: ${item.title}</span>
+              <span class="text-[11px] font-semibold text-slate-500">${item.dateLabel}</span>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[11px] font-bold">
+              <span class="px-2 py-0.5 rounded bg-slate-900 text-white">${item.rpe}</span>
+              <span class="px-2 py-0.5 rounded bg-teal-100 text-teal-900 border border-teal-200">${item.fingers}</span>
+            </div>
+            ${item.note ? `<p class="text-slate-700 italic pt-1">"${item.note}"</p>` : ""}
+          </div>
+        `).join("");
+      }
+
+      openModal("feelingsLogModal");
+    }
+
+    function copyFeelingsOnlyText() {
+      const feelings = appState.dayFeelings || {};
+      let lines = ["BITÁCORA DE SENSACIONES Y RPE • CICLO 6 SEMANAS (ELBLOQUE)", "------------------------------------------------------------"];
+      WEEKLY_TEMPLATES.forEach(w => {
+        w.days.forEach((day, dIdx) => {
+          const key = `w${w.week}_d${dIdx}`;
+          const f = feelings[key];
+          if (f) {
+            const dStr = appState.dayCustomDates[key] ? formatShortDate(appState.dayCustomDates[key]) : "Sin fecha";
+            lines.push(`• Sem ${w.week} - ${day.dayLabel} (${dStr}) | ${day.title}`);
+            lines.push(`  [${f.rpe} | ${f.fingers}]${f.note ? ` — "${f.note}"` : ""}`);
+          }
+        });
+      });
+      navigator.clipboard.writeText(lines.join("\n"));
+      showToast("Bitácora de sensaciones copiada");
+    }
+
+    function resetSabotageData() {
+      if (!confirm("¿Seguro que deseas borrar todos los checks, sensaciones e imprevistos actuales y volver a 0%? (No se guardará en el historial).")) return;
+      appState.completedTasks = {};
+      appState.dayCustomDates = {};
+      appState.dayFeelings = {};
+      appState.exceptions = [];
+      appState.activeWeek = 1;
+      saveState();
+      showToast("Registros limpios y sincronizados en 0%");
     }
 
     function showToast(msg) {
