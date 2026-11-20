@@ -46,7 +46,27 @@
   </style>
 </head>
 <body class="theme-body-bg text-slate-800 min-h-screen flex flex-col transition-colors duration-300">
-
+<!-- PANTALLA DE BLOQUEO INICIAL (ACCESO RESTRINGIDO) -->
+  <div id="accessGateScreen" class="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-5">
+      <div class="w-12 h-12 rounded-xl bg-amber-500 text-slate-950 font-extrabold flex items-center justify-center text-base mx-auto shadow-lg">
+        EH6
+      </div>
+      <div class="space-y-1">
+        <h2 class="text-white font-bold text-base">Acceso Privado • ELBLOQUE</h2>
+        <p class="text-xs text-slate-400">Ingresa tu código personal para visualizar y gestionar tu ciclo de 6 semanas.</p>
+      </div>
+      <form onsubmit="verifyGateAccess(event)" class="space-y-3 text-left">
+        <input type="password" inputmode="numeric" maxlength="4" id="gatePasswordInput" placeholder="PIN (4 dígitos)" autocomplete="current-password"
+          class="w-full bg-slate-950 border border-slate-700 text-white text-sm font-mono tracking-widest rounded-xl px-4 py-3 text-center focus:outline-none focus:border-amber-500" />
+        <p id="gateErrorMsg" class="hidden text-xs text-rose-400 font-semibold text-center">Contraseña incorrecta.</p>
+        <button type="submit"
+          class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs uppercase tracking-wider transition shadow-md">
+          Ingresar al Plan
+        </button>
+      </form>
+    </div>
+  </div>
   <!-- Barra Superior -->
   <header class="theme-bg-900 text-white sticky top-0 z-30 shadow-md border-b theme-border-800 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
@@ -435,9 +455,77 @@
   <div id="toast" class="hidden fixed bottom-5 right-5 z-50 theme-bg-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-lg border theme-border-700"></div>
 
   <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwf7Naopzt_A6chJDFLo2Gq5VMykynfWmU3BztAFPdtvygadIhHi4wLMJlfs6p-UDd46A/exec";
-    const STORAGE_KEY = "horst_climbing_cycle_v7";
+    // =========================================================================
+    // BLOQUEO TOTAL DE ACCESO AL ABRIR LA PÁGINA
+    // =========================================================================
+    const SECRET_PASSCODE = "2026"; // <-- CAMBIA AQUÍ TU CONTRASEÑA PERSONAL
+    const UNLOCK_STORAGE_KEY = "eh6_full_access_v2";
 
+    let isUnlocked = localStorage.getItem(UNLOCK_STORAGE_KEY) === "true";
+
+    function initAccessGate() {
+      const gate = document.getElementById("accessGateScreen");
+      if (isUnlocked) {
+        if (gate) gate.classList.add("hidden");
+      } else {
+        if (gate) gate.classList.remove("hidden");
+        setTimeout(() => {
+          const inp = document.getElementById("gatePasswordInput");
+          if (inp) inp.focus();
+        }, 100);
+      }
+    }
+
+    function verifyGateAccess(e) {
+      e.preventDefault();
+      const inputVal = document.getElementById("gatePasswordInput").value.trim();
+      const err = document.getElementById("gateErrorMsg");
+
+      if (inputVal === SECRET_PASSCODE) {
+        isUnlocked = true;
+        localStorage.setItem(UNLOCK_STORAGE_KEY, "true");
+        document.getElementById("accessGateScreen").classList.add("hidden");
+        err.classList.add("hidden");
+        updateLockUI();
+        renderAll();
+        showToast("Acceso concedido");
+      } else {
+        err.classList.remove("hidden");
+        document.getElementById("gatePasswordInput").value = "";
+        document.getElementById("gatePasswordInput").focus();
+      }
+    }
+
+    function requireUnlock(actionCallback) {
+      if (isUnlocked) {
+        if (typeof actionCallback === "function") actionCallback();
+        return true;
+      }
+      initAccessGate();
+      return false;
+    }
+
+    function handleLockButtonClick() {
+      isUnlocked = false;
+      localStorage.removeItem(UNLOCK_STORAGE_KEY);
+      document.getElementById("gatePasswordInput").value = "";
+      initAccessGate();
+      showToast("Sesión bloqueada");
+    }
+
+    function updateLockUI() {
+      const btn = document.getElementById("lockStatusBtn");
+      const icon = document.getElementById("lockIcon");
+      const label = document.getElementById("lockLabel");
+      const banner = document.getElementById("readOnlyBanner");
+
+      if (btn && icon && label) {
+        icon.textContent = "🔒";
+        label.textContent = "Bloquear";
+        btn.className = "flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700 transition";
+      }
+      if (banner) banner.classList.add("hidden");
+    }
     // =========================================================================
     // MOTOR DE COLORES HEXADECIMALES EN TIEMPO REAL
     // =========================================================================
@@ -1245,6 +1333,7 @@
     let syncTimeout = null;
 
     document.addEventListener("DOMContentLoaded", async () => {
+      initAccessGate();
       loadFromLocal();
       applyThemeVariables(appState.theme);
       renderAll();
